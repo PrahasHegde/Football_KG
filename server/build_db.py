@@ -55,6 +55,7 @@ def build(graph_path: Path = GRAPH_PATH, db_path: Path = DB_PATH) -> None:
                 "minute": d.get("minute"),
                 "penalty": d.get("penalty"),
                 "own_goal": d.get("own_goal"),
+                "source": d.get("source"),
             }
             for n, d in G.nodes(data=True)
         ]
@@ -138,7 +139,8 @@ def build(graph_path: Path = GRAPH_PATH, db_path: Path = DB_PATH) -> None:
                CAST(g.minute AS INTEGER) AS minute,
                CAST(g.penalty AS BOOLEAN) AS penalty,
                CAST(g.own_goal AS BOOLEAN) AS own_goal,
-               asd.src AS assist_player_id, ap.name AS assister
+               asd.src AS assist_player_id, ap.name AS assister,
+               coalesce(g.source, 'dataset') AS source   -- 'dataset' (goalscorers.csv) | 'wikipedia' (friendlies)
         FROM raw_nodes g
         JOIN edges im ON im.src = g.id AND im.type = 'IN_MATCH'
         JOIN matches m ON m.match_id = im.dst
@@ -154,7 +156,8 @@ def build(graph_path: Path = GRAPH_PATH, db_path: Path = DB_PATH) -> None:
     con.execute("""
         CREATE TABLE players AS
         SELECT p.id AS player_id, p.name, t.name AS team, pf.dst AS team_id,
-               count(g.goal_id) FILTER (WHERE NOT g.own_goal)                AS goals,
+               count(g.goal_id) FILTER (WHERE NOT g.own_goal AND g.source = 'dataset') AS goals,
+               count(g.goal_id) FILTER (WHERE g.source = 'wikipedia')          AS friendly_goals,
                count(g.goal_id) FILTER (WHERE g.penalty AND NOT g.own_goal)   AS penalty_goals,
                count(g.goal_id) FILTER (WHERE g.own_goal)                     AS own_goals,
                (SELECT count(*) FROM goals a WHERE a.assist_player_id = p.id) AS assists,

@@ -235,7 +235,13 @@ function Details({ entity, open }: { entity: Entity; open: (id: string) => void 
             <Stats
               items={[
                 ["Team", <Link id={p.team_id} open={open}>{p.team}</Link>],
-                ["Goals*", fmt(p.goals)],
+                ...(p.friendly_goals > 0
+                  ? ([
+                      ["Total goals", fmt(p.goals + p.friendly_goals)],
+                      ["Competitive*", fmt(p.goals)],
+                      ["Friendlies†", fmt(p.friendly_goals)],
+                    ] as [string, ReactNode][])
+                  : ([["Goals*", fmt(p.goals)]] as [string, ReactNode][])),
                 ["Penalties", fmt(p.penalty_goals)],
                 ["Assists*", fmt(p.assists)],
                 ["Hat-tricks", fmt(d.hat_tricks)],
@@ -243,7 +249,10 @@ function Details({ entity, open }: { entity: Entity; open: (id: string) => void 
               ]}
             />
           )}
-          <p className="footnote">* Competitive matches with recorded scorers only; assists are sparsely recorded.</p>
+          <p className="footnote">
+            * Competitive matches with recorded scorers; assists are sparsely recorded.
+            {p?.friendly_goals > 0 && " † Friendly goals from this player's Wikipedia goal list."}
+          </p>
           <Section title="Goals by competition">
             <Rows rows={d.by_tournament} render={(t) => <span className="row-flex">{t.name}<span className="num">{t.goals}</span></span>} />
           </Section>
@@ -255,7 +264,8 @@ function Details({ entity, open }: { entity: Entity; open: (id: string) => void 
               rows={d.goals}
               render={(g) => (
                 <Link id={g.match_id} open={open}>
-                  <span className="mono muted">{g.date}</span> {g.minute ?? "?"}′ vs {g.opponent}
+                  <span className="mono muted">{g.date}</span> {g.source === "wikipedia" ? "" : `${g.minute ?? "?"}′ `}vs {g.opponent}
+                  {g.source === "wikipedia" && <span className="tag">friendly</span>}
                   {g.penalty && <span className="tag">pen</span>}
                   {g.own_goal && <span className="tag">o.g.</span>}
                 </Link>
@@ -299,7 +309,7 @@ function Details({ entity, open }: { entity: Entity; open: (id: string) => void 
               rows={d.goals}
               render={(g) => (
                 <Link id={g.player_id} open={open}>
-                  <span className="mono muted">{g.minute ?? "?"}′</span> {g.scorer}
+                  <span className="mono muted">{g.source === "wikipedia" ? "–" : `${g.minute ?? "?"}′`}</span> {g.scorer}
                   <span className="muted small"> ({g.team})</span>
                   {g.penalty && <span className="tag">pen</span>}
                   {g.own_goal && <span className="tag">o.g.</span>}
@@ -308,6 +318,9 @@ function Details({ entity, open }: { entity: Entity; open: (id: string) => void 
               )}
             />
             {!d.goals?.length && <p className="footnote">Scorers are not recorded for this match.</p>}
+            {d.goals?.some((g: any) => g.source === "wikipedia") && (
+              <p className="footnote">Friendly goals from players' Wikipedia goal lists; other scorers in this match may be missing.</p>
+            )}
           </Section>
         </>
       );

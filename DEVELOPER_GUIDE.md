@@ -245,6 +245,26 @@ Illustration: one World Cup goal by Messi links to the rest of the graph like th
   Argentina            Argentina           City ──LOCATED_IN──► Country
 ```
 
+### Optional input: friendly goals from Wikipedia
+
+`goalscorers.csv` has no scorers for friendlies, although `results.csv` contains 18,283 friendly
+matches. `scripts/fetch_friendly_goals.py` fills part of that gap:
+
+1. finds Wikipedia's ~165 "List of international goals scored by …" pages (prolific scorers only),
+2. downloads each once (HTML cached in `app_data/wiki_goal_lists/`, throttled like all Wikimedia calls),
+3. reads the goal table (one row per goal: date, opponent, competition),
+4. matches each goal to a match in `results.csv` by date + both teams (historical names like
+   "West Germany" resolve through `former_names.csv` and `OPPONENT_ALIASES`),
+5. keeps only goals in matches the dataset classes as **Friendly** (no overlap with goalscorers.csv),
+   and drops a match's goals if they would exceed the team's actual score,
+6. writes `data_extra/friendly_goals_wikipedia.csv` in goalscorers.csv format plus `source` /
+   `source_page`.
+
+`build_kg.py` appends these rows after the dataset's goals (so Goal IDs stay stable) and stores
+`source` on each Goal node. The build still works when the file is absent. Because only stars have
+friendly goals, they are kept separate in the app (`players.friendly_goals`) rather than mixed into
+the competitive totals.
+
 ### Outputs
 
 - `football_kg.gpickle`: the NetworkX `MultiDiGraph` (117,180 nodes, 404,151 edges).

@@ -192,7 +192,7 @@ class Store:
             ),
             "goals": self.q(
                 """
-                SELECT g.goal_id AS id, g.match_id, g.date, g.minute, g.penalty, g.own_goal,
+                SELECT g.goal_id AS id, g.match_id, g.date, g.minute, g.penalty, g.own_goal, g.source,
                        g.opponent, g.tournament, m.home_team, m.away_team, m.home_score, m.away_score
                 FROM goals g JOIN matches m USING (match_id)
                 WHERE g.player_id = ? ORDER BY g.date DESC, g.minute DESC LIMIT 12
@@ -206,7 +206,7 @@ class Store:
         return {
             "match": m[0] if m else None,
             "goals": self.q(
-                "SELECT goal_id AS id, player_id, scorer, team, minute, penalty, own_goal, assister "
+                "SELECT goal_id AS id, player_id, scorer, team, minute, penalty, own_goal, assister, source "
                 "FROM goals WHERE match_id = ? ORDER BY minute NULLS LAST",
                 [mid],
             ),

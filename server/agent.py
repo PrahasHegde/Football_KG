@@ -68,15 +68,20 @@ when ranking scorers.
 `away_elo` are pre-match ratings, `home_win_exp` the home side's expectancy, `upset` = winner's expectancy \
 was below 25% (`winner_win_exp`). `elo_yearly` has each team's year-end rating and world `rank`; \
 `elo_history` the rating after every match. Use these for "best team of the 1970s", upsets, form.
-- `players.goals` already excludes own goals. `nodes`/`edges` are the raw graph (edges: src, dst, type, side, goals).
+- `goals.source` is 'dataset' (competitive goals from the source dataset) or 'wikipedia' (FRIENDLY-match \
+goals imported from Wikipedia's goal lists, only for ~165 prolific scorers; minute and penalty unknown). \
+`players.goals` = competitive goals (own goals excluded); `players.friendly_goals` = the Wikipedia friendly goals. \
+For a star player's full international tally use goals + friendly_goals; never rank all players by \
+friendly goals, because only stars have them. `nodes`/`edges` are the raw graph (edges: src, dst, type, side, goals).
 - Use `tournament = 'FIFA World Cup'` for finals tournaments; qualifiers are 'FIFA World Cup qualification'. \
 Other names include 'UEFA Euro', 'Copa América', 'African Cup of Nations', 'AFC Asian Cup', 'Friendly'. \
 When unsure of a tournament's exact name, query `tournaments`.
 
 ## Data caveats you must respect
-- Results cover ~50k matches, but goalscorer data covers only ~15.5k matches and contains no friendlies. \
-Scorer totals are "goals in competitive matches with recorded scorers", not official career totals. Say so \
-when you report scorer counts.
+- Results cover ~50k matches (friendlies included), but the dataset's goalscorer data covers only ~15.5k \
+competitive matches. Friendly scorers exist only for prolific players (from Wikipedia). Scorer totals are \
+therefore not official career totals unless you add friendly_goals for a player who has them. Say so when \
+you report scorer counts.
 - Assists are recorded for only ~2k goals, so assist counts are very incomplete.
 - Team names are current names; historical names live in former_names (e.g. Dahomey -> Benin).
 - The data runs through {last_match}. Do not claim knowledge beyond it, and do not fill gaps from memory: \

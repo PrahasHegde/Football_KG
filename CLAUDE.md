@@ -5,6 +5,7 @@ https://github.com/martj42/international_results.
 
 ## Commands
 - Get data: `python scripts/get_data.py` (clones the dataset into `data/international_results/`)
+- Friendly goals (optional, slow, stop the server first): `python scripts/fetch_friendly_goals.py`
 - Build graph: `python src/build_kg.py` → writes `football_kg.gpickle` and `neo4j_import/`
 - Explore: `python src/explore_kg.py` → runs the showcase queries
 - Install deps: `pip install -r requirements.txt`; UI deps: `cd web && npm install`
@@ -55,8 +56,13 @@ https://github.com/martj42/international_results.
 
 ## Known data facts (verified)
 - results.csv has ~50k matches; one duplicate key (1974-02-17 Tahiti v New Caledonia), so goals link to the first one.
-- goalscorers.csv contains NO friendlies and covers only ~15.5k of the ~46k matches with goals.
-  Scorer totals are "competitive matches with recorded scorers", not official career totals.
+- results.csv DOES include friendlies (18,283 matches), but goalscorers.csv contains NO friendly scorers
+  and covers only ~15.5k of the ~46k matches with goals.
+- Friendly scorers for ~165 prolific players come from Wikipedia goal lists via
+  `python scripts/fetch_friendly_goals.py` -> `data_extra/friendly_goals_wikipedia.csv` (committed; optional
+  build input). These goals have `source = 'wikipedia'` (dataset goals: `'dataset'`), no minute and unknown
+  penalty flag. `players.goals` stays competitive-only; `players.friendly_goals` holds the Wikipedia ones.
+  Never rank all players by friendly goals (only stars have them).
 - `assist` is filled for only ~2k goals.
 - Former team names never appear in results.csv (results use current names).
 - In goalscorers.csv `team` is the team credited with the goal, so for own goals the scorer actually

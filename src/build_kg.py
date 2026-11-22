@@ -26,6 +26,14 @@ key = ["date", "home_team", "away_team"]
 match_lookup = results.drop_duplicates(key).set_index(key)["match_id"]
 
 goals = goals.dropna(subset=["scorer"]).copy()
+goals["source"] = "dataset"
+# Optional: friendly-match goals for prolific scorers, imported from Wikipedia goal lists by
+# scripts/fetch_friendly_goals.py (goalscorers.csv has no friendlies). Appended AFTER the dataset's
+# goals so existing Goal IDs stay stable; the build works without this file.
+EXTRA = Path("data_extra/friendly_goals_wikipedia.csv")
+if EXTRA.exists():
+    extra = pd.read_csv(EXTRA)
+    goals = pd.concat([goals, extra[goals.columns]], ignore_index=True)
 goals["match_id"] = [match_lookup[tuple(k)] for k in goals[key].values]
 goals["goal_id"] = "G" + goals.reset_index().index.astype(str)
 # A player is identified by name + national team (names alone collide)
@@ -68,7 +76,7 @@ for g in goals.itertuples():
         node(g.player_id, "Player", name=g.scorer)
         G.add_edge(g.player_id, team, type="PLAYS_FOR")
     minute = None if pd.isna(g.minute) else int(g.minute)
-    node(g.goal_id, "Goal", minute=minute, penalty=bool(g.penalty), own_goal=bool(g.own_goal))
+    node(g.goal_id, "Goal", minute=minute, penalty=bool(g.penalty), own_goal=bool(g.own_goal), source=g.source)
     G.add_edge(g.player_id, g.goal_id, type="SCORED")
     G.add_edge(g.goal_id, g.match_id, type="IN_MATCH")
     G.add_edge(g.goal_id, team, type="FOR_TEAM")
