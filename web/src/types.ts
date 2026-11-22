@@ -16,8 +16,15 @@ export interface GNode {
   degree?: number;
   group?: number;
   elo?: number | null;
-  /** confederation key (overview only) */
+  /** overview cluster key: confederation (nations) or league (clubs) */
   conf?: string;
+  /** overview: 0..1 strength that sizes the node (clubs: win rate) */
+  strength?: number;
+  /** overview: one-line description for the tooltip */
+  subtitle?: string;
+  /** pipeline ring: fixed home position */
+  hx?: number;
+  hy?: number;
   // set by the force simulation
   x?: number;
   y?: number;
@@ -36,6 +43,8 @@ export interface GEdge {
   virtual?: boolean;
   /** overview: kept only as one of a team's most frequent opponents */
   backbone?: boolean;
+  /** what `weight` counts (default: meetings) */
+  unit?: string;
 }
 
 export interface Subgraph {
@@ -43,6 +52,8 @@ export interface Subgraph {
   edges: GEdge[];
   truncated?: Record<string, number>;
   confederations?: Confederation[];
+  /** overview groups (confederations or leagues) */
+  groups?: Confederation[];
   era?: { start: number; end: number; min_meetings: number };
 }
 

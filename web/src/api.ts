@@ -22,6 +22,8 @@ export const api = {
     if (opts.direction) p.set("direction", opts.direction);
     return get<Subgraph>(`/api/expand/${enc(id)}?${p}`);
   },
+  clubUniverse: () => get<Subgraph>("/api/clubs/universe"),
+  pipeline: () => get<Subgraph>("/api/clubs/pipeline"),
   overview: (era?: { start: number; end: number }) =>
     get<Subgraph>(`/api/overview?top=${era ? 140 : 200}${era ? `&start=${era.start}&end=${era.end}` : ""}`),
   h2h: (a: string, b: string) => get<H2H>(`/api/h2h?a=${enc(a)}&b=${enc(b)}`),

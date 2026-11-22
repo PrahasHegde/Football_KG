@@ -45,6 +45,10 @@ automatically whenever `football_kg.gpickle` is newer. To force a rebuild, run `
   teams with the most different opponents.
 - **Inspector**: per-entity profiles, relationship-by-type expansion, and **Connect** for shortest
   paths (animated along the path).
+- **Three home views** (switcher at the top of the canvas): **Nations** (the universe above), **Clubs**
+  (192 clubs clustered by league like a map of Europe, linked by the players they shared, sized by win rate,
+  with club crests) and **Pipeline** (nations on an outer ring, clubs on an inner ring: where each country's
+  internationals play). Hover anything to light up its connections; click a legend chip to spotlight a group.
 - **Club stats** for ~800 clubs in the top leagues since 2012/13 (transfermarkt-datasets, CC0):
   club nodes in the graph, a club panel (stadium, coach, win rate by season, top scorers, assisters and
   appearances) and a club table on player panels (apps, goals, assists per club). International players

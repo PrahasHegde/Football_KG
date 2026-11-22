@@ -39,6 +39,10 @@ HEADERS = {
     else "FootballKG/1.0 (local football knowledge-graph explorer) python-urllib"
 }
 WIKI_API = "https://en.wikipedia.org/w/api.php"
+# a Wikipedia page image that is a club crest, not a stadium or team photo
+CREST_FILE = re.compile(r"\.(svg|png)$|logo|crest|badge|emblem|escudo|wappen", re.I)
+GENERIC_CLUB_WORDS = {"football", "club", "futbol", "sport", "sports", "athletic", "calcio", "associazione",
+                      "sportiva", "united", "city", "real", "union"}
 WD_API = "https://www.wikidata.org/w/api.php"
 SPARQL = "https://query.wikidata.org/sparql"
 IMG_HOSTS = {"upload.wikimedia.org", "thumb.wikimedia.org", "commons.wikimedia.org"}
@@ -121,6 +125,8 @@ class Media:
         threading.Thread(target=self._worker, daemon=True).start()
         self.teams = teams
         self._teams_ready = threading.Event()
+        self.clubs: list[dict[str, Any]] = []   # [{"id": "CL:fc_barcelona", "tm": 131}], set by the app
+        self._clubs_ready = threading.Event()
 
     # ------------------------------------------------------------------ cache
     def _get(self, key: str) -> dict[str, Any] | None:
@@ -396,6 +402,105 @@ class Media:
                 photos[i["id"]] = proxied(m.get("photo")) if m.get("found") else None
         self.enqueue(todo, priority=0)
         return {"photos": photos, "pending": [i["id"] for i in todo]}
+
+    # ------------------------------------------------------------------ clubs (bulk)
+    def warm_clubs(self) -> None:
+        """Club logos, matched exactly by Transfermarkt ID (Wikidata P7223), never by name.
+
+        1. Wikidata: the free logo on Commons (P154) and the club's English Wikipedia article, in a few SPARQL
+           queries.
+        2. Clubs without a free logo: the main image of their Wikipedia article, which for a club is its crest
+           (often a non-free file hosted on en.wikipedia under fair use). 50 articles per API call; only images
+           that look like a crest (SVG/PNG, or "logo"/"crest"/"badge" in the file name) are kept, so a stadium
+           photo never shows up as a logo.
+        All calls are serial and throttled like every other Wikimedia call; results are cached for good."""
+        try:
+            if self.clubs and self._get("__clubs_v2__") is None:
+                by_tm = {str(c["tm"]): c["id"] for c in self.clubs if c.get("tm") is not None}
+                ids = sorted(by_tm)
+                articles: dict[str, str] = {}   # enwiki title -> club id (clubs still without a logo)
+                for i in range(0, len(ids), 300):
+                    values = " ".join(f'"{x}"' for x in ids[i:i + 300])
+                    q = (f"SELECT ?tm ?club ?logo ?article WHERE {{ VALUES ?tm {{ {values} }} ?club wdt:P7223 ?tm . "
+                         f"OPTIONAL {{ ?club wdt:P154 ?logo . }} "
+                         f"OPTIONAL {{ ?article schema:about ?club ; schema:isPartOf <https://en.wikipedia.org/> . }} }}")
+                    rows = _get_json(SPARQL, {"query": q, "format": "json"}, timeout=60)["results"]["bindings"]
+                    for b in rows:
+                        cid = by_tm.get(b["tm"]["value"])
+                        if not cid:
+                            continue
+                        if "logo" in b:
+                            if not (self._get(cid) or {}).get("logo"):
+                                self._put(cid, {"found": True, "logo": b["logo"]["value"],
+                                                "qid": b["club"]["value"].rsplit("/", 1)[-1]})
+                        elif "article" in b:
+                            title = urllib.parse.unquote(b["article"]["value"].rsplit("/wiki/", 1)[-1]).replace("_", " ")
+                            articles[title] = cid
+                todo = [t for t, cid in articles.items() if not (self._get(cid) or {}).get("logo")]
+                for i in range(0, len(todo), 50):
+                    batch = todo[i:i + 50]
+                    r = _get_json(WIKI_API, {"action": "query", "format": "json", "formatversion": 2,
+                                             "prop": "pageimages", "piprop": "thumbnail|name", "pithumbsize": 120,
+                                             "pilicense": "any",  # crests are usually non-free files
+                                             "redirects": 1, "titles": "|".join(batch)})
+                    q = r.get("query", {})
+                    back = {x["to"]: x["from"] for x in q.get("redirects", [])}
+                    back.update({x["to"]: x["from"] for x in q.get("normalized", [])})
+                    for page in q.get("pages", []):
+                        thumb, name = page.get("thumbnail", {}).get("source"), page.get("pageimage", "")
+                        title = page.get("title", "")
+                        cid = articles.get(title) or articles.get(back.get(title, ""), None) \
+                            or articles.get(back.get(back.get(title, ""), ""), None)
+                        if cid and thumb and CREST_FILE.search(name):
+                            self._put(cid, {"found": True, "thumb": thumb, "source": "enwiki", "file": name})
+                # 3. Still nothing (no Transfermarkt ID on Wikidata, or the article's image isn't a crest): search
+                # Wikipedia for the club name. Only a few clubs, one call each; the hit must share a word with the
+                # club's name and its image must look like a crest.
+                for c in self.clubs:
+                    if self._club_logo(c["id"]) or not c.get("name"):
+                        continue
+                    name = re.sub(r"\(.*?\)", "", c["name"]).strip()
+                    r = _get_json(WIKI_API, {"action": "query", "format": "json", "formatversion": 2,
+                                             "generator": "search", "gsrsearch": f"{name} football club",
+                                             "gsrlimit": 3, "prop": "pageimages", "piprop": "thumbnail|name",
+                                             "pithumbsize": 120, "pilicense": "any"})
+                    # the club's first distinctive word must be in the article title ("Metalist Kharkiv" must
+                    # not match "FC Kharkiv", a different club)
+                    words = [w for w in re.findall(r"\w+", _norm(name)) if len(w) > 3 and w not in GENERIC_CLUB_WORDS]
+                    pages = sorted(r.get("query", {}).get("pages", []), key=lambda pg: pg.get("index", 99))
+                    for page in pages:
+                        thumb, file = page.get("thumbnail", {}).get("source"), page.get("pageimage", "")
+                        if thumb and CREST_FILE.search(file) and words \
+                                and words[0] in re.findall(r"\w+", _norm(page.get("title", ""))):
+                            self._put(c["id"], {"found": True, "thumb": thumb, "source": "enwiki-search", "file": file})
+                            break
+                found = sum(1 for c in self.clubs if self._club_logo(c["id"]))
+                self._put("__clubs_v2__", {"matched": found, "total": len(ids)})
+        except Exception:  # noqa: BLE001 - offline: the app works without logos
+            pass
+        finally:
+            self._clubs_ready.set()
+
+    def _club_logo(self, cid: str) -> str | None:
+        m = self._get(cid) or {}
+        if m.get("logo"):
+            return proxied(commons_thumb(m["logo"], 96))
+        if m.get("thumb"):
+            return proxied(m["thumb"])
+        return None
+
+    def warm_all(self) -> None:
+        self.warm_teams()
+        self.warm_clubs()
+
+    def club_images(self) -> dict[str, str]:
+        """{club_id: logo thumbnail URL via the image proxy}."""
+        out = {}
+        for c in self.clubs:
+            logo = self._club_logo(c["id"])
+            if logo:
+                out[c["id"]] = logo
+        return out
 
     @staticmethod
     def player_public(m: dict[str, Any]) -> dict[str, Any] | None:

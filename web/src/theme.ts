@@ -71,6 +71,7 @@ const BASE_RADIUS: Record<Label, number> = {
 };
 
 export function nodeRadius(n: GNode): number {
+  if (n.strength !== undefined) return 4 + Math.max(0, Math.min(1, n.strength)) * 13;
   if (n.elo) {
     // era overview: size by strength
     return Math.max(4, Math.min(17, 4 + ((n.elo - 1250) / 1000) * 13));
@@ -178,6 +179,15 @@ export const CONF_HOME: Record<string, [number, number]> = {
   AFC: [390, -20],
   OFC: [450, 250],
   "Non-FIFA": [-300, -300],
+  // club universe: leagues roughly where they sit on a map of Europe; the rest of the world off to the east
+  "Premier League": [-230, -230],
+  Eredivisie: [60, -280],
+  Bundesliga: [310, -190],
+  "Ligue 1": [-400, -10],
+  LaLiga: [-220, 300],
+  "Liga Portugal": [-560, 250],
+  "Serie A": [290, 230],
+  "Rest of world": [600, -10],
 };
 export const CONF_NAME: Record<string, string> = {
   UEFA: "Europe",
@@ -187,6 +197,14 @@ export const CONF_NAME: Record<string, string> = {
   AFC: "Asia",
   OFC: "Oceania",
   "Non-FIFA": "Non-FIFA",
+  "Premier League": "England",
+  LaLiga: "Spain",
+  Bundesliga: "Germany",
+  "Serie A": "Italy",
+  "Ligue 1": "France",
+  Eredivisie: "Netherlands",
+  "Liga Portugal": "Portugal",
+  "Rest of world": "Other leagues",
 };
 
 /** "#2a78d6" + 0.3 -> "rgba(42,120,214,0.3)" */

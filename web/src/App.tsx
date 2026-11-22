@@ -1,7 +1,7 @@
-import { Compass, Download, Eraser, Globe2, Maximize2, Moon, MousePointerClick, Pause, Play, Sparkles, Sun, X } from "lucide-react";
+import { Compass, Download, Eraser, Globe2, Maximize2, Moon, MousePointerClick, Orbit, Pause, Play, Shield, Sparkles, Sun, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "./api";
-import { loadTeamMedia } from "./media";
+import { loadClubMedia, loadTeamMedia } from "./media";
 import { ChatPanel } from "./components/ChatPanel";
 import { DiscoverPanel } from "./components/DiscoverPanel";
 import { ALL_TIME, EraBar, type Era } from "./components/EraBar";
@@ -15,6 +15,13 @@ import { useGraph } from "./useGraph";
 import { useTheme } from "./useTheme";
 
 type ViewMode = "overview" | "explore";
+/** The three home views: nations universe, club universe, nation->club talent pipeline. */
+type Home = "nations" | "clubs" | "pipeline";
+const HOMES: { key: Home; label: string; hint: string; icon: typeof Globe2 }[] = [
+  { key: "nations", label: "Nations", hint: "since 1872", icon: Globe2 },
+  { key: "clubs", label: "Clubs", hint: "since 2012", icon: Shield },
+  { key: "pipeline", label: "Pipeline", hint: "nations → clubs", icon: Orbit },
+];
 type Tab = "ask" | "discover";
 
 export default function App() {
@@ -29,6 +36,7 @@ export default function App() {
   const [era, setEra] = useState<Era>(ALL_TIME);
   const [playing, setPlaying] = useState(false);
   const [confeds, setConfeds] = useState<Confederation[]>([]);
+  const [home, setHome] = useState<Home>("nations");
   const [spotlight, setSpotlight] = useState<string | null>(null);
   const [intro, setIntro] = useState(() => {
     try {
@@ -75,6 +83,7 @@ export default function App() {
       try {
         const sub = await api.overview(e === ALL_TIME ? undefined : e);
         setConfeds(sub.confederations ?? []);
+        setHome("nations");
         setEra(e);
         show(sub, {
           view: "overview",
@@ -91,10 +100,48 @@ export default function App() {
     [show, notify],
   );
 
+  /** Club universe or nation -> club pipeline. */
+  const loadClubView = useCallback(
+    async (kind: "clubs" | "pipeline") => {
+      try {
+        const sub = kind === "clubs" ? await api.clubUniverse() : await api.pipeline();
+        if (!sub.nodes.length) {
+          notify("No club data yet: run python scripts/fetch_club_data.py and rebuild.");
+          return;
+        }
+        setConfeds(sub.groups ?? []);
+        setHome(kind);
+        setSpotlight(null);
+        setH2H(null);
+        const clubs = sub.nodes.filter((n) => n.label === "Club").length;
+        show(sub, {
+          view: "overview",
+          caption:
+            kind === "clubs"
+              ? `${clubs} clubs since 2012/13 · linked by ${fmt(sub.edges.length)} shared-player bonds`
+              : `${sub.nodes.length - clubs} nations → ${clubs} clubs · where internationals play`,
+        });
+      } catch (err) {
+        notify(`Could not load the club view: ${(err as Error).message}`);
+      }
+    },
+    [show, notify],
+  );
+
+  const loadHome = useCallback(
+    (h: Home) => {
+      setSpotlight(null);
+      if (h === "nations") loadOverview(ALL_TIME);
+      else loadClubView(h);
+    },
+    [loadOverview, loadClubView],
+  );
+
   useEffect(() => {
     api.meta().then(setMeta).catch(() => notify("API is not reachable. Is the server running on :8000?"));
     loadOverview(ALL_TIME);
     loadTeamMedia();
+    loadClubMedia();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -276,15 +323,29 @@ export default function App() {
             onExpand={onExpandNode}
           />
 
-          {caption && (
-            <div className="caption">
-              {view === "overview" && era !== ALL_TIME && <span className="caption__era">{era.label}</span>}
-              {caption}
+          {view === "overview" ? (
+            <div className="homeswitch">
+              <div className="homeswitch__tabs" role="tablist" aria-label="Home view">
+                {HOMES.map(({ key, label, hint, icon: Icon }) => (
+                  <button key={key} role="tab" aria-selected={home === key} className={home === key ? "is-active" : ""}
+                    onClick={() => home !== key && loadHome(key)}>
+                    <Icon size={15} /> {label} <small>{hint}</small>
+                  </button>
+                ))}
+              </div>
+              {caption && (
+                <div className="caption">
+                  {home === "nations" && era !== ALL_TIME && <span className="caption__era">{era.label}</span>}
+                  {caption}
+                </div>
+              )}
             </div>
+          ) : caption && (
+            <div className="caption">{caption}</div>
           )}
 
           <div className="toolbar" role="toolbar">
-            <button className={`icon-btn ${view === "overview" ? "is-on" : ""}`} onClick={() => loadOverview(era)} title="Rivalry network">
+            <button className={`icon-btn ${view === "overview" ? "is-on" : ""}`} onClick={() => loadHome(home)} title="Back to the home view">
               <Globe2 size={16} />
             </button>
             <button className="icon-btn" onClick={() => canvas.current?.fit()} title="Fit to screen">
@@ -327,14 +388,21 @@ export default function App() {
                     key={c.key}
                     className={`legend__item legend__conf ${spotlight === c.key ? "is-active" : ""} ${spotlight && spotlight !== c.key ? "is-off" : ""}`}
                     onClick={() => setSpotlight((s) => (s === c.key ? null : c.key))}
-                    title={`${c.name}: spotlight these ${c.teams} teams`}
+                    title={`${c.name}: spotlight these ${c.teams} ${home === "clubs" ? "clubs" : "teams"}`}
                   >
                     <span className="dot" style={{ background: communityColor(c.slot, theme) }} />
                     <b>{c.key}</b>
                     <span className="muted">{c.teams}</span>
                   </button>
                 ))}
-                <span className="legend__note">Size = Elo at the end of the era · line weight = meetings · click a confederation to spotlight it</span>
+                {home === "pipeline" && (
+                  <span className="legend__item"><span className="legend__swatch--club" /> <b>Clubs</b></span>
+                )}
+                <span className="legend__note">
+                  {home === "nations" && "Size = Elo at the end of the era · line weight = meetings · click a confederation to spotlight it"}
+                  {home === "clubs" && "Size = win rate since 2012/13 · line weight = players shared (5+ games at both) · click a league to spotlight it"}
+                  {home === "pipeline" && "Outer ring = nations, inner ring = clubs · line weight = internationals who played there · click a confederation"}
+                </span>
               </>
             ) : (
               LABEL_ORDER.filter((l) => counts.has(l)).map((l) => (
@@ -358,8 +426,9 @@ export default function App() {
                 <span>One football universe.</span>
               </h1>
               <p>
-                Every men's international since {meta.first_match.slice(0, 4)}. Nations cluster by confederation and
-                are pulled together by the rivalries they played most.
+                Every men's international since {meta.first_match.slice(0, 4)}, plus the top clubs since 2012. Switch
+                between <b>Nations</b>, <b>Clubs</b> and the <b>Pipeline</b> that shows where each country's players
+                end up.
               </p>
               <ul className="welcome__tips">
                 <li><MousePointerClick size={14} /> Hover a nation to light up its rivals; click it for the full story</li>
@@ -369,7 +438,7 @@ export default function App() {
             </div>
           )}
 
-          {view === "overview" && <EraBar era={era} playing={playing} onChange={changeEra} onPlay={setPlaying} />}
+          {view === "overview" && home === "nations" && <EraBar era={era} playing={playing} onChange={changeEra} onPlay={setPlaying} />}
 
           {data.nodes.length === 0 && (
             <div className="stage__empty">

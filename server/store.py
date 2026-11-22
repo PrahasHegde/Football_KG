@@ -6,6 +6,7 @@ Every public method opens its own cursor, so it is safe to call from FastAPI's t
 """
 from __future__ import annotations
 
+import math
 import re
 import threading
 from functools import cached_property
@@ -463,6 +464,151 @@ class Store:
         ]
         return {"nodes": nodes, "edges": edges, "confederations": conf_out,
                 "era": {"start": max(start, 1872), "end": min(end, 2026), "min_meetings": min_meetings}}
+
+    # ------------------------------------------------------------------ club universe / pipeline
+    # Seven big leagues get their own palette slot (fixed order); every other league is "Rest of world" (slot 7).
+    LEAGUES = [("Premier League", "England"), ("LaLiga", "Spain"), ("Bundesliga", "Germany"), ("Serie A", "Italy"),
+               ("Ligue 1", "France"), ("Eredivisie", "Netherlands"), ("Liga Portugal", "Portugal")]
+    LEAGUE_SLOT = {name: i for i, (name, _) in enumerate(LEAGUES)}
+
+    def _club_rows(self, ids: list[str] | None = None, others: int = 24) -> list[dict[str, Any]]:
+        """Clubs for the universe: big-league clubs with 4+ league seasons since 2012/13, plus the `others`
+        winningest clubs elsewhere. Win rate over all competitions drives node size."""
+        ph = ",".join("?" * len(self.LEAGUE_SLOT))
+        return self.q(
+            f"""
+            WITH rec AS (
+                SELECT club_id, sum(played) AS played, sum(wins) AS wins, sum(draws) AS draws,
+                       sum(goals_for) AS goals_for, sum(goals_against) AS goals_against,
+                       count(DISTINCT season) FILTER (WHERE competition_type = 'domestic_league') AS seasons
+                FROM club_seasons GROUP BY club_id
+            ), pick AS (
+                SELECT c.club_id, c.name, c.league, c.country, r.*, c.league IN ({ph}) AS big,
+                       row_number() OVER (PARTITION BY c.league IN ({ph}) ORDER BY r.wins DESC) AS rk
+                FROM clubs c JOIN rec r USING (club_id)
+            )
+            SELECT * FROM pick WHERE (big AND seasons >= 4) OR (NOT big AND rk <= ?)
+            ORDER BY wins DESC
+            """,
+            [*self.LEAGUE_SLOT, *self.LEAGUE_SLOT, others],
+        )
+
+    def _league_groups(self, nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        out = [{"key": n, "name": country, "slot": i, "teams": 0} for i, (n, country) in enumerate(self.LEAGUES)]
+        out.append({"key": "Rest of world", "name": "Other leagues", "slot": 7, "teams": 0})
+        for n in nodes:
+            out[n["group"] if n["group"] < 7 else -1]["teams"] += 1
+        return out
+
+    def club_universe(self, min_shared: int = 5, backbone: int = 2) -> dict[str, Any]:
+        """Clubs since 2012/13, clustered by league, linked by the players they shared (5+ apps at both)."""
+        clubs = self._club_rows()
+        if not clubs:
+            return {"nodes": [], "edges": [], "groups": []}
+        ids = [c["club_id"] for c in clubs]
+        ph = ",".join("?" * len(ids))
+        pairs = self.q(
+            f"""
+            WITH p AS (
+                SELECT a.club_id AS a, b.club_id AS b, count(*) AS shared
+                FROM club_careers a JOIN club_careers b ON a.tm_player_id = b.tm_player_id AND a.club_id < b.club_id
+                WHERE a.apps >= 5 AND b.apps >= 5 AND a.club_id IN ({ph}) AND b.club_id IN ({ph})
+                GROUP BY ALL
+            ), ranked AS (
+                SELECT a, b, shared, row_number() OVER (PARTITION BY a ORDER BY shared DESC, b) AS r
+                FROM (SELECT a, b, shared FROM p UNION ALL SELECT b, a, shared FROM p)
+            )
+            SELECT least(a, b) AS a, greatest(a, b) AS b, any_value(shared) AS shared,
+                   bool_and(shared < ?) AS backbone
+            FROM ranked WHERE shared >= ? OR r <= ? GROUP BY ALL
+            """,
+            ids + ids + [min_shared, min_shared, backbone],
+        )
+        nodes = []
+        for c in clubs:
+            slot = self.LEAGUE_SLOT.get(c["league"], 7)
+            wr = c["wins"] / c["played"] if c["played"] else 0
+            nodes.append({
+                "id": c["club_id"], "label": "Club", "name": c["name"], "degree": c["played"], "group": slot,
+                "conf": c["league"] if slot < 7 else "Rest of world",
+                "strength": max(0.0, min(1.0, (wr - 0.25) / 0.5)),
+                "subtitle": f"{c['league']} · {round(100 * wr)}% wins · {c['played']:,} games since 2012/13",
+            })
+        edges = [{"id": f"{e['a']}|SHARED|{e['b']}", "source": e["a"], "target": e["b"], "type": "SHARED_PLAYERS",
+                  "weight": e["shared"], "unit": "shared players", "virtual": True, "backbone": e["backbone"]}
+                 for e in pairs]
+        return {"nodes": nodes, "edges": edges, "groups": self._league_groups(nodes)}
+
+    def pipeline(self, nations: int = 40, clubs: int = 64, min_players: int = 3) -> dict[str, Any]:
+        """Talent pipeline: the nations with the most internationals in club football (outer ring, by
+        confederation) and the clubs that used the most of them (inner ring, by league). A link = how many of
+        that nation's internationals played for that club (since 2012/13)."""
+        teams = self.q(
+            """
+            SELECT p.team_id AS id, p.team AS name, t.confederation AS conf, count(DISTINCT cc.player_id) AS players,
+                   (SELECT elo FROM elo_yearly e WHERE e.team_id = p.team_id ORDER BY year DESC LIMIT 1) AS elo
+            FROM club_careers cc JOIN players p USING (player_id) JOIN teams t ON t.team_id = p.team_id
+            GROUP BY ALL ORDER BY players DESC LIMIT ?
+            """,
+            [nations],
+        )
+        if not teams:
+            return {"nodes": [], "edges": [], "groups": []}
+        tids = [t["id"] for t in teams]
+        tph = ",".join("?" * len(tids))
+        club_rows = self.q(
+            f"""
+            SELECT c.club_id AS id, c.name, c.league, count(DISTINCT cc.player_id) AS players
+            FROM club_careers cc JOIN players p USING (player_id) JOIN clubs c ON c.club_id = cc.club_id
+            WHERE p.team_id IN ({tph}) GROUP BY ALL ORDER BY players DESC LIMIT ?
+            """,
+            tids + [clubs],
+        )
+        cids = [c["id"] for c in club_rows]
+        cph = ",".join("?" * len(cids))
+        links = self.q(
+            f"""
+            SELECT p.team_id AS team, cc.club_id AS club, count(DISTINCT cc.player_id) AS players
+            FROM club_careers cc JOIN players p USING (player_id)
+            WHERE p.team_id IN ({tph}) AND cc.club_id IN ({cph}) GROUP BY ALL HAVING count(DISTINCT cc.player_id) >= ?
+            """,
+            tids + cids + [min_players],
+        )
+
+        def ring(items: list[dict[str, Any]], key, radius: float, gap: float) -> None:
+            """Spread items round a circle, grouped by key, with a gap between groups."""
+            items.sort(key=lambda x: (key(x), -x["players"]))
+            groups = [k for i, k in enumerate(map(key, items)) if i == 0 or k != key(items[i - 1])]
+            step = (2 * math.pi - gap * len(groups)) / max(1, len(items))
+            a = -math.pi / 2
+            prev = None
+            for it in items:
+                if prev is not None and key(it) != prev:
+                    a += gap
+                it["hx"], it["hy"] = radius * math.cos(a), radius * math.sin(a)
+                a += step
+                prev = key(it)
+
+        conf_slot = self.CONF_SLOT
+        ring(teams, lambda t: conf_slot.get(t["conf"], 7), 520, 0.12)
+        ring(club_rows, lambda c: self.LEAGUE_SLOT.get(c["league"], 7), 300, 0.16)
+        nodes = []
+        for t in teams:
+            nodes.append({"id": t["id"], "label": "Team", "name": t["name"], "degree": t["players"],
+                          "elo": t["elo"], "group": conf_slot.get(t["conf"], 7), "conf": t["conf"],
+                          "hx": t["hx"], "hy": t["hy"],
+                          "subtitle": f"{t['conf']} · {t['players']} internationals in club data"})
+        for c in club_rows:
+            nodes.append({"id": c["id"], "label": "Club", "name": c["name"], "degree": c["players"], "group": 7,
+                          "conf": c["league"] if c["league"] in self.LEAGUE_SLOT else "Rest of world",
+                          "strength": min(1.0, c["players"] / 110), "hx": c["hx"], "hy": c["hy"],
+                          "subtitle": f"{c['league']} · {c['players']} internationals from these nations"})
+        edges = [{"id": f"{e['team']}|PIPELINE|{e['club']}", "source": e["team"], "target": e["club"],
+                  "type": "PLAYERS_AT", "weight": e["players"], "unit": "internationals", "virtual": True}
+                 for e in links]
+        groups = [{"key": c, "name": n, "slot": i, "teams": sum(1 for t in teams if t["conf"] == c)}
+                  for i, (c, n) in enumerate(self.CONFEDERATIONS)]
+        return {"nodes": nodes, "edges": edges, "groups": [g for g in groups if g["teams"]]}
 
     # ------------------------------------------------------------------ head to head
     def h2h(self, a: str, b: str) -> dict[str, Any] | None:

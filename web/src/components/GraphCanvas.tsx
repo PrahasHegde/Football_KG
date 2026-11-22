@@ -36,12 +36,16 @@ interface Props {
 const CURVATURE = 0.14;
 const INTRO_MS = 1600;
 
-/** Pull every overview node towards its confederation's home. */
+/** Where an overview node belongs: its own ring position (pipeline) or its cluster's home. */
+const homeOf = (n: GNode): [number, number] | undefined =>
+  n.hx !== undefined && n.hy !== undefined ? [n.hx, n.hy] : n.conf ? CONF_HOME[n.conf] : undefined;
+
+/** Pull every overview node towards its home. */
 function homeForce(strength: number) {
   let nodes: N[] = [];
   const force = (alpha: number) => {
     for (const n of nodes) {
-      const home = n.conf ? CONF_HOME[n.conf] : undefined;
+      const home = homeOf(n);
       if (!home || n.x === undefined || n.y === undefined) continue;
       n.vx = (n.vx ?? 0) + (home[0] - n.x) * strength * alpha;
       n.vy = (n.vy ?? 0) + (home[1] - n.y) * strength * alpha;
@@ -116,6 +120,8 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
   const mediaVersion = useMediaVersion();
 
   const overview = data.nodes.length > 0 && data.nodes.every((n) => n.conf !== undefined);
+  // pipeline: nations and clubs on two fixed rings
+  const ring = overview && data.nodes.some((n) => n.hx !== undefined);
   const maxW = useMemo(() => Math.max(1, ...data.links.map((l) => l.weight ?? 1)), [data]);
 
   // Seed brand-new overview nodes at their confederation's home, so the universe "blooms" out of
@@ -124,7 +130,7 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
     let seeded = 0;
     for (const n of data.nodes) {
       if (n.x !== undefined || !n.conf) continue;
-      const home = CONF_HOME[n.conf] ?? [0, 0];
+      const home = homeOf(n) ?? [0, 0];
       const a = Math.random() * 2 * Math.PI, r = Math.random() * 40;
       n.x = home[0] * 0.35 + Math.cos(a) * r;
       n.y = home[1] * 0.35 + Math.sin(a) * r;
@@ -167,16 +173,25 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
       y1 += 30;
     }
     const left = Math.min(inset.current, w * 0.45), pad = 56;
-    const k = Math.min(2.6, (w - left - 2 * pad) / Math.max(1, x1 - x0), (h - 2 * pad - 40) / Math.max(1, y1 - y0));
+    const top = overview ? 90 : 0; // home switcher + caption
+    const bottom = overview ? 50 : 0; // legend
+    const k = Math.min(2.6, (w - left - 2 * pad) / Math.max(1, x1 - x0),
+      (h - 2 * pad - 40 - top - bottom) / Math.max(1, y1 - y0));
     g.zoom(k, ms);
-    g.centerAt((x0 + x1) / 2 - left / 2 / k, (y0 + y1) / 2 + 10 / k, ms);
+    g.centerAt((x0 + x1) / 2 - left / 2 / k, (y0 + y1) / 2 + 10 / k - (top - bottom) / 2 / k, ms);
   }, [data, overview]);
 
   // physics: a geographic "universe" for the overview, a classic force layout for exploring
   useEffect(() => {
     const g = fg.current;
     if (!g) return;
-    if (overview) {
+    if (ring) {
+      // the rings are the layout: links carry no force, nodes just settle into their places
+      g.d3Force("charge")?.strength(-10).distanceMax(60);
+      g.d3Force("link")?.strength(0);
+      g.d3Force("home", homeForce(0.3) as never);
+      g.d3Force("collide", collideForce(3) as never);
+    } else if (overview) {
       const conf = new Map(data.nodes.map((n) => [n.id, n.conf]));
       g.d3Force("charge")?.strength(-70).distanceMax(260);
       g.d3Force("link")
@@ -198,7 +213,7 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
       if (pendingFit.current) fit(600);
     }, 1400);
     return () => window.clearTimeout(t);
-  }, [data, fit, overview, maxW]);
+  }, [data, fit, overview, ring, maxW]);
 
   useImperativeHandle(ref, () => ({
     fit,
@@ -252,13 +267,26 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
     [highlight],
   );
 
+  // pipeline spotlight: a confederation's nations AND the clubs their players went to
+  const spotSet = useMemo(() => {
+    if (!spotlight || !ring) return null;
+    const s = new Set<string>();
+    for (const n of data.nodes) {
+      if (n.conf !== spotlight) continue;
+      s.add(n.id);
+      neighbours.get(n.id)?.forEach((m) => s.add(m));
+    }
+    return s;
+  }, [spotlight, ring, data, neighbours]);
+
   const isDim = useCallback(
     (node: GNode) => {
       if (focusSet) return !focusSet.has(node.id);
+      if (spotSet) return !spotSet.has(node.id) && node.id !== selectedId;
       if (spotlight && overview) return node.conf !== spotlight && node.id !== selectedId;
       return highlight.size > 0 && !highlight.has(node.id) && node.id !== selectedId;
     },
-    [focusSet, spotlight, overview, highlight, selectedId],
+    [focusSet, spotSet, spotlight, overview, highlight, selectedId],
   );
 
   // ------------------------------------------------------------ overview backdrop: confederation nebulae
@@ -274,6 +302,10 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
         groups.set(n.conf, g);
       }
       const intro = introAt.current ? ease((performance.now() - introAt.current) / INTRO_MS) : 1;
+      if (ring) {
+        paintRings(ctx, scale, groups, intro);
+        return;
+      }
       for (const [conf, g] of groups) {
         const cx = g.xs / g.n, cy = g.ys / g.n;
         let spread = 0;
@@ -322,7 +354,50 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
         }
       }
     },
-    [overview, data, mode, spotlight, focusSet, ink],
+    [overview, ring, data, mode, spotlight, focusSet, ink],
+  );
+
+  /** Pipeline backdrop: two faint orbits and each group's name just outside (nations) or inside (clubs). */
+  const paintRings = useCallback(
+    (ctx: CanvasRenderingContext2D, scale: number,
+     groups: Map<string, { xs: number; ys: number; n: number; nodes: GNode[]; color: string }>, intro: number) => {
+      const radii = new Set<number>();
+      for (const n of data.nodes) if (n.hx !== undefined) radii.add(Math.round(Math.hypot(n.hx, n.hy ?? 0)));
+      ctx.save();
+      ctx.globalAlpha = 0.5 * intro;
+      ctx.strokeStyle = ink.edge;
+      ctx.setLineDash([3 / scale, 6 / scale]);
+      ctx.lineWidth = 1 / scale;
+      for (const r of radii) {
+        ctx.beginPath();
+        ctx.arc(0, 0, r, 0, 2 * Math.PI);
+        ctx.stroke();
+      }
+      ctx.setLineDash([]);
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      for (const [conf, g] of groups) {
+        let ax = 0, ay = 0;
+        for (const n of g.nodes) { ax += n.hx ?? 0; ay += n.hy ?? 0; }
+        const ang = Math.atan2(ay, ax);
+        const r0 = Math.hypot(g.nodes[0].hx ?? 0, g.nodes[0].hy ?? 0);
+        const club = g.nodes[0].label === "Club";
+        if (club || g.n < 3) continue; // tiny groups: the nation's own label says enough
+        const r = r0 + 105;
+        const faded = spotlight !== null && spotlight !== conf && !club;
+        ctx.globalAlpha = (faded ? 0.3 : 0.9) * intro;
+        const fs = (club ? 10.5 : 12) / scale;
+        ctx.font = `700 ${fs}px Inter, system-ui, sans-serif`;
+        ctx.fillStyle = club ? ink.text : g.color;
+        ctx.fillText(conf.toUpperCase(), Math.cos(ang) * r, Math.sin(ang) * r);
+        ctx.font = `500 ${fs * 0.85}px Inter, system-ui, sans-serif`;
+        ctx.fillStyle = ink.text;
+        ctx.globalAlpha *= 0.7;
+        ctx.fillText(club ? `${g.n} clubs` : `${CONF_NAME[conf] ?? conf} · ${g.n}`, Math.cos(ang) * r, Math.sin(ang) * r + fs * 1.3);
+      }
+      ctx.restore();
+    },
+    [data, ink, spotlight],
   );
 
   // ------------------------------------------------------------ overview links: glowing gradient arcs
@@ -334,8 +409,10 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
       const touchesHover = hoverId !== null && (s.id === hoverId || t.id === hoverId);
       let alpha = (l.backbone ? 0.12 : 0.16 + 0.42 * w) * (mode === "light" ? 1.25 : 1);
       if (focusSet) alpha = touchesHover ? 0.95 : 0.025;
+      else if (spotSet) alpha = spotSet.has(s.id) && spotSet.has(t.id) && (s.conf === spotlight || t.conf === spotlight) ? alpha * 1.4 : 0.02;
       else if (spotlight) alpha = s.conf === spotlight && t.conf === spotlight ? alpha * 1.3 : s.conf === spotlight || t.conf === spotlight ? alpha * 0.6 : 0.02;
       else if (highlight.size) alpha = isPathLink(l) ? 0.95 : 0.03;
+      if (ring && !focusSet && !spotSet) alpha *= 0.55; // bundled links overlap a lot on the rings
       if (introAt.current) alpha *= ease((performance.now() - introAt.current - 250) / INTRO_MS);
       if (alpha <= 0.005) return;
 
@@ -348,7 +425,8 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
         grad.addColorStop(1, rgba(ct, alpha));
         stroke = grad;
       }
-      const cp = controlPoint(s, t, CURVATURE);
+      // rings: pull every curve towards the centre so links bundle like a chord diagram
+      const cp = ring ? { x: (s.x! + t.x!) * 0.18, y: (s.y! + t.y!) * 0.18 } : controlPoint(s, t, CURVATURE);
       ctx.save();
       ctx.globalCompositeOperation = mode === "dark" ? "lighter" : "multiply";
       ctx.strokeStyle = stroke;
@@ -360,7 +438,7 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
       ctx.stroke();
       ctx.restore();
     },
-    [maxW, hoverId, focusSet, spotlight, highlight, isPathLink, mode],
+    [maxW, hoverId, focusSet, spotSet, spotlight, highlight, isPathLink, mode, ring],
   );
 
   const paintNode = useCallback(
@@ -394,9 +472,11 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
         ctx.fill();
       }
 
-      // body + a surface-coloured ring so overlapping marks stay separable
+      // body + a surface-coloured ring so overlapping marks stay separable (clubs draw their own crest)
       drawShape(ctx, shape, x, y, r);
-      if (node.label === "FormerName") {
+      if (node.label === "Club") {
+        /* drawn below with the logo */
+      } else if (node.label === "FormerName") {
         ctx.fillStyle = ink.ring;
         ctx.fill();
         ctx.setLineDash([2 / scale, 2 / scale]);
@@ -414,7 +494,28 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
       // flag (teams) or photo (players) clipped into the node; a coloured rim keeps the
       // type / community colour readable around the picture
       const img = r * scale >= 3.5 ? loadedImage(nodeImageUrl(node)) : undefined;
-      if (img) {
+      if (node.label === "Club") {
+        // a light crest carrying the club logo (never cropped), rimmed in the league colour
+        drawShape(ctx, shape, x, y, r);
+        ctx.fillStyle = mode === "dark" ? "#f4f3ef" : "#ffffff";
+        ctx.fill();
+        ctx.lineWidth = Math.max(1.4 / scale, r * 0.14);
+        ctx.strokeStyle = color;
+        ctx.stroke();
+        if (img) {
+          const box = r * 1.25;
+          const s = Math.min(box / img.naturalWidth, box / img.naturalHeight);
+          const w = img.naturalWidth * s, h = img.naturalHeight * s;
+          ctx.drawImage(img, x - w / 2, y - h / 2 + r * 0.02, w, h);
+        } else if (r * scale >= 7) {
+          const fs = Math.min(r * 0.62, 9);
+          ctx.font = `800 ${fs}px Inter, system-ui, sans-serif`;
+          ctx.fillStyle = color;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(teamCode(node.name.replace(/^(FC|AFC|SC|SV|AC|AS|SS|US|RC|CD|CA|UD|SD|RCD|Real)\s+/i, "")), x, y);
+        }
+      } else if (img) {
         const rim = Math.max(1.4 / scale, r * (overview ? 0.2 : 0.16));
         const inner = r - rim;
         ctx.save();
@@ -457,7 +558,8 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
       const minor = node.label === "Match" || node.label === "Goal";
       const inFocus = focusSet?.has(node.id) ?? false;
       const showLabel = overview
-        ? !dim && (selected || hi || inFocus || r >= 11.5 || r * scale >= 8 || scale > 2.2)
+        ? !dim && (selected || hi || inFocus || scale > 2.2 ||
+            (ring && node.label === "Club" ? r >= 12.5 : r >= 11.5 || r * scale >= 8))
         : selected || hi || node.id === hoverId || inFocus || (minor ? scale >= 3.4 : scale > 1.9 || r * scale >= 7);
       if (showLabel) {
         // drawn after all nodes (paintLabels) so flags never cover a name, and de-cluttered there
@@ -568,7 +670,7 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
         linkDirectionalParticleWidth={3.2}
         linkDirectionalParticleColor={() => ink.accent}
         linkLabel={(l) =>
-          `<div class="tip"><b>${l.virtual ? linkTitle(l) : l.type}</b>${l.weight ? `<span>${l.weight} meetings</span>` : ""}${l.side ? `<span>${l.side}, ${l.goals ?? 0} goals</span>` : ""}</div>`
+          `<div class="tip"><b>${l.virtual ? linkTitle(l) : l.type}</b>${l.weight ? `<span>${l.weight} ${l.unit ?? "meetings"}</span>` : ""}${l.side ? `<span>${l.side}, ${l.goals ?? 0} goals</span>` : ""}</div>`
         }
         cooldownTicks={frozen ? 0 : 320}
         cooldownTime={7000}
@@ -603,7 +705,10 @@ function linkTitle(l: L) {
 }
 
 function tooltip(n: GNode) {
-  const img = n.label === "Team" || n.label === "Player" ? nodeImageUrl(n) : undefined;
+  const img = n.label === "Team" || n.label === "Player" || n.label === "Club" ? nodeImageUrl(n) : undefined;
+  if (n.subtitle) {
+    return `<div class="tip tip--rich">${img ? `<img src="${img}" alt="" class="${n.label === "Club" ? "is-logo" : ""}" />` : ""}<div><b>${escapeHtml(n.name)}</b><span>${escapeHtml(n.subtitle)}</span></div></div>`;
+  }
   const meta = [
     n.conf ? `${n.conf} · ${CONF_NAME[n.conf] ?? ""}` : n.label,
     n.elo ? `Elo ${Math.round(n.elo)}` : "",

@@ -31,7 +31,8 @@ store = Store()
 agent = Agent(store)
 media = Media(store.q("SELECT team_id AS id, name, matches FROM teams"))
 # Resolve every team's flag + crest in the background (one-off; cached in app_data/media.sqlite).
-threading.Thread(target=media.warm_teams, daemon=True).start()
+media.clubs = store.q("SELECT club_id AS id, tm_club_id AS tm, name FROM clubs")
+threading.Thread(target=media.warm_all, daemon=True).start()  # teams, then club logos (serial)
 # Pre-fetch top scorers at low priority so famous players already have photos (fewer when we're on
 # Wikimedia's slow anonymous tier, so the warm-up doesn't delay what you actually look at).
 media.enqueue(store.q("SELECT player_id AS id, name, team FROM players ORDER BY goals DESC LIMIT ?",
@@ -50,6 +51,12 @@ def media_teams() -> dict:
 
 class IdsRequest(BaseModel):
     ids: list[str] = Field(..., max_length=60)
+
+
+@app.get("/api/media/clubs")
+def media_clubs() -> dict:
+    ready = media._clubs_ready.is_set()
+    return {"ready": ready, "clubs": media.club_images() if ready else {}}
 
 
 @app.post("/api/media/players")
@@ -129,6 +136,16 @@ def overview(top: int = Query(200, ge=10, le=337), min_meetings: int | None = Qu
              start: int | None = Query(None, ge=1872, le=2100), end: int | None = Query(None, ge=1872, le=2100),
              backbone: int = Query(3, ge=0, le=8)) -> dict:
     return store.overview(top, min_meetings, start, end, backbone)
+
+
+@app.get("/api/clubs/universe")
+def club_universe() -> dict:
+    return store.club_universe()
+
+
+@app.get("/api/clubs/pipeline")
+def club_pipeline() -> dict:
+    return store.pipeline()
 
 
 @app.get("/api/h2h")

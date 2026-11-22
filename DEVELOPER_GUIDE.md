@@ -707,7 +707,32 @@ floating panel on the left via `insetLeft` and caps the zoom).
   names never pile up.
 
 Hovering a team dims everything but its rivals; clicking a confederation in the legend spotlights
-it (`spotlight` prop). Opening an entity from the overview starts a clean canvas around it.
+it (`spotlight` prop).
+
+**Three home views.** A switcher at the top of the canvas (`HOMES` in `App.tsx`) swaps between:
+
+| View | Endpoint / method | Nodes | Links | Layout |
+|---|---|---|---|---|
+| Nations | `/api/overview`, `Store.overview` | 200 national teams, size = Elo | meetings | confederation homes |
+| Clubs | `/api/clubs/universe`, `Store.club_universe` | clubs of the 7 big leagues with 4+ seasons since 2012/13, plus the 24 winningest elsewhere; size = win rate (`strength`) | players shared (5+ games at both) + each club's 2 strongest bonds | league homes in `CONF_HOME`, roughly a map of Europe |
+| Pipeline | `/api/clubs/pipeline`, `Store.pipeline` | 40 nations with the most internationals in club data + the 64 clubs that used most of them | internationals of that nation who played for that club | two fixed rings (`hx`/`hy` from the server), links bundled towards the centre |
+
+All three reuse the same canvas code. Every overview node has a `conf` (cluster key: confederation or
+league), and the canvas works out each node's home from `hx`/`hy` or `CONF_HOME[conf]`. On the rings, link
+forces are switched off and a strong home force keeps nodes in place. In the Pipeline, spotlighting a
+confederation also keeps the clubs its players went to lit. Club logos (`Media.warm_clubs`, 789 of 796 clubs) are
+found in three steps, all serial and throttled:
+
+1. Wikidata, matched exactly by Transfermarkt team ID (P7223): the free logo on Commons (P154). About 280 clubs
+   have one.
+2. Otherwise, the main image of the club's English Wikipedia article (`prop=pageimages`, `pilicense=any`).
+   Most club crests are non-free files hosted on en.wikipedia under fair use, so this finds nearly all the
+   rest. Only crest-like images (SVG/PNG, or "logo"/"crest"/"badge" in the file name) are kept.
+3. Otherwise, a Wikipedia search for the club's name. The result's title must contain the club's first
+   distinctive word, so "Metalist Kharkiv" can't pick up "FC Kharkiv".
+
+Clubs still without a logo get a crest with their initials. Results are cached; delete the `__clubs_v2__`
+row from `app_data/media.sqlite` to run the lookup again. Opening an entity from the overview starts a clean canvas around it.
 
 Interactions: click = select, double-click or right-click = expand, drag = pin, background click =
 deselect.

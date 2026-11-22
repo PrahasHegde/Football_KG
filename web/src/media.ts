@@ -15,6 +15,7 @@ export interface TeamMedia {
 
 const teams: Record<string, TeamMedia> = {};
 const playerPhotos: Record<string, string | null> = {};
+const clubLogos: Record<string, string> = {};
 const requested = new Set<string>();
 const images = new Map<string, HTMLImageElement>();
 const listeners = new Set<() => void>();
@@ -60,6 +61,24 @@ export async function loadTeamMedia(): Promise<void> {
   }
 }
 
+/** Load club logos once (Wikidata, matched by Transfermarkt ID); retries while the server warms up. */
+export async function loadClubMedia(): Promise<void> {
+  for (let attempt = 0; attempt < 40; attempt++) {
+    try {
+      const r = await fetch("/api/media/clubs");
+      const body = (await r.json()) as { ready: boolean; clubs: Record<string, string> };
+      if (body.ready) {
+        Object.assign(clubLogos, body.clubs);
+        bump();
+        return;
+      }
+    } catch {
+      /* server not ready */
+    }
+    await new Promise((res) => window.setTimeout(res, 5000));
+  }
+}
+
 /**
  * Ask the server for photos of these players (only ones not asked for before). The server answers
  * with what it already has and queues the rest; pending ones are re-polled until they resolve, so
@@ -96,6 +115,7 @@ export const playerPhoto = (id: string): string | null | undefined => playerPhot
 export function nodeImageUrl(n: GNode): string | null {
   if (n.label === "Team") return teams[n.id]?.flag ?? null;
   if (n.label === "Player") return playerPhotos[n.id] ?? null;
+  if (n.label === "Club") return clubLogos[n.id] ?? null;
   return null;
 }
 

@@ -41,6 +41,15 @@ https://github.com/martj42/international_results.
   competition; CONMEBOL listed explicitly; else 'Non-FIFA') in fixed slot order. Layout = geographic homes
   (`CONF_HOME` in theme.ts) via custom `home`/`collide` d3 forces; nebulae + titles in `onRenderFramePre`,
   gradient arcs via `linkCanvasObject`, labels de-cluttered in `onRenderFramePost`.
+- Home switcher (App.tsx `HOMES`): **Nations** (above), **Clubs** (`Store.club_universe`, `/api/clubs/universe`:
+  big-7-league clubs with 4+ seasons + 24 winningest elsewhere, grouped by league via `conf` + `CONF_HOME` league
+  homes, size = win rate via `strength`, edges = players shared with 5+ apps at both) and **Pipeline**
+  (`Store.pipeline`, `/api/clubs/pipeline`: 40 nations on an outer ring by confederation, 64 clubs on an inner
+  ring, fixed ring positions sent as `hx/hy`, edge = internationals of that nation who played for that club).
+  Club logos (`Media.warm_clubs`, 789/796): Wikidata by Transfermarkt ID (P7223) -> free Commons logo (P154);
+  else the club's enwiki article page image (`pilicense=any`: most crests are NON-FREE fair-use files on
+  en.wikipedia) kept only if crest-like (`CREST_FILE`); else a Wikipedia search whose title must contain the
+  club's first distinctive word. Re-run by deleting `__clubs_v2__` from app_data/media.sqlite.
 - `web/` React + TS + Vite, canvas via `react-force-graph-2d`. Graph state lives in `useGraph.ts`;
   node objects are kept stable so the simulation keeps positions. Keep hook callbacks off the
   per-render `useGraph()` object (doing so caused an infinite fetch loop once).
