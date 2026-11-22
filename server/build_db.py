@@ -72,6 +72,7 @@ def build(graph_path: Path = GRAPH_PATH, db_path: Path = DB_PATH) -> None:
                 "goals": d.get("goals"),
                 "start_date": d.get("start"),
                 "end_date": d.get("end"),
+                "source": d.get("source"),  # ASSISTED: 'dataset' | 'statsbomb'
             }
             for u, v, d in G.edges(data=True)
         ]
@@ -89,7 +90,7 @@ def build(graph_path: Path = GRAPH_PATH, db_path: Path = DB_PATH) -> None:
         CREATE TABLE raw_nodes AS SELECT * FROM nodes_df;
         CREATE TABLE edges AS
             SELECT src, dst, type, side, CAST(goals AS INTEGER) AS goals,
-                   start_date, end_date
+                   start_date, end_date, source
             FROM edges_df;
     """)
 
@@ -139,8 +140,8 @@ def build(graph_path: Path = GRAPH_PATH, db_path: Path = DB_PATH) -> None:
                CAST(g.minute AS INTEGER) AS minute,
                CAST(g.penalty AS BOOLEAN) AS penalty,
                CAST(g.own_goal AS BOOLEAN) AS own_goal,
-               asd.src AS assist_player_id, ap.name AS assister,
-               coalesce(g.source, 'dataset') AS source   -- 'dataset' (goalscorers.csv) | 'wikipedia' (friendlies)
+               asd.src AS assist_player_id, ap.name AS assister, asd.source AS assist_source,
+               coalesce(g.source, 'dataset') AS source   -- 'dataset' (goalscorers.csv) | 'wikipedia' (gap-filling)
         FROM raw_nodes g
         JOIN edges im ON im.src = g.id AND im.type = 'IN_MATCH'
         JOIN matches m ON m.match_id = im.dst
@@ -156,8 +157,12 @@ def build(graph_path: Path = GRAPH_PATH, db_path: Path = DB_PATH) -> None:
     con.execute("""
         CREATE TABLE players AS
         SELECT p.id AS player_id, p.name, t.name AS team, pf.dst AS team_id,
+               -- goals: from the dataset only (same coverage for everyone, so fair for rankings)
                count(g.goal_id) FILTER (WHERE NOT g.own_goal AND g.source = 'dataset') AS goals,
-               count(g.goal_id) FILTER (WHERE g.source = 'wikipedia')          AS friendly_goals,
+               -- wiki_goals: gap-filling goals from the player's Wikipedia goal list (~165 stars only)
+               count(g.goal_id) FILTER (WHERE g.source = 'wikipedia')          AS wiki_goals,
+               count(g.goal_id) FILTER (WHERE NOT g.own_goal)                 AS total_goals,
+               count(g.goal_id) FILTER (WHERE NOT g.own_goal AND g.tournament = 'Friendly') AS friendly_goals,
                count(g.goal_id) FILTER (WHERE g.penalty AND NOT g.own_goal)   AS penalty_goals,
                count(g.goal_id) FILTER (WHERE g.own_goal)                     AS own_goals,
                (SELECT count(*) FROM goals a WHERE a.assist_player_id = p.id) AS assists,
@@ -205,6 +210,8 @@ def build(graph_path: Path = GRAPH_PATH, db_path: Path = DB_PATH) -> None:
     """)
 
     add_elo(con)
+    add_confederations(con)
+    add_clubs(con)
 
     # ---------- graph node table with degree (importance) and readable names ----------
     con.execute("""
@@ -244,6 +251,107 @@ def build(graph_path: Path = GRAPH_PATH, db_path: Path = DB_PATH) -> None:
     print(f"Built {db_path.relative_to(ROOT)} in {time.time() - t0:.1f}s")
     for name, n in counts:
         print(f"  {name:8s} {n:,}")
+
+
+EXTRA = ROOT / "data_extra"
+
+
+def add_clubs(con: duckdb.DuckDBPyConnection) -> None:
+    """Club tables from scripts/fetch_club_data.py (transfermarkt-datasets, 2012/13+). Optional: without the CSVs
+    the tables exist but are empty, so queries and the UI keep working."""
+    have = all((EXTRA / f).exists() for f in ("clubs.csv", "club_player_stats.csv", "club_seasons.csv",
+                                              "player_profiles.csv"))
+    if not have:
+        con.execute("""
+            CREATE TABLE clubs (club_id VARCHAR, tm_club_id INTEGER, name VARCHAR, league VARCHAR, country VARCHAR,
+                                stadium VARCHAR, stadium_seats INTEGER, coach VARCHAR, squad_size INTEGER);
+            CREATE TABLE club_careers (player_id VARCHAR, tm_player_id INTEGER, player_name VARCHAR,
+                nationality VARCHAR, club_id VARCHAR, club VARCHAR, apps INTEGER, goals INTEGER, assists INTEGER,
+                minutes INTEGER, league_apps INTEGER, league_goals INTEGER, league_assists INTEGER,
+                europe_apps INTEGER, europe_goals INTEGER, first_app DATE, last_app DATE);
+            CREATE TABLE club_seasons (club_id VARCHAR, season INTEGER, competition VARCHAR,
+                competition_type VARCHAR, played INTEGER, wins INTEGER, draws INTEGER, losses INTEGER,
+                goals_for INTEGER, goals_against INTEGER);
+            ALTER TABLE players ADD COLUMN position VARCHAR;
+            ALTER TABLE players ADD COLUMN date_of_birth DATE;
+            ALTER TABLE players ADD COLUMN caps INTEGER;
+        """)
+        return
+    q = lambda f: str(EXTRA / f).replace("\\", "/")  # noqa: E731
+    con.execute(f"""
+        CREATE TABLE clubs AS
+        SELECT 'CL:' || replace(lower(trim(name)), ' ', '_') AS club_id, CAST(club_id AS INTEGER) AS tm_club_id,
+               name, league, country, stadium, CAST(stadium_seats AS INTEGER) AS stadium_seats, coach,
+               CAST(squad_size AS INTEGER) AS squad_size
+        FROM read_csv_auto('{q("clubs.csv")}', header = true);
+
+        CREATE TABLE club_careers AS
+        SELECT s.kg_player_id AS player_id, CAST(s.tm_player_id AS INTEGER) AS tm_player_id, s.player_name,
+               s.nationality, c.club_id, c.name AS club,
+               CAST(s.apps AS INTEGER) AS apps, CAST(s.goals AS INTEGER) AS goals,
+               CAST(s.assists AS INTEGER) AS assists, CAST(s.minutes AS INTEGER) AS minutes,
+               CAST(s.league_apps AS INTEGER) AS league_apps, CAST(s.league_goals AS INTEGER) AS league_goals,
+               CAST(s.league_assists AS INTEGER) AS league_assists, CAST(s.europe_apps AS INTEGER) AS europe_apps,
+               CAST(s.europe_goals AS INTEGER) AS europe_goals,
+               CAST(s.first_app AS DATE) AS first_app, CAST(s.last_app AS DATE) AS last_app
+        FROM read_csv_auto('{q("club_player_stats.csv")}', header = true) s
+        JOIN clubs c ON c.tm_club_id = s.club_id;
+
+        CREATE TABLE club_seasons AS
+        SELECT c.club_id, CAST(s.season AS INTEGER) AS season, s.competition, s.competition_type,
+               CAST(s.played AS INTEGER) AS played, CAST(s.wins AS INTEGER) AS wins,
+               CAST(s.draws AS INTEGER) AS draws, CAST(s.losses AS INTEGER) AS losses,
+               CAST(s.goals_for AS INTEGER) AS goals_for, CAST(s.goals_against AS INTEGER) AS goals_against
+        FROM read_csv_auto('{q("club_seasons.csv")}', header = true) s
+        JOIN clubs c ON c.tm_club_id = s.club_id;
+
+        ALTER TABLE players ADD COLUMN position VARCHAR;
+        ALTER TABLE players ADD COLUMN date_of_birth DATE;
+        ALTER TABLE players ADD COLUMN caps INTEGER;
+        UPDATE players SET position = coalesce(p.sub_position, p.position),
+                           date_of_birth = CAST(p.date_of_birth AS DATE),
+                           caps = CAST(p.international_caps AS INTEGER)
+        FROM read_csv_auto('{q("player_profiles.csv")}', header = true) p
+        WHERE players.player_id = p.kg_player_id;
+    """)
+
+
+CONMEBOL = ("Argentina", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador", "Paraguay", "Peru", "Uruguay",
+            "Venezuela")
+
+
+def add_confederations(con: duckdb.DuckDBPyConnection) -> None:
+    """teams.confederation, derived from the data: the confederation of the team's most recent
+    continental competition (so Australia -> AFC, Israel / Kazakhstan -> UEFA). The Copa América invites
+    guests, so CONMEBOL's ten members are listed explicitly. Teams with no continental fixtures -> 'Non-FIFA'."""
+    conmebol = ", ".join(f"'{t}'" for t in CONMEBOL)
+    con.execute(f"""
+        ALTER TABLE teams ADD COLUMN confederation VARCHAR;
+        UPDATE teams SET confederation = c.conf FROM (
+            WITH tm AS (
+                SELECT home_team_id AS team_id, tournament, date FROM matches
+                UNION ALL SELECT away_team_id, tournament, date FROM matches
+            ), tagged AS (
+                SELECT team_id, date, CASE
+                    WHEN tournament IN ('UEFA Euro', 'UEFA Euro qualification', 'UEFA Nations League') THEN 'UEFA'
+                    WHEN tournament LIKE 'African Cup of Nations%' OR tournament LIKE 'African Nations Championship%'
+                        THEN 'CAF'
+                    WHEN tournament LIKE 'AFC %' OR tournament LIKE 'AFF Championship%' OR tournament LIKE 'EAFF%'
+                        OR tournament LIKE 'SAFF%' OR tournament LIKE 'WAFF%' OR tournament LIKE 'Gulf Cup%' THEN 'AFC'
+                    WHEN tournament LIKE 'Gold Cup%' OR tournament LIKE 'CONCACAF%'
+                        OR tournament LIKE 'CFU Caribbean Cup%' OR tournament LIKE 'UNCAF%' OR tournament LIKE 'CCCF%'
+                        THEN 'CONCACAF'
+                    WHEN tournament LIKE 'Oceania Nations Cup%' OR tournament LIKE 'OFC %' THEN 'OFC'
+                END AS conf
+                FROM tm
+            )
+            SELECT t.team_id,
+                   CASE WHEN t.name IN ({conmebol}) THEN 'CONMEBOL'
+                        ELSE coalesce(arg_max(g.conf, g.date) FILTER (WHERE g.conf IS NOT NULL), 'Non-FIFA') END AS conf
+            FROM teams t LEFT JOIN tagged g USING (team_id)
+            GROUP BY t.team_id, t.name
+        ) c WHERE teams.team_id = c.team_id;
+    """)
 
 
 def _elo_k(tournament: str) -> int:

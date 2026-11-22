@@ -27,13 +27,27 @@ match_lookup = results.drop_duplicates(key).set_index(key)["match_id"]
 
 goals = goals.dropna(subset=["scorer"]).copy()
 goals["source"] = "dataset"
-# Optional: friendly-match goals for prolific scorers, imported from Wikipedia goal lists by
-# scripts/fetch_friendly_goals.py (goalscorers.csv has no friendlies). Appended AFTER the dataset's
-# goals so existing Goal IDs stay stable; the build works without this file.
-EXTRA = Path("data_extra/friendly_goals_wikipedia.csv")
+# Optional: goals for prolific scorers in matches where goalscorers.csv records no scorers for their team
+# (all friendlies, plus e.g. India's SAFF Cup games), imported from Wikipedia goal lists by
+# scripts/fetch_wikipedia_goals.py. Appended AFTER the dataset's goals so existing Goal IDs stay stable;
+# the build works without this file.
+EXTRA = Path("data_extra/wikipedia_goals.csv")
 if EXTRA.exists():
     extra = pd.read_csv(EXTRA)
     goals = pd.concat([goals, extra[goals.columns]], ignore_index=True)
+# Optional: assists for Euro 2020/2024, Copa América 2024 and AFCON 2023 from StatsBomb Open Data
+# (scripts/fetch_statsbomb_assists.py); the dataset itself only has World Cup assists. Fills empty assists only.
+goals["assist_source"] = goals.assist.map(lambda a: "dataset" if isinstance(a, str) else None)
+SB = Path("data_extra/statsbomb_assists.csv")
+if SB.exists():
+    sb = pd.read_csv(SB)
+    akey = ["date", "home_team", "away_team", "team", "scorer", "minute"]
+    lookup = {tuple(k): a for k, a in zip(sb[akey].values.tolist(), sb.assist)}
+    for i, k in zip(goals.index, goals[akey].values.tolist()):
+        a = lookup.get(tuple(k))
+        if a is not None and not isinstance(goals.at[i, "assist"], str):
+            goals.at[i, "assist"] = a
+            goals.at[i, "assist_source"] = "statsbomb"
 goals["match_id"] = [match_lookup[tuple(k)] for k in goals[key].values]
 goals["goal_id"] = "G" + goals.reset_index().index.astype(str)
 # A player is identified by name + national team (names alone collide)
@@ -84,7 +98,25 @@ for g in goals.itertuples():
         a = pid(g.assist, g.team)
         if a not in G:
             node(a, "Player", name=g.assist); G.add_edge(a, team, type="PLAYS_FOR")
-        G.add_edge(a, g.goal_id, type="ASSISTED")
+        G.add_edge(a, g.goal_id, type="ASSISTED", source=g.assist_source)
+
+# Optional: clubs (2012/13+) from transfermarkt-datasets via scripts/fetch_club_data.py. Club nodes for every
+# club; PLAYED_FOR_CLUB edges only for players already in the graph (linked by name + national team + era).
+CLUBS, CLUB_STATS = Path("data_extra/clubs.csv"), Path("data_extra/club_player_stats.csv")
+club_node = {}
+if CLUBS.exists() and CLUB_STATS.exists():
+    for c in pd.read_csv(CLUBS).itertuples():
+        cid = f"CL:{slug(c.name)}"
+        club_node[c.club_id] = cid
+        node(cid, "Club", name=c.name, league=c.league, country=c.country,
+             stadium=None if pd.isna(c.stadium) else c.stadium)
+        country = c.country_team if isinstance(c.country_team, str) else c.country
+        if isinstance(country, str) and f"C:{slug(country)}" in G:
+            G.add_edge(cid, f"C:{slug(country)}", type="BASED_IN")
+    for s in pd.read_csv(CLUB_STATS).itertuples():
+        if isinstance(s.kg_player_id, str) and s.kg_player_id in G and s.club_id in club_node:
+            G.add_edge(s.kg_player_id, club_node[s.club_id], type="PLAYED_FOR_CLUB", apps=int(s.apps),
+                       goals=int(s.goals), assists=int(s.assists), start=s.first_app, end=s.last_app)
 
 for f in former.itertuples():               # historical names as aliases
     fid = f"FN:{slug(f.former)}"

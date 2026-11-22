@@ -31,6 +31,7 @@ export function useGraph() {
           existing.degree = n.degree ?? existing.degree;
           if (n.group !== undefined) existing.group = n.group;
           if (n.elo !== undefined) existing.elo = n.elo;
+          if (n.conf !== undefined) existing.conf = n.conf;
           continue;
         }
         const fresh: GNode = { ...n };
@@ -87,6 +88,7 @@ export function useGraph() {
     for (const n of nodes.current.values()) {
       delete n.group;
       delete n.elo;
+      delete n.conf;
     }
     commit();
   }, [commit]);

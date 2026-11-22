@@ -233,6 +233,7 @@ exist. Goals are linked to matches by the key `(date, home_team, away_team)`.
 (Match)-[:WON_BY]->(Team)          (Team)-[:WON_SHOOTOUT]->(Match)
 (Match)-[:HELD_IN]->(City)-[:LOCATED_IN]->(Country)<-[:REPRESENTS]-(Team)
 (Team)-[:FORMERLY_KNOWN_AS {start, end}]->(FormerName)
+(Player)-[:PLAYED_FOR_CLUB {apps, goals, assists, start, end}]->(Club)-[:BASED_IN]->(Country)
 ```
 
 Illustration: one World Cup goal by Messi links to the rest of the graph like this:
@@ -245,25 +246,81 @@ Illustration: one World Cup goal by Messi links to the rest of the graph like th
   Argentina            Argentina           City ──LOCATED_IN──► Country
 ```
 
-### Optional input: friendly goals from Wikipedia
+### Optional input: goals from Wikipedia goal lists
 
-`goalscorers.csv` has no scorers for friendlies, although `results.csv` contains 18,283 friendly
-matches. `scripts/fetch_friendly_goals.py` fills part of that gap:
+`goalscorers.csv` has no scorers for friendlies (18,283 matches in `results.csv`) and none for many
+regional competitions either; India, for example, has no scorers for any SAFF Cup, Nehru Cup or Asian Cup
+qualifier, so Sunil Chhetri showed 14 dataset goals instead of 95. `scripts/fetch_wikipedia_goals.py`
+fills part of that gap:
 
 1. finds Wikipedia's ~165 "List of international goals scored by …" pages (prolific scorers only),
 2. downloads each once (HTML cached in `app_data/wiki_goal_lists/`, throttled like all Wikimedia calls),
-3. reads the goal table (one row per goal: date, opponent, competition),
-4. matches each goal to a match in `results.csv` by date + both teams (historical names like
-   "West Germany" resolve through `former_names.csv` and `OPPONENT_ALIASES`),
-5. keeps only goals in matches the dataset classes as **Friendly** (no overlap with goalscorers.csv),
-   and drops a match's goals if they would exceed the team's actual score,
-6. writes `data_extra/friendly_goals_wikipedia.csv` in goalscorers.csv format plus `source` /
-   `source_page`.
+3. reads the goal table (one row per goal: date, opponent, competition). Only the page's largest
+   table is used, plus extra tables that are per-team goal lists (players who scored for two national
+   teams). Hat-trick, youth and summary tables repeat goals and are skipped, as are rows in youth sections
+   or against U15-U23 sides. A header row that the HTML parser read as data is promoted back to a header,
+4. matches each goal to a match in `results.csv` by date (±1 day as a fallback) + both teams
+   (historical names like "West Germany" resolve through `former_names.csv` and `OPPONENT_ALIASES`;
+   exact team names always win, because `results.csv` keeps Yugoslavia and Czechoslovakia as teams),
+5. per player and match, adds only the goals the dataset does not already credit to that player, so a
+   goal is never counted twice. It drops a match's goals if the team's dataset plus imported goals would
+   exceed its actual score,
+6. writes `data_extra/wikipedia_goals.csv` in goalscorers.csv format plus `source` / `source_page`.
+
+Result: about 2,480 goals for 95 players. Totals were checked against each player's Wikipedia list:
+52 match exactly (Messi 126, Ronaldo 146, Kane, Lewandowski, Gerd Müller, Muriqi) and 72 are within 2.
+Two are 1 over because of the source dataset: a Villa goal his list doesn't have, and a 1992 goal by
+Pierre Aubameyang (the father) credited to Pierre-Emerick. The large shortfalls (Hussein Saeed, Kamamoto,
+Ahmed Faras, Mokhtar Dahari) are Olympic qualifiers and early Merdeka Cup games that are not in
+`results.csv`, so there is no match to attach them to.
+
+### Optional input: assists from StatsBomb Open Data
+
+`goalscorers.csv` has assists **only for FIFA World Cup matches**. No free, licensed source publishes
+official career international assists: Opta is commercial, and FBref (which lost its Opta feed in January
+2026) and Transfermarkt forbid scraping. [StatsBomb Open Data](https://github.com/statsbomb/open-data)
+is free for analysis with attribution and has full event data for Euro 2020 and 2024, Copa América
+2024 and AFCON 2023. `scripts/fetch_statsbomb_assists.py`:
+
+1. downloads each match's events and lineups once, keeping only the goals (`app_data/statsbomb/`),
+2. matches StatsBomb matches to `results.csv` (date ±1 day + both teams) and each goal to the
+   dataset's goal (same team, minute within 2),
+3. takes the assist from the pass marked `goal_assist` and writes the assister under the spelling the
+   dataset uses for that team (e.g. "Lionel Andrés Messi Cuccittini" -> "Lionel Messi"),
+4. writes `data_extra/statsbomb_assists.csv`. `build_kg.py` fills only empty assists from it;
+   `goals.assist_source` says where each assist came from.
+
+The 2018 and 2022 World Cups are run through the same matching purely to validate it against the
+dataset's own assists (the agreement rate is printed); the dataset's World Cup assists stay as they are.
+Credit "StatsBomb" when sharing anything built on this data.
 
 `build_kg.py` appends these rows after the dataset's goals (so Goal IDs stay stable) and stores
 `source` on each Goal node. The build still works when the file is absent. Because only stars have
-friendly goals, they are kept separate in the app (`players.friendly_goals`) rather than mixed into
-the competitive totals.
+Wikipedia goals, `players.goals` stays dataset-only (fair for rankings); `players.wiki_goals` and
+`players.total_goals` (dataset + Wikipedia) give one player's full tally, which the Inspector shows.
+
+### Optional input: club data from transfermarkt-datasets
+
+[transfermarkt-datasets](https://github.com/dcaribou/transfermarkt-datasets) is a CC0 (public domain)
+dataset that its author collects from Transfermarkt. It covers ~800 clubs in the top leagues (Premier
+League, LaLiga, Bundesliga, Serie A, Ligue 1, Eredivisie, Liga Portugal, MLS, Saudi Pro League and more),
+their cups and the European competitions, with every appearance's goals, assists and minutes. Coverage
+starts in **2012/13** and ends in July 2026 (upstream updates are paused). `scripts/fetch_club_data.py`:
+
+1. downloads the dataset's DuckDB file once to `app_data/transfermarkt/` (~200 MB, not committed),
+2. links Transfermarkt players to graph players: same name (ignoring word order and hyphens, so
+   "Heung-min Son" = "Son Heung-min") and national team (nationality or current national team), or a
+   unique surname + first initial. Every link must pass an **era check**: the player's median
+   international-goal year must fall between ages 16 and 40. Namesakes from other eras are common
+   (Bebeto, Ali Karimi, two Abdoulaye Fayes),
+3. writes small committed CSVs to `data_extra/`: `clubs.csv`, `club_player_stats.csv` (one row per
+   player per club, all ~55k pairs, with `kg_player_id` when linked), `club_seasons.csv` (W/D/L and
+   goals per club, season and competition) and `player_profiles.csv` (caps, position, date of birth).
+
+`build_kg.py` adds a `Club` node for every club (`CL:<slug>`, linked to its Country) and
+`PLAYED_FOR_CLUB` edges for the ~3.9k linked players. `build_db.py` loads the CSVs into `clubs`,
+`club_careers` and `club_seasons` and adds `caps`, `position` and `date_of_birth` to `players`. Without
+the CSVs those tables are created empty, so nothing breaks.
 
 ### Outputs
 
@@ -307,13 +364,16 @@ in milliseconds, opens instantly, and can be opened **read-only**.
 | `nodes` | graph node | `id, label, name, name_norm` (lowercase, accents stripped, for search), `degree` |
 | `edges` | graph edge | `src, dst, type, side, goals, start_date, end_date` |
 | `matches` | match | `match_id, date, home_team, away_team, home_score, away_score, tournament, city, country, neutral, winner` (NULL = draw), `shootout_winner`, `*_id` columns, **Elo:** `home_elo, away_elo, home_win_exp, winner_win_exp, upset` |
-| `goals` | goal | `goal_id, match_id, date, tournament, team, opponent, player_id, scorer, minute, penalty, own_goal, assist_player_id, assister` |
-| `players` | player | `player_id, name, team, goals` (excl. own goals), `penalty_goals, own_goals, assists, matches_scored_in, first_goal_date, last_goal_date` |
-| `teams` | team | `team_id, name, matches, wins, draws, losses, goals_for, goals_against, first_match, last_match` |
+| `goals` | goal | `goal_id, match_id, date, tournament, team, opponent, player_id, scorer, minute, penalty, own_goal, assist_player_id, assister, assist_source` |
+| `players` | player | `player_id, name, team, goals` (dataset, excl. own goals), `wiki_goals, total_goals, friendly_goals, penalty_goals, own_goals, assists, matches_scored_in, first_goal_date, last_goal_date` |
+| `teams` | team | `team_id, name, matches, wins, draws, losses, goals_for, goals_against, first_match, last_match, confederation` (UEFA, CONMEBOL, CONCACAF, CAF, AFC, OFC or Non-FIFA: the confederation of the team's most recent continental competition, from `add_confederations`) |
 | `tournaments` | tournament | `tournament_id, name, matches, first_match, last_match` |
 | `former_names` | old name | `former_id, former_name, team, team_id, start_date, end_date` |
 | `elo_history` | team × match | `team_id, date, match_id, elo` (rating after the match) |
 | `elo_yearly` | team × year | `team_id, team, year, elo` (year-end), `rank` (world rank that year) |
+| `clubs` | club | `club_id` (`CL:…`), `tm_club_id, name, league, country, stadium, stadium_seats, coach, squad_size` |
+| `club_careers` | player × club | `player_id` (graph id or NULL), `tm_player_id, player_name, nationality, club_id, club, apps, goals, assists, minutes, league_*, europe_*` (Champions/Europa/Conference League), `first_app, last_app`; since 2012/13 |
+| `club_seasons` | club × season × competition | `season, competition, competition_type, played, wins, draws, losses, goals_for, goals_against` |
 
 Note: `winner` is derived from the scores, not from `WON_BY` edges, so an unplayed fixture with no
 score can never be counted as a win.
@@ -352,7 +412,7 @@ duckdb.connect(path, read_only=True,
 ```
 
 Every method takes a fresh **cursor** (`self.q(...)`), which makes it safe to call from FastAPI's
-thread pool. Expensive results that never change (`meta`, `communities`, `discover`, `schema_text`)
+thread pool. Expensive results that never change (`meta`, `discover`, `schema_text`)
 are cached with `@cached_property`.
 
 | Method | What it does | How |
@@ -362,8 +422,7 @@ are cached with `@cached_property`.
 | `expand(id, limit, type, direction)` | Neighbours of a node | One SQL with a window function: at most `limit` neighbours **per relationship group**, matches newest first, others by degree; reports totals that were cut (`truncated`) |
 | `subgraph(ids)` | Nodes + all edges among them | Used for "add this to the canvas" |
 | `subgraph_with_context(ids)` | `subgraph` plus anchors | Adds player→team, match→teams/tournament, goal→scorer/match; for 2–3 teams adds their latest meetings. Used for agent drawings |
-| `communities` | Team "regions" | Louvain community detection on the all-time meeting graph (pairs that met 5+ times); top 7 communities named after their 3 most active teams; the rest → "Other" |
-| `overview(top, min_meetings, start, end)` | Rivalry network for an era | Top 80 teams by matches in the era, linked when they met `min_meetings` times (default scales with the era length), Elo at era end for sizing |
+| `overview(top, min_meetings, start, end, backbone)` | The "football universe" for an era | Top `top` teams by matches in the era (200 all-time, 140 per decade). Edges: pairs that met `min_meetings` times (default ≈ 10% of the era's years, min 4) **plus** each team's `backbone` (3) most frequent opponents, flagged `backbone: true`, so no team floats alone. Nodes carry `conf` (confederation) and `group` (its fixed palette slot), Elo at era end for sizing; the response lists the confederations with team counts |
 | `h2h(a, b)` / `h2h_graph` | Head-to-head data | Summary, results by decade, biggest wins, recent meetings, competitions, both Elo series |
 | `discover` | Insight cards | Current Elo top 10 (+ 4-year change), all-time peaks, biggest upsets (competitive, both teams rated above 1600), most-played rivalries, most different opponents |
 | `find_path(src, dst, via_teams)` | Shortest connection | Builds an undirected NetworkX graph lazily (first call only) without hub labels (Tournament/City/Country/FormerName); bidirectional BFS. `via_teams=False` hides Team nodes, so players link only through shared matches |
@@ -395,7 +454,7 @@ Several layers protect against harmful or runaway agent SQL:
 | GET | `/api/entity/{id}` | Entity profile |
 | GET | `/api/expand/{id}?limit=&type=&direction=` | Neighbourhood subgraph |
 | POST | `/api/subgraph` `{ids: [...]}` | Nodes + edges among them |
-| GET | `/api/overview?start=&end=&top=&min_meetings=` | Era rivalry network + community names |
+| GET | `/api/overview?start=&end=&top=&min_meetings=&backbone=` | Era "universe" + confederations |
 | GET | `/api/h2h?a=&b=` | Head-to-head data + its graph |
 | GET | `/api/discover` | Insight cards |
 | GET | `/api/path?src=&dst=&via_teams=` | Shortest path subgraph |
@@ -615,7 +674,7 @@ in `localStorage`.
 its default node drawing with `paintNode`:
 
 1. **Shape** by node type (`LABEL_SHAPE` in `theme.ts`, drawn by `drawShape`).
-2. **Colour** by node type, or by community (overview) or result (head-to-head) when `node.group`
+2. **Colour** by node type, or by confederation (overview) or result (head-to-head) when `node.group`
    is set.
 3. **Size** by `log(degree)`, or by Elo in the overview (`nodeRadius`).
 4. **Surface-coloured ring** around each node so overlapping nodes stay distinguishable.
@@ -625,9 +684,30 @@ its default node drawing with `paintNode`:
 7. **Dimming**: hovering a node dims everything except it and its neighbours; a highlighted path
    dims the rest, and its edges carry moving particles.
 
-Physics (`d3Force('charge')`, `d3Force('link')`) is tuned differently for the overview (spread
-clusters, edge strength by number of meetings) and for exploration (compact). After a layout settles,
-the view auto-fits, with a zoom cap so tiny graphs don't zoom absurdly far.
+Physics (`d3Force('charge')`, `d3Force('link')`) is tuned differently for the overview and for
+exploration (compact). After a layout settles, the view auto-fits (our own `fit`, which keeps clear of a
+floating panel on the left via `insetLeft` and caps the zoom).
+
+**The overview ("football universe")** is drawn in four layers:
+
+- **Layout**: every confederation has a *home* roughly where it sits on a world map (`CONF_HOME` in
+  `theme.ts`). Two custom d3 forces are added only in this mode: `home` pulls each team gently
+  towards its home, and `collide` stops flags overlapping. Links still pull rivals together, so teams
+  that play across confederations (Australia, Israel, the USA and Mexico) settle between clusters.
+  New nodes are seeded near their home, so the view "blooms" outward when it opens.
+- **Backdrop** (`onRenderFramePre`): a soft radial "nebula" per confederation, sized from its nodes'
+  spread, plus its title (`UEFA · Europe · 57`), above the cluster for northern confederations and
+  below it for southern ones.
+- **Links** (`linkCanvasObject`, virtual edges only): curved arcs with a colour gradient from one
+  confederation to the other, opacity and width by number of meetings. The dark theme uses
+  `lighter` (additive) blending so busy areas glow; light uses `multiply`.
+- **Nodes and labels**: flags with a confederation-coloured rim, a gloss highlight and a glow for
+  strong (high-Elo) teams. Labels are collected while painting nodes and drawn last
+  (`onRenderFramePost`), strongest first, skipping any that would overlap: no flag covers a name and
+  names never pile up.
+
+Hovering a team dims everything but its rivals; clicking a confederation in the legend spotlights
+it (`spotlight` prop). Opening an entity from the overview starts a clean canvas around it.
 
 Interactions: click = select, double-click or right-click = expand, drag = pin, background click =
 deselect.
@@ -642,8 +722,8 @@ deselect.
   **shapes** are a second encoding, so a node type is never identified by colour alone.
 - The canvas cannot read CSS variables cheaply on every frame, so `CANVAS[mode]` in `theme.ts` holds
   the canvas inks (label text, rings, edges) for each mode.
-- Community colours are assigned once over all time (`Store.communities`), so Brazil keeps the same
-  colour in every decade.
+- Overview colours follow the confederation in a fixed slot order (UEFA, CONMEBOL, CONCACAF, CAF, AFC,
+  OFC; Non-FIFA neutral), so Brazil keeps the same colour in every decade.
 
 ### Charts (`charts.tsx`)
 
@@ -669,9 +749,10 @@ Inspector.
 ### …you open the app
 
 1. `App` mounts → `api.meta()` (header counts) and `loadOverview(ALL_TIME)`.
-2. `GET /api/overview` → `Store.overview()` returns 80 teams + "met 20+ times" edges, community IDs
-   and Elo values.
-3. `replace()` puts them on the canvas; physics spreads the clusters; the view fits to the screen.
+2. `GET /api/overview` → `Store.overview()` returns 200 teams, ~850 rivalry edges, each team's
+   confederation and Elo.
+3. `replace()` puts them on the canvas, seeded near their confederation's home; the clusters bloom
+   outward, the links fade in, and the view fits to the screen (clear of the welcome card).
 
 ### …you search "messi" and press Enter
 
@@ -825,8 +906,9 @@ provider, `Agent._loop` is the only place that talks to the LLM API.
 
 **Limitations**
 
-- Scorer data covers competitive matches only (no friendlies) and only part of them; assist data is
-  sparse.
+- Dataset scorers cover only part of the matches (no friendlies, few regional cups). Wikipedia fills
+  this for ~95 star players only. Assists cover World Cups, Euro 2020/2024, Copa América 2024 and
+  AFCON 2023 only; they are not career totals.
 - Own-goal scorers are attached to the wrong national team in the graph (see §5).
 - Conversations are kept in memory only and vanish on restart.
 - The agent cannot open the head-to-head panel by itself yet.
@@ -838,7 +920,7 @@ provider, `Agent._loop` is the only place that talks to the LLM API.
 2. ⬜ Load into Neo4j and verify counts
 3. ◐ Derived knowledge: ✅ Elo + upsets · ⬜ `RIVAL_OF` edges (50+ meetings), `TEAMMATE_OF`
 4. ⬜ Enrich players/teams from Wikidata (photos, birth dates, positions)
-5. ◐ Graph analytics: ✅ community detection · ⬜ link prediction
+5. ◐ Graph analytics: ✅ confederation clustering · ⬜ community detection, link prediction
 6. ✅ Interactive web explorer + agent
 
 Further ideas: let the agent open head-to-head views, add a team "form guide" (last 10 results),
@@ -857,7 +939,6 @@ persist conversations, and add shareable links to a view.
 | **Entity resolution** | Deciding which mentions refer to the same real thing, and giving it one ID |
 | **Subgraph** | A selection of nodes plus the edges between them |
 | **Force-directed layout** | Nodes repel each other and edges pull like springs, so connected things cluster |
-| **Louvain communities** | An algorithm that finds groups of nodes more connected to each other than to the rest |
 | **Elo rating** | A strength rating updated after every match based on the result versus the expectation |
 | **Win expectancy** | The probability the Elo model gives a team before the match |
 | **Upset** | A win by a team whose pre-match win expectancy was under 25% |

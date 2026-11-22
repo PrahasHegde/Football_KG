@@ -5,7 +5,9 @@ https://github.com/martj42/international_results.
 
 ## Commands
 - Get data: `python scripts/get_data.py` (clones the dataset into `data/international_results/`)
-- Friendly goals (optional, slow, stop the server first): `python scripts/fetch_friendly_goals.py`
+- Wikipedia goals (optional, slow, stop the server first): `python scripts/fetch_wikipedia_goals.py`
+- StatsBomb assists (optional, slow ~320 downloads): `python scripts/fetch_statsbomb_assists.py`
+- Club data (optional, downloads ~200 MB once): `python scripts/fetch_club_data.py`
 - Build graph: `python src/build_kg.py` → writes `football_kg.gpickle` and `neo4j_import/`
 - Explore: `python src/explore_kg.py` → runs the showcase queries
 - Install deps: `pip install -r requirements.txt`; UI deps: `cd web && npm install`
@@ -27,13 +29,18 @@ https://github.com/martj42/international_results.
 - The agent links entities as `[Name](<entity:ID>)`; the UI makes these clickable. Answers that link
   entities are drawn on the canvas automatically if the model didn't call `show_in_graph`.
 - DuckDB tables: graph `nodes`/`edges` plus tidy `matches`, `goals`, `players`, `teams`, `tournaments`,
-  `former_names`, `elo_history`, `elo_yearly` (see `server/build_db.py`). Winners are derived from scores, not `WON_BY`.
+  `former_names`, `elo_history`, `elo_yearly`, `clubs`, `club_careers`, `club_seasons` (see `server/build_db.py`). Winners are derived from scores, not `WON_BY`.
 - Elo (`add_elo` in build_db.py): start 1500, home advantage 100, K = 60 World Cup / 50 continental finals /
   40 qualifiers + Nations League / 30 other / 20 friendlies, goal-difference multiplier. `matches` gets
   `home_elo`, `away_elo` (pre-match), `home_win_exp`, `winner_win_exp`, `upset` (winner expectancy < 25%).
 - UI colours: validated 8-slot categorical palette in `web/src/theme.ts` (light + dark steps); node types also
-  differ by shape. Overview communities are computed once over all time (`Store.communities`) so colours
-  don't shift between eras. Charts read `--series-1/2`, `--neutral` CSS tokens.
+  differ by shape. Charts read `--series-1/2`, `--neutral` CSS tokens.
+- Overview ("football universe", `Store.overview` + `GraphCanvas`): top 200 teams (140 per decade), edges =
+  pairs that met often + each team's 3 most frequent opponents (`backbone`). Grouped/coloured by
+  `teams.confederation` (derived in `add_confederations`: confederation of the team's latest continental
+  competition; CONMEBOL listed explicitly; else 'Non-FIFA') in fixed slot order. Layout = geographic homes
+  (`CONF_HOME` in theme.ts) via custom `home`/`collide` d3 forces; nebulae + titles in `onRenderFramePre`,
+  gradient arcs via `linkCanvasObject`, labels de-cluttered in `onRenderFramePost`.
 - `web/` React + TS + Vite, canvas via `react-force-graph-2d`. Graph state lives in `useGraph.ts`;
   node objects are kept stable so the simulation keeps positions. Keep hook callbacks off the
   per-render `useGraph()` object (doing so caused an infinite fetch loop once).
@@ -46,24 +53,50 @@ https://github.com/martj42/international_results.
 (Match)-[:WON_BY]->(Team)          (Team)-[:WON_SHOOTOUT]->(Match)
 (Match)-[:HELD_IN]->(City)-[:LOCATED_IN]->(Country)<-[:REPRESENTS]-(Team)
 (Team)-[:FORMERLY_KNOWN_AS {start, end}]->(FormerName)
+(Player)-[:PLAYED_FOR_CLUB {apps, goals, assists, start, end}]->(Club)-[:BASED_IN]->(Country)
 ```
 
 ## Node ID conventions
 - Team `T:<slug>`, Tournament `TR:<slug>`, Country `C:<slug>`, City `CI:<city>@<country>`
-- Match `M<row index in results.csv>`, Goal `G<n>`, FormerName `FN:<slug>`
+- Match `M<row index in results.csv>`, Goal `G<n>`, FormerName `FN:<slug>`, Club `CL:<slug of club name>`
 - Player `P:<name>@<team>`: names alone are NOT unique, so the national team is part of the ID
 - slug = lowercase, spaces → underscores
 
 ## Known data facts (verified)
 - results.csv has ~50k matches; one duplicate key (1974-02-17 Tahiti v New Caledonia), so goals link to the first one.
 - results.csv DOES include friendlies (18,283 matches), but goalscorers.csv contains NO friendly scorers
-  and covers only ~15.5k of the ~46k matches with goals.
-- Friendly scorers for ~165 prolific players come from Wikipedia goal lists via
-  `python scripts/fetch_friendly_goals.py` -> `data_extra/friendly_goals_wikipedia.csv` (committed; optional
-  build input). These goals have `source = 'wikipedia'` (dataset goals: `'dataset'`), no minute and unknown
-  penalty flag. `players.goals` stays competitive-only; `players.friendly_goals` holds the Wikipedia ones.
-  Never rank all players by friendly goals (only stars have them).
-- `assist` is filled for only ~2k goals.
+  and covers only ~15.5k of the ~46k matches with goals; many regional competitions have no scorers at all
+  (e.g. India: none for SAFF Cup, Nehru Cup, Intercontinental Cup, Asian Cup qualifiers).
+- Gap-filling goals for ~95 prolific players come from Wikipedia goal lists via
+  `python scripts/fetch_wikipedia_goals.py` -> `data_extra/wikipedia_goals.csv` (committed; optional build
+  input). Per player and match it adds only the goals the dataset doesn't already credit to that player
+  (skipped if the dataset covers the match under an unmatched spelling), and the team's dataset + imported
+  goals may not exceed its score. Parsing: the page's largest goal table, plus extra tables only if they are
+  per-team lists (a "team" column, no goals column) - hat-trick, youth and summary tables repeat goals; rows in
+  youth sections / vs U15-U23 opponents are dropped; header rows parsed as data are promoted. Exact team names
+  beat aliases: results.csv has Yugoslavia and Czechoslovakia as their own teams. Dates may differ by ±1 day. These goals have `source = 'wikipedia'`
+  (dataset: `'dataset'`), no minute and unknown penalty flag. `players.goals` = dataset only (use for
+  rankings), `wiki_goals`, `total_goals` (= one player's tally), `friendly_goals` (goals in friendlies).
+  Never rank all players by total_goals/friendly_goals (only stars have Wikipedia goals). Checked: 52/95
+  players match their Wikipedia list exactly, 72 within 2; over by 1: Villa (dataset goal not on his list) and
+  Aubameyang (the dataset credits his father Pierre's 1992 goal to him). Big shortfalls (Hussein Saeed,
+  Kamamoto, Faras, Dahari) = Olympic qualifiers / old Merdeka games absent from results.csv.
+- goalscorers.csv `assist` exists ONLY for FIFA World Cup matches (~2.1k goals). StatsBomb Open Data adds
+  Euro 2020/2024, Copa America 2024, AFCON 2023 via `scripts/fetch_statsbomb_assists.py` ->
+  `data_extra/statsbomb_assists.csv` (fills empty assists only; WC 2018/2022 used to validate the matching).
+  `goals.assist_source` = 'dataset' | 'statsbomb'. No free, licensed source has career international assists
+  (Opta is commercial; FBref lost Opta in Jan 2026 and, like Transfermarkt, forbids scraping). StatsBomb's
+  terms require crediting "StatsBomb" when sharing results.
+- Club data = transfermarkt-datasets (github.com/dcaribou/transfermarkt-datasets, CC0; collected from
+  Transfermarkt by its author). ~800 clubs in top leagues + cups + European competitions, ONLY 2012/13 ->
+  July 2026 (updates paused upstream). `scripts/fetch_club_data.py` downloads the DuckDB file to
+  app_data/transfermarkt/ and writes committed CSVs: data_extra/clubs.csv, club_player_stats.csv (all ~55k
+  player-club pairs, `kg_player_id` when linked), club_seasons.csv, player_profiles.csv (caps, position, DOB).
+  Linking to graph players: same name (order/hyphen-insensitive) + national team (nationality or current
+  national team), else unique surname + first initial; ALWAYS with an era check (median international goal
+  year at age 16-40 from the DOB) - namesakes from other eras are common (Bebeto, Ali Karimi). ~3.9k linked.
+  Club nodes for all clubs; PLAYED_FOR_CLUB edges only for linked players. Transfermarkt's
+  `international_goals` is stale for some players (Chhetri 89 vs 95): not used.
 - Former team names never appear in results.csv (results use current names).
 - In goalscorers.csv `team` is the team credited with the goal, so for own goals the scorer actually
   played for the opponent; build_kg.py therefore attaches own-goal scorers to the wrong national team.

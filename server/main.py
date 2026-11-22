@@ -125,9 +125,10 @@ def subgraph(req: SubgraphRequest) -> dict:
 
 
 @app.get("/api/overview")
-def overview(top: int = Query(80, ge=10, le=337), min_meetings: int | None = Query(None, ge=1),
-             start: int | None = Query(None, ge=1872, le=2100), end: int | None = Query(None, ge=1872, le=2100)) -> dict:
-    return store.overview(top, min_meetings, start, end)
+def overview(top: int = Query(200, ge=10, le=337), min_meetings: int | None = Query(None, ge=1),
+             start: int | None = Query(None, ge=1872, le=2100), end: int | None = Query(None, ge=1872, le=2100),
+             backbone: int = Query(3, ge=0, le=8)) -> dict:
+    return store.overview(top, min_meetings, start, end, backbone)
 
 
 @app.get("/api/h2h")

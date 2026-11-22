@@ -1,6 +1,7 @@
 export type Label =
   | "Team"
   | "Player"
+  | "Club"
   | "Match"
   | "Goal"
   | "Tournament"
@@ -15,6 +16,8 @@ export interface GNode {
   degree?: number;
   group?: number;
   elo?: number | null;
+  /** confederation key (overview only) */
+  conf?: string;
   // set by the force simulation
   x?: number;
   y?: number;
@@ -31,13 +34,15 @@ export interface GEdge {
   goals?: number;
   weight?: number;
   virtual?: boolean;
+  /** overview: kept only as one of a team's most frequent opponents */
+  backbone?: boolean;
 }
 
 export interface Subgraph {
   nodes: GNode[];
   edges: GEdge[];
   truncated?: Record<string, number>;
-  communities?: string[];
+  confederations?: Confederation[];
   era?: { start: number; end: number; min_meetings: number };
 }
 
@@ -154,3 +159,10 @@ export type AgentEvent =
   | { type: "graph"; nodes: GNode[]; edges: GEdge[]; caption: string; focus?: string | null; path?: string[] }
   | { type: "done"; usage: Record<string, number> }
   | { type: "error"; message: string };
+
+export interface Confederation {
+  key: string;
+  name: string;
+  slot: number;
+  teams: number;
+}

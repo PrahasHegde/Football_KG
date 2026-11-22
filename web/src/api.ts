@@ -23,7 +23,7 @@ export const api = {
     return get<Subgraph>(`/api/expand/${enc(id)}?${p}`);
   },
   overview: (era?: { start: number; end: number }) =>
-    get<Subgraph>(`/api/overview?top=80${era ? `&start=${era.start}&end=${era.end}` : ""}`),
+    get<Subgraph>(`/api/overview?top=${era ? 140 : 200}${era ? `&start=${era.start}&end=${era.end}` : ""}`),
   h2h: (a: string, b: string) => get<H2H>(`/api/h2h?a=${enc(a)}&b=${enc(b)}`),
   discover: () => get<Discover>("/api/discover"),
   path: (src: string, dst: string, viaTeams: boolean) =>

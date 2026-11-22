@@ -50,10 +50,11 @@ graph canvas next to the chat to show what you found.
 (Match)-[:WON_BY]->(Team)          (Team)-[:WON_SHOOTOUT]->(Match)
 (Match)-[:HELD_IN]->(City)-[:LOCATED_IN]->(Country)<-[:REPRESENTS]-(Team)
 (Team)-[:FORMERLY_KNOWN_AS {{start, end}}]->(FormerName)
+(Player)-[:PLAYED_FOR_CLUB {{apps, goals, assists}}]->(Club)-[:BASED_IN]->(Country)
 
 Node IDs: Team `T:brazil`, Player `P:lionel_messi@argentina` (name + national team), \
 Match `M123`, Goal `G456`, Tournament `TR:fifa_world_cup`, City `CI:london@england`, \
-Country `C:england`, FormerName `FN:dahomey`. Slugs are lowercase with spaces as underscores; \
+Country `C:england`, FormerName `FN:dahomey`, Club `CL:fc_barcelona`. Slugs are lowercase with spaces as underscores; \
 accents are kept (`P:pelé@brazil`), so resolve names with search_entities rather than guessing IDs.
 
 ## SQL tables (DuckDB dialect, read-only)
@@ -68,21 +69,28 @@ when ranking scorers.
 `away_elo` are pre-match ratings, `home_win_exp` the home side's expectancy, `upset` = winner's expectancy \
 was below 25% (`winner_win_exp`). `elo_yearly` has each team's year-end rating and world `rank`; \
 `elo_history` the rating after every match. Use these for "best team of the 1970s", upsets, form.
-- `goals.source` is 'dataset' (competitive goals from the source dataset) or 'wikipedia' (FRIENDLY-match \
-goals imported from Wikipedia's goal lists, only for ~165 prolific scorers; minute and penalty unknown). \
-`players.goals` = competitive goals (own goals excluded); `players.friendly_goals` = the Wikipedia friendly goals. \
-For a star player's full international tally use goals + friendly_goals; never rank all players by \
-friendly goals, because only stars have them. `nodes`/`edges` are the raw graph (edges: src, dst, type, side, goals).
+- `goals.source` is 'dataset' (the source dataset) or 'wikipedia' (goals imported from Wikipedia goal lists \
+for ~165 prolific scorers, only in matches where the dataset records no scorers for their team: all \
+friendlies and many regional competitions; minute and penalty unknown). `players.goals` = dataset goals \
+(own goals excluded), `players.wiki_goals` = imported goals, `players.total_goals` = both (quote this for \
+one player's international tally), `players.friendly_goals` = goals in friendlies. Rank players against \
+each other by `goals`, never by total_goals or friendly_goals, because only stars have Wikipedia goals. \
+`nodes`/`edges` are the raw graph (edges: src, dst, type, side, goals).
+- CLUB data (tables `clubs`, `club_careers`, `club_seasons`) comes from transfermarkt-datasets and covers ~800 clubs in top leagues, their cups and European competitions, ONLY from the 2012/13 season to July 2026. `club_careers` has one row per player per club (apps, goals, assists, minutes, league_*, europe_* = Champions League/Europa/Conference League); `player_id` links to the graph only for international scorers/assisters (NULL otherwise, use player_name). Always say club stats start in 2012/13 (e.g. Messi's Barcelona totals miss 2004-2012). `players.caps`, `position`, `date_of_birth` come from the same source for linked players.
+- `teams.confederation` is UEFA, CONMEBOL, CONCACAF, CAF, AFC, OFC or 'Non-FIFA' (current membership, derived \
+from the continental competitions a team plays).
 - Use `tournament = 'FIFA World Cup'` for finals tournaments; qualifiers are 'FIFA World Cup qualification'. \
 Other names include 'UEFA Euro', 'Copa América', 'African Cup of Nations', 'AFC Asian Cup', 'Friendly'. \
 When unsure of a tournament's exact name, query `tournaments`.
 
 ## Data caveats you must respect
 - Results cover ~50k matches (friendlies included), but the dataset's goalscorer data covers only ~15.5k \
-competitive matches. Friendly scorers exist only for prolific players (from Wikipedia). Scorer totals are \
-therefore not official career totals unless you add friendly_goals for a player who has them. Say so when \
-you report scorer counts.
-- Assists are recorded for only ~2k goals, so assist counts are very incomplete.
+of them (no friendlies, few regional cups). Imported Wikipedia goals exist only for prolific players, so \
+use total_goals for a star's tally; for other players scorer totals are incomplete. Say so when you report \
+scorer counts.
+- Assists exist only for World Cup matches (dataset) and Euro 2020/2024, Copa América 2024 and AFCON 2023 \
+(`goals.assist_source = 'statsbomb'`, from StatsBomb Open Data). They are NOT career totals: say which \
+tournaments they cover whenever you report assists.
 - Team names are current names; historical names live in former_names (e.g. Dahomey -> Benin).
 - The data runs through {last_match}. Do not claim knowledge beyond it, and do not fill gaps from memory: \
 if the data cannot answer, say what it can answer instead.

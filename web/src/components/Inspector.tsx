@@ -161,6 +161,17 @@ function Link({ id, open, children }: { id: string; open: (id: string) => void; 
 const year = (d?: string | null) => (d ? d.slice(0, 4) : "–");
 const pct = (a: number, b: number) => (b ? `${Math.round((a / b) * 100)}%` : "–");
 
+function ClubPerson({ r, open, value }: { r: any; open: (id: string) => void; value: number }) {
+  const body = (
+    <>
+      {r.name}
+      <span className="muted small"> {r.nationality ?? ""} · {year(r.first_app)}–{year(r.last_app)}</span>
+      <span className="num">{fmt(value)}</span>
+    </>
+  );
+  return r.id ? <Link id={r.id} open={open}>{body}</Link> : <span className="row-flex">{body}</span>;
+}
+
 function MatchRow({ m, open }: { m: any; open: (id: string) => void }) {
   return (
     <Link id={m.id ?? m.match_id} open={open}>
@@ -235,13 +246,15 @@ function Details({ entity, open }: { entity: Entity; open: (id: string) => void 
             <Stats
               items={[
                 ["Team", <Link id={p.team_id} open={open}>{p.team}</Link>],
-                ...(p.friendly_goals > 0
+                ...(p.wiki_goals > 0
                   ? ([
-                      ["Total goals", fmt(p.goals + p.friendly_goals)],
-                      ["Competitive*", fmt(p.goals)],
-                      ["Friendlies†", fmt(p.friendly_goals)],
+                      ["Total goals†", fmt(p.total_goals)],
+                      ["Competitive", fmt(p.total_goals - p.friendly_goals)],
+                      ["Friendlies", fmt(p.friendly_goals)],
                     ] as [string, ReactNode][])
                   : ([["Goals*", fmt(p.goals)]] as [string, ReactNode][])),
+                ...(p.caps ? ([["Caps", fmt(p.caps)]] as [string, ReactNode][]) : []),
+                ...(p.position ? ([["Position", p.position]] as [string, ReactNode][]) : []),
                 ["Penalties", fmt(p.penalty_goals)],
                 ["Assists*", fmt(p.assists)],
                 ["Hat-tricks", fmt(d.hat_tricks)],
@@ -250,9 +263,43 @@ function Details({ entity, open }: { entity: Entity; open: (id: string) => void 
             />
           )}
           <p className="footnote">
-            * Competitive matches with recorded scorers; assists are sparsely recorded.
-            {p?.friendly_goals > 0 && " † Friendly goals from this player's Wikipedia goal list."}
+            {p?.wiki_goals > 0
+              ? `† ${fmt(p.goals)} from the dataset + ${fmt(p.wiki_goals)} from this player's Wikipedia goal list, for matches the dataset has no scorers for. `
+              : "Goals: matches with recorded scorers only (the dataset has none for friendlies and many regional cups). "}
+            * Assists are only tracked at World Cups (1930–2026) and, via StatsBomb Open Data, Euro 2020 & 2024,
+            Copa América 2024 and AFCON 2023. No free source publishes official career assist totals.
           </p>
+          {d.clubs?.length > 0 && (
+            <Section title="Club stats · since 2012/13">
+              <table className="club-table">
+                <thead>
+                  <tr><th>Club</th><th>Apps</th><th>Goals</th><th>Assists</th></tr>
+                </thead>
+                <tbody>
+                  {d.clubs.map((c: any) => (
+                    <tr key={c.id}>
+                      <td>
+                        <Link id={c.id} open={open}>{c.name}</Link>
+                        <span className="muted small"> {year(c.first_app)}–{year(c.last_app)}</span>
+                      </td>
+                      <td className="num">{fmt(c.apps)}</td>
+                      <td className="num">{fmt(c.goals)}</td>
+                      <td className="num">{fmt(c.assists)}</td>
+                    </tr>
+                  ))}
+                  {d.clubs.length > 1 && (
+                    <tr className="club-table__total">
+                      <td>Total</td>
+                      {(["apps", "goals", "assists"] as const).map((k) => (
+                        <td key={k} className="num">{fmt(d.clubs.reduce((s: number, c: any) => s + (c[k] ?? 0), 0))}</td>
+                      ))}
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+              <p className="footnote">All club competitions (league, cups, Europe) in transfermarkt-datasets, which starts in 2012/13.</p>
+            </Section>
+          )}
           <Section title="Goals by competition">
             <Rows rows={d.by_tournament} render={(t) => <span className="row-flex">{t.name}<span className="num">{t.goals}</span></span>} />
           </Section>
@@ -265,7 +312,7 @@ function Details({ entity, open }: { entity: Entity; open: (id: string) => void 
               render={(g) => (
                 <Link id={g.match_id} open={open}>
                   <span className="mono muted">{g.date}</span> {g.source === "wikipedia" ? "" : `${g.minute ?? "?"}′ `}vs {g.opponent}
-                  {g.source === "wikipedia" && <span className="tag">friendly</span>}
+                  {g.tournament === "Friendly" && <span className="tag">friendly</span>}
                   {g.penalty && <span className="tag">pen</span>}
                   {g.own_goal && <span className="tag">o.g.</span>}
                 </Link>
@@ -319,7 +366,7 @@ function Details({ entity, open }: { entity: Entity; open: (id: string) => void 
             />
             {!d.goals?.length && <p className="footnote">Scorers are not recorded for this match.</p>}
             {d.goals?.some((g: any) => g.source === "wikipedia") && (
-              <p className="footnote">Friendly goals from players' Wikipedia goal lists; other scorers in this match may be missing.</p>
+              <p className="footnote">Some goals come from players' Wikipedia goal lists (no minute); other scorers in this match may be missing.</p>
             )}
           </Section>
         </>
@@ -355,6 +402,52 @@ function Details({ entity, open }: { entity: Entity; open: (id: string) => void 
           <Section title="Host countries">
             <Rows rows={d.hosts} render={(h) => <span className="row-flex">{h.name}<span className="num">{h.matches}</span></span>} />
           </Section>
+        </>
+      );
+    }
+    case "Club": {
+      const c = d.club;
+      const t = d.totals ?? {};
+      const seasons = (d.seasons ?? []).filter((x: any) => x.played > 0);
+      return (
+        <>
+          <Stats
+            items={[
+              ["League", c?.league ?? "–"],
+              ["Country", c?.country ?? "–"],
+              ["Stadium", c?.stadium ? `${c.stadium}${c.stadium_seats ? ` · ${fmt(c.stadium_seats)}` : ""}` : "–"],
+              ["Coach", c?.coach ?? "–"],
+              ["Players used*", fmt(t.players)],
+              ["Internationals in graph", fmt(t.internationals)],
+            ]}
+          />
+          {seasons.length > 1 && (
+            <Section title="Win rate by season · all competitions">
+              <LineChart
+                ariaLabel={`Win rate of ${entity.name} by season`}
+                height={120}
+                formatY={(v) => `${Math.round(v)}%`}
+                series={[{ name: "Win rate", color: "var(--series-1)",
+                  points: seasons.map((x: any) => ({ x: x.season, y: (100 * x.wins) / x.played })) }]}
+              />
+            </Section>
+          )}
+          <Section title="Top scorers*">
+            <Rows rows={d.top_scorers} render={(r) => <ClubPerson r={r} open={open} value={r.goals} />} />
+          </Section>
+          <Section title="Top assisters*">
+            <Rows rows={d.top_assisters} render={(r) => <ClubPerson r={r} open={open} value={r.assists} />} />
+          </Section>
+          <Section title="Most appearances*">
+            <Rows rows={d.most_apps} render={(r) => <ClubPerson r={r} open={open} value={r.apps} />} />
+          </Section>
+          <Section title="Squad nationalities*">
+            <Rows rows={d.nations} render={(n) => <span className="row-flex">{n.name}<span className="num">{n.players}</span></span>} />
+          </Section>
+          <p className="footnote">
+            * Since the 2012/13 season, all competitions (transfermarkt-datasets, CC0). Linked players are also in
+            the international graph.
+          </p>
         </>
       );
     }

@@ -28,6 +28,10 @@
   --radius: 12px;
   --font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+  --stage-top: #f7f6f2;
+  --stage-glow: rgba(255, 255, 255, 0.9);
+  --vignette: rgba(120, 115, 100, 0.08);
+  --brand-grad: linear-gradient(135deg, #0b8a5e, #2a78d6);
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
@@ -55,6 +59,12 @@
   --glass: rgba(26, 26, 25, 0.88);
   --code-bg: #121211;
   --code-ink: #b4b8ff;
+  --surface: #0f1012;
+  --stage-top: #12141a;
+  --stage-glow: rgba(60, 80, 120, 0.16);
+  --vignette: rgba(0, 0, 0, 0.45);
+  --grid: #1d2026;
+  --brand-grad: linear-gradient(135deg, #34d399, #3987e5);
 }
 
 * { box-sizing: border-box; }
@@ -88,19 +98,26 @@ code, .mono { font-family: var(--mono); font-size: 0.86em; }
   height: 60px; padding: 0 16px; flex: none;
   border-bottom: 1px solid var(--border);
   background: var(--panel);
+  position: relative; z-index: 10;
 }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.02em; font-size: 16px; white-space: nowrap; }
 .brand em { font-style: normal; color: var(--accent); }
 .kpis { margin-left: auto; display: flex; gap: 18px; color: var(--muted); font-size: 12.5px; white-space: nowrap; }
 .kpis b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+.kpis span { padding: 4px 10px; border-radius: 999px; background: var(--panel-2); border: 1px solid var(--border); }
+.brand em { background: var(--brand-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
 .workspace { flex: 1; display: flex; min-height: 0; }
 .stage {
   position: relative; flex: 1; min-width: 0; overflow: hidden;
   background:
-    radial-gradient(circle at 50% 45%, var(--accent-soft), transparent 55%),
-    radial-gradient(var(--grid) 1.1px, transparent 1.2px) 0 0 / 24px 24px,
-    var(--surface);
+    radial-gradient(ellipse 70% 60% at 50% 42%, var(--stage-glow), transparent 70%),
+    radial-gradient(var(--grid) 1px, transparent 1.2px) 0 0 / 26px 26px,
+    linear-gradient(180deg, var(--stage-top), var(--surface) 60%);
+}
+.stage::after { /* vignette */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 85% 80% at 50% 45%, transparent 60%, var(--vignette));
 }
 .graph-canvas { position: absolute; inset: 0; }
 .side {
@@ -109,14 +126,14 @@ code, .mono { font-family: var(--mono); font-size: 0.86em; }
 }
 .side__body { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .side__scroll { overflow: auto; }
-.tabs { display: flex; gap: 4px; padding: 10px 12px 0; border-bottom: 1px solid var(--border); }
+.tabs { display: flex; gap: 4px; margin: 12px 12px 4px; padding: 4px; border-radius: 12px; background: var(--panel-2); border: 1px solid var(--border); }
 .tabs button {
-  display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px 10px;
-  border: 0; background: none; color: var(--muted); font-weight: 600; font-size: 13px;
-  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 7px 12px;
+  border: 0; border-radius: 9px; background: none; color: var(--muted); font-weight: 600; font-size: 13px;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
 }
 .tabs button:hover { color: var(--text); }
-.tabs button.is-active { color: var(--text); border-bottom-color: var(--accent); }
+.tabs button.is-active { color: var(--text); background: var(--panel); box-shadow: var(--shadow-sm), 0 0 0 1px var(--border); }
 .tabs button.is-active svg { color: var(--accent); }
 
 /* ============================================================ buttons */
@@ -166,8 +183,9 @@ code, .mono { font-family: var(--mono); font-size: 0.86em; }
 .search__meta { color: var(--muted); font-size: 12px; white-space: nowrap; }
 
 /* ============================================================ stage overlays */
-.caption, .toolbar, .legend, .erabar {
-  background: var(--glass); border: 1px solid var(--border); backdrop-filter: blur(10px); box-shadow: var(--shadow-sm);
+.caption, .toolbar, .legend, .erabar, .welcome {
+  background: var(--glass); border: 1px solid var(--border); backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4); box-shadow: var(--shadow-sm);
 }
 .caption {
   position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
@@ -227,7 +245,7 @@ button.legend__item:hover { background: var(--panel-3); }
 
 /* ============================================================ floating panels (inspector, h2h) */
 .panel {
-  position: absolute; top: 14px; left: 14px; bottom: 90px; z-index: 5;
+  position: absolute; top: 14px; left: 14px; bottom: 90px; z-index: 5; border-radius: 16px !important;
   display: flex; flex-direction: column; width: 372px;
   background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
   box-shadow: var(--shadow); animation: slide 0.18s ease-out;
@@ -490,3 +508,43 @@ button.legend__item:hover { background: var(--panel-3); }
 .skeleton--lines { flex: 1; height: 60px; }
 .hero--loading { display: flex; gap: 14px; }
 @keyframes shimmer { to { background-position: -200% 0; } }
+
+/* ============================================================ football universe (overview) */
+.graph-canvas.is-universe canvas { animation: fadein 0.6s ease-out; }
+@keyframes fadein { from { opacity: 0; } }
+.legend__conf { gap: 6px !important; font-size: 11.5px; transition: opacity 0.15s, background 0.15s; }
+.legend__conf b { font-weight: 650; color: var(--text); letter-spacing: 0.02em; }
+.legend__conf .muted { font-variant-numeric: tabular-nums; }
+.legend__conf.is-active { background: var(--panel-3); box-shadow: inset 0 0 0 1px var(--border-strong); }
+.legend__conf .dot { width: 10px; height: 10px; box-shadow: 0 0 0 2px var(--panel), 0 0 8px currentColor; }
+.legend { max-width: min(560px, calc(100% - 28px)); }
+
+.welcome {
+  position: absolute; top: 60px; left: 18px; z-index: 4; width: 300px; max-width: calc(100% - 36px);
+  padding: 20px 22px 18px; border-radius: 18px; box-shadow: var(--shadow); animation: rise 0.5s ease-out;
+}
+.welcome__close { position: absolute; top: 10px; right: 10px; width: 28px; height: 28px; }
+.welcome h1 { margin: 8px 0 10px; font-size: 23px; line-height: 1.15; letter-spacing: -0.03em; font-weight: 750; }
+.welcome h1 span { background: var(--brand-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.welcome p { color: var(--text-2); font-size: 13px; line-height: 1.55; }
+.welcome__tips { list-style: none; margin: 14px 0 0; padding: 12px 0 0; border-top: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 7px; font-size: 12.5px; color: var(--text-2); }
+.welcome__tips li { display: flex; align-items: center; gap: 9px; }
+.welcome__tips svg { flex: none; color: var(--accent); }
+
+.tip--rich { flex-direction: row; align-items: center; gap: 9px; }
+.tip--rich img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px var(--border); }
+.tip--rich div { display: flex; flex-direction: column; }
+.toolbar .icon-btn { border-radius: 10px; }
+.erabar__chips button.is-active { background: var(--brand-grad); color: #fff; }
+@media (max-width: 1250px) { .welcome { top: 110px; } }
+@media (max-width: 760px) { .welcome { display: none; } }
+
+/* ============================================================ club stats table */
+.club-table { width: 100%; border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.club-table th { text-align: right; font-size: 11px; font-weight: 600; color: var(--muted); padding: 4px 6px; border-bottom: 1px solid var(--border); }
+.club-table th:first-child, .club-table td:first-child { text-align: left; padding-left: 0; }
+.club-table td { padding: 6px; border-bottom: 1px solid var(--border); text-align: right; }
+.club-table td .link { font-weight: 600; }
+.club-table .num { margin: 0; padding-left: 6px; }
+.club-table__total td { font-weight: 700; border-bottom: 0; }

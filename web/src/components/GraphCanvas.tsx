@@ -1,7 +1,9 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import ForceGraph2D, { type ForceGraphMethods, type LinkObject, type NodeObject } from "react-force-graph-2d";
 import { loadedImage, nodeImageUrl, requestPlayerPhotos, useMediaVersion } from "../media";
-import { CANVAS, LABEL_SHAPE, drawShape, nodeColor, nodeRadius, teamCode, type Mode } from "../theme";
+import {
+  CANVAS, CONF_HOME, CONF_NAME, LABEL_SHAPE, drawShape, nodeColor, nodeRadius, rgba, teamCode, type Mode,
+} from "../theme";
 import type { GEdge, GNode, Label } from "../types";
 import { idOf, type GraphData } from "../useGraph";
 
@@ -23,12 +25,81 @@ interface Props {
   highlight: Set<string>;
   hiddenLabels: Set<Label>;
   frozen: boolean;
+  /** overview only: confederation to spotlight (others recede) */
+  spotlight?: string | null;
+  /** screen pixels on the left covered by a floating panel; fitting keeps the graph clear of it */
+  insetLeft?: number;
   onSelect: (node: GNode | null) => void;
   onExpand: (node: GNode) => void;
 }
 
+const CURVATURE = 0.14;
+const INTRO_MS = 1600;
+
+/** Pull every overview node towards its confederation's home. */
+function homeForce(strength: number) {
+  let nodes: N[] = [];
+  const force = (alpha: number) => {
+    for (const n of nodes) {
+      const home = n.conf ? CONF_HOME[n.conf] : undefined;
+      if (!home || n.x === undefined || n.y === undefined) continue;
+      n.vx = (n.vx ?? 0) + (home[0] - n.x) * strength * alpha;
+      n.vy = (n.vy ?? 0) + (home[1] - n.y) * strength * alpha;
+    }
+  };
+  force.initialize = (ns: N[]) => {
+    nodes = ns;
+  };
+  return force;
+}
+
+/** Keep nodes from overlapping (O(n²), fine for the few hundred nodes of the overview). */
+function collideForce(pad: number) {
+  let nodes: N[] = [];
+  const force = () => {
+    for (let i = 0; i < nodes.length; i++) {
+      const a = nodes[i];
+      for (let j = i + 1; j < nodes.length; j++) {
+        const b = nodes[j];
+        const dx = (b.x ?? 0) - (a.x ?? 0), dy = (b.y ?? 0) - (a.y ?? 0);
+        const min = nodeRadius(a) + nodeRadius(b) + pad;
+        const d2 = dx * dx + dy * dy;
+        if (d2 >= min * min || d2 === 0) continue;
+        const d = Math.sqrt(d2), push = ((min - d) / d) * 0.5;
+        a.x! -= dx * push; a.y! -= dy * push;
+        b.x! += dx * push; b.y! += dy * push;
+      }
+    }
+  };
+  force.initialize = (ns: N[]) => {
+    nodes = ns;
+  };
+  return force;
+}
+
+/** Same control point force-graph uses for curved links, so hover areas match what we draw. */
+function controlPoint(s: N, t: N, curvature: number) {
+  const dx = t.x! - s.x!, dy = t.y! - s.y!;
+  const l = Math.sqrt(dx * dx + dy * dy), a = Math.atan2(dy, dx), d = l * curvature;
+  return { x: (s.x! + t.x!) / 2 + d * Math.cos(a - Math.PI / 2), y: (s.y! + t.y!) / 2 + d * Math.sin(a - Math.PI / 2) };
+}
+
+interface LabelJob {
+  text: string;
+  x: number;
+  y: number;
+  r: number;
+  alpha: number;
+  forced: boolean;
+  strong: boolean;
+  big: boolean;
+  ink: string;
+}
+
+const ease = (x: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 3);
+
 export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
-  { data, mode, selectedId, highlight, hiddenLabels, frozen, onSelect, onExpand },
+  { data, mode, selectedId, highlight, hiddenLabels, frozen, spotlight = null, insetLeft = 0, onSelect, onExpand },
   ref,
 ) {
   const fg = useRef<ForceGraphMethods<N, L> | undefined>(undefined);
@@ -37,8 +108,30 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
   const [hoverId, setHoverId] = useState<string | null>(null);
   const pendingFit = useRef(true);
   const lastClick = useRef<{ id: string; t: number } | null>(null);
+  const introAt = useRef(0);
+  const labelJobs = useRef<LabelJob[]>([]);
+  const inset = useRef(insetLeft);
+  inset.current = insetLeft;
   const ink = CANVAS[mode];
   const mediaVersion = useMediaVersion();
+
+  const overview = data.nodes.length > 0 && data.nodes.every((n) => n.conf !== undefined);
+  const maxW = useMemo(() => Math.max(1, ...data.links.map((l) => l.weight ?? 1)), [data]);
+
+  // Seed brand-new overview nodes at their confederation's home, so the universe "blooms" out of
+  // six small clusters instead of one tangle. (Runs during render, before the simulation sees them.)
+  useMemo(() => {
+    let seeded = 0;
+    for (const n of data.nodes) {
+      if (n.x !== undefined || !n.conf) continue;
+      const home = CONF_HOME[n.conf] ?? [0, 0];
+      const a = Math.random() * 2 * Math.PI, r = Math.random() * 40;
+      n.x = home[0] * 0.35 + Math.cos(a) * r;
+      n.y = home[1] * 0.35 + Math.sin(a) * r;
+      seeded++;
+    }
+    if (seeded > data.nodes.length / 2) introAt.current = performance.now();
+  }, [data]);
 
   // fetch photos for the most connected players on the canvas
   useEffect(() => {
@@ -54,31 +147,58 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
   }, []);
 
   // zoomToFit on a tiny graph zooms in absurdly far; cap it.
+  // Our own zoom-to-fit: keeps clear of a floating panel on the left and caps the zoom
+  // (zoomToFit on a tiny graph zooms in absurdly far).
   const fit = useCallback((ms = 500) => {
     const g = fg.current;
-    if (!g) return;
-    g.zoomToFit(ms, 80);
-    window.setTimeout(() => {
-      if (g.zoom() > 2.6) g.zoom(2.6, 250);
-    }, ms + 30);
-  }, []);
+    const el = wrap.current;
+    if (!g || !el) return;
+    const ns = data.nodes.filter((n) => n.x !== undefined && n.y !== undefined);
+    if (!ns.length) return;
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+    for (const n of ns) {
+      const r = nodeRadius(n);
+      x0 = Math.min(x0, n.x! - r); x1 = Math.max(x1, n.x! + r);
+      y0 = Math.min(y0, n.y! - r); y1 = Math.max(y1, n.y! + r * 3); // room for labels below
+    }
+    const w = el.clientWidth, h = el.clientHeight;
+    if (overview) {
+      y0 -= 40;
+      y1 += 30;
+    }
+    const left = Math.min(inset.current, w * 0.45), pad = 56;
+    const k = Math.min(2.6, (w - left - 2 * pad) / Math.max(1, x1 - x0), (h - 2 * pad - 40) / Math.max(1, y1 - y0));
+    g.zoom(k, ms);
+    g.centerAt((x0 + x1) / 2 - left / 2 / k, (y0 + y1) / 2 + 10 / k, ms);
+  }, [data, overview]);
 
-  // physics tuned for a few hundred nodes; re-applied whenever the data changes
+  // physics: a geographic "universe" for the overview, a classic force layout for exploring
   useEffect(() => {
     const g = fg.current;
     if (!g) return;
-    const overview = data.links.length > 0 && data.links.every((l) => l.virtual);
-    const maxW = Math.max(1, ...data.links.map((l) => l.weight ?? 1));
-    g.d3Force("charge")?.strength((n: N) => (overview ? -150 : -80 - nodeRadius(n) * 12)).distanceMax(overview ? 420 : 420);
-    g.d3Force("link")
-      ?.distance((l: L) => (l.virtual ? 95 - 55 * ((l.weight ?? 1) / maxW) : 42))
-      .strength((l: L) => (l.virtual ? 0.04 + 0.5 * ((l.weight ?? 1) / maxW) : 0.6));
+    if (overview) {
+      const conf = new Map(data.nodes.map((n) => [n.id, n.conf]));
+      g.d3Force("charge")?.strength(-70).distanceMax(260);
+      g.d3Force("link")
+        ?.distance((l: L) => 44 + 50 * (1 - Math.sqrt((l.weight ?? 1) / maxW)))
+        .strength((l: L) => {
+          const same = conf.get(idOf(l.source as string | GNode)) === conf.get(idOf(l.target as string | GNode));
+          return (same ? 0.05 : 0.012) + 0.22 * ((l.weight ?? 1) / maxW);
+        });
+      g.d3Force("home", homeForce(0.055) as never);
+      g.d3Force("collide", collideForce(5) as never);
+    } else {
+      g.d3Force("home", null as never);
+      g.d3Force("collide", null as never);
+      g.d3Force("charge")?.strength((n: N) => -80 - nodeRadius(n) * 12).distanceMax(420);
+      g.d3Force("link")?.distance(42).strength(0.6);
+    }
     g.d3ReheatSimulation();
     const t = window.setTimeout(() => {
       if (pendingFit.current) fit(600);
     }, 1400);
     return () => window.clearTimeout(t);
-  }, [data, fit]);
+  }, [data, fit, overview, maxW]);
 
   useImperativeHandle(ref, () => ({
     fit,
@@ -100,7 +220,7 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
       out.width = src.width;
       out.height = src.height;
       const ctx = out.getContext("2d")!;
-      ctx.fillStyle = mode === "light" ? "#fcfcfb" : "#141413";
+      ctx.fillStyle = ink.bg;
       ctx.fillRect(0, 0, out.width, out.height);
       ctx.drawImage(src, 0, 0);
       const a = document.createElement("a");
@@ -132,6 +252,117 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
     [highlight],
   );
 
+  const isDim = useCallback(
+    (node: GNode) => {
+      if (focusSet) return !focusSet.has(node.id);
+      if (spotlight && overview) return node.conf !== spotlight && node.id !== selectedId;
+      return highlight.size > 0 && !highlight.has(node.id) && node.id !== selectedId;
+    },
+    [focusSet, spotlight, overview, highlight, selectedId],
+  );
+
+  // ------------------------------------------------------------ overview backdrop: confederation nebulae
+  const paintBackdrop = useCallback(
+    (ctx: CanvasRenderingContext2D, scale: number) => {
+      labelJobs.current = [];
+      if (!overview) return;
+      const groups = new Map<string, { xs: number; ys: number; n: number; nodes: GNode[]; color: string }>();
+      for (const n of data.nodes) {
+        if (n.x === undefined || n.y === undefined || !n.conf) continue;
+        const g = groups.get(n.conf) ?? { xs: 0, ys: 0, n: 0, nodes: [], color: nodeColor(n, mode) };
+        g.xs += n.x; g.ys += n.y; g.n++; g.nodes.push(n);
+        groups.set(n.conf, g);
+      }
+      const intro = introAt.current ? ease((performance.now() - introAt.current) / INTRO_MS) : 1;
+      for (const [conf, g] of groups) {
+        const cx = g.xs / g.n, cy = g.ys / g.n;
+        let spread = 0;
+        for (const n of g.nodes) spread += (n.x! - cx) ** 2 + (n.y! - cy) ** 2;
+        spread = Math.sqrt(spread / g.n);
+        const faded = (spotlight && spotlight !== conf) || (focusSet !== null);
+        const strength = (mode === "dark" ? 0.2 : 0.13) * (faded ? 0.35 : 1) * intro;
+        const R = spread * 1.9 + 50;
+        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
+        grad.addColorStop(0, rgba(g.color, strength));
+        grad.addColorStop(0.55, rgba(g.color, strength * 0.45));
+        grad.addColorStop(1, rgba(g.color, 0));
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(cx, cy, R, 0, 2 * Math.PI);
+        ctx.fill();
+
+        // confederation title above the cluster, constant size on screen
+        if (g.n >= 3) {
+          const fs = 12 / scale;
+          let top = Infinity, bottom = -Infinity;
+          for (const n of g.nodes) {
+            top = Math.min(top, n.y! - nodeRadius(n));
+            bottom = Math.max(bottom, n.y! + nodeRadius(n));
+          }
+          const below = (CONF_HOME[conf]?.[1] ?? 0) > 0;
+          ctx.save();
+          ctx.globalAlpha = (faded ? 0.3 : 0.9) * intro;
+          ctx.font = `700 ${fs}px Inter, system-ui, sans-serif`;
+          try {
+            (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = `${2.4 / scale}px`;
+          } catch { /* older browsers */ }
+          ctx.textAlign = "center";
+          ctx.textBaseline = "bottom";
+          const ty = below ? bottom + 16 / scale + fs : top - 14 / scale - fs * 1.1;
+          ctx.fillStyle = g.color;
+          ctx.fillText(conf.toUpperCase(), cx, ty);
+          ctx.font = `500 ${fs * 0.86}px Inter, system-ui, sans-serif`;
+          try {
+            (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = "0px";
+          } catch { /* older browsers */ }
+          ctx.fillStyle = ink.text;
+          ctx.globalAlpha *= 0.75;
+          ctx.fillText(`${CONF_NAME[conf] ?? conf} · ${g.n}`, cx, ty + fs * 1.25);
+          ctx.restore();
+        }
+      }
+    },
+    [overview, data, mode, spotlight, focusSet, ink],
+  );
+
+  // ------------------------------------------------------------ overview links: glowing gradient arcs
+  const paintLink = useCallback(
+    (l: L, ctx: CanvasRenderingContext2D, scale: number) => {
+      const s = l.source as N, t = l.target as N;
+      if (typeof s !== "object" || typeof t !== "object" || s.x === undefined || t.x === undefined) return;
+      const w = Math.sqrt((l.weight ?? 1) / maxW);
+      const touchesHover = hoverId !== null && (s.id === hoverId || t.id === hoverId);
+      let alpha = (l.backbone ? 0.12 : 0.16 + 0.42 * w) * (mode === "light" ? 1.25 : 1);
+      if (focusSet) alpha = touchesHover ? 0.95 : 0.025;
+      else if (spotlight) alpha = s.conf === spotlight && t.conf === spotlight ? alpha * 1.3 : s.conf === spotlight || t.conf === spotlight ? alpha * 0.6 : 0.02;
+      else if (highlight.size) alpha = isPathLink(l) ? 0.95 : 0.03;
+      if (introAt.current) alpha *= ease((performance.now() - introAt.current - 250) / INTRO_MS);
+      if (alpha <= 0.005) return;
+
+      const cs = nodeColor(s, mode), ct = nodeColor(t, mode);
+      let stroke: string | CanvasGradient;
+      if (cs === ct) stroke = rgba(cs, alpha);
+      else {
+        const grad = ctx.createLinearGradient(s.x!, s.y!, t.x!, t.y!);
+        grad.addColorStop(0, rgba(cs, alpha));
+        grad.addColorStop(1, rgba(ct, alpha));
+        stroke = grad;
+      }
+      const cp = controlPoint(s, t, CURVATURE);
+      ctx.save();
+      ctx.globalCompositeOperation = mode === "dark" ? "lighter" : "multiply";
+      ctx.strokeStyle = stroke;
+      ctx.lineCap = "round";
+      ctx.lineWidth = ((touchesHover ? 1.6 : 0.5) + 2.6 * w) / Math.pow(scale, 0.7);
+      ctx.beginPath();
+      ctx.moveTo(s.x!, s.y!);
+      ctx.quadraticCurveTo(cp.x, cp.y, t.x!, t.y!);
+      ctx.stroke();
+      ctx.restore();
+    },
+    [maxW, hoverId, focusSet, spotlight, highlight, isPathLink, mode],
+  );
+
   const paintNode = useCallback(
     (node: N, ctx: CanvasRenderingContext2D, scale: number) => {
       const x = node.x ?? 0, y = node.y ?? 0;
@@ -140,14 +371,26 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
       const shape = LABEL_SHAPE[node.label];
       const selected = node.id === selectedId;
       const hi = highlight.has(node.id);
-      const dim = (focusSet && !focusSet.has(node.id)) || (highlight.size > 0 && !hi && !selected && !focusSet);
+      const dim = isDim(node);
 
-      ctx.globalAlpha = dim ? 0.16 : 1;
+      ctx.globalAlpha = dim ? (overview ? 0.12 : 0.16) : 1;
 
-      // halo for selection / highlighted path
-      if (selected || hi) {
+      // overview: strong teams glow in their confederation colour
+      if (overview && !dim && r >= 9) {
+        const R = r * (2 + (r - 9) / 8);
+        const glow = ctx.createRadialGradient(x, y, r * 0.6, x, y, R);
+        glow.addColorStop(0, rgba(color, mode === "dark" ? 0.5 : 0.32));
+        glow.addColorStop(1, rgba(color, 0));
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(x, y, R, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+
+      // halo for selection / highlighted path / hover
+      if (selected || hi || node.id === hoverId) {
         drawShape(ctx, shape, x, y, r + (selected ? 7 : 5) / Math.sqrt(scale));
-        ctx.fillStyle = selected ? ink.halo : `${color}33`;
+        ctx.fillStyle = selected ? ink.halo : rgba(color, 0.25);
         ctx.fill();
       }
 
@@ -170,9 +413,9 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
       }
       // flag (teams) or photo (players) clipped into the node; a coloured rim keeps the
       // type / community colour readable around the picture
-      const img = r * scale >= 4 ? loadedImage(nodeImageUrl(node)) : undefined;
+      const img = r * scale >= 3.5 ? loadedImage(nodeImageUrl(node)) : undefined;
       if (img) {
-        const rim = Math.max(1.4 / scale, r * 0.16);
+        const rim = Math.max(1.4 / scale, r * (overview ? 0.2 : 0.16));
         const inner = r - rim;
         ctx.save();
         ctx.beginPath();
@@ -183,6 +426,15 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
         // photos: bias towards the top, where faces are; flags: centred
         const dy = node.label === "Player" ? Math.min(0, -(h - 2 * inner) * 0.18) : -(h - 2 * inner) / 2;
         ctx.drawImage(img, x - w / 2, y - inner + dy, w, h);
+        // a soft highlight makes flags read as little glossy "planets"
+        if (overview) {
+          const gloss = ctx.createRadialGradient(x - inner * 0.4, y - inner * 0.5, 0, x, y, inner * 1.1);
+          gloss.addColorStop(0, "rgba(255,255,255,0.35)");
+          gloss.addColorStop(0.5, "rgba(255,255,255,0)");
+          gloss.addColorStop(1, "rgba(0,0,0,0.22)");
+          ctx.fillStyle = gloss;
+          ctx.fillRect(x - inner, y - inner, inner * 2, inner * 2);
+        }
         ctx.restore();
       } else if (shape === "ring") {
         // players without a photo: a small inner dot reads as a "person" marker
@@ -203,30 +455,61 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
       }
 
       const minor = node.label === "Match" || node.label === "Goal";
-      const showLabel =
-        selected || hi || node.id === hoverId || (focusSet?.has(node.id) ?? false) ||
-        (minor ? scale >= 3.4 : scale > 1.9 || r * scale >= 7);
+      const inFocus = focusSet?.has(node.id) ?? false;
+      const showLabel = overview
+        ? !dim && (selected || hi || inFocus || r >= 11.5 || r * scale >= 8 || scale > 2.2)
+        : selected || hi || node.id === hoverId || inFocus || (minor ? scale >= 3.4 : scale > 1.9 || r * scale >= 7);
       if (showLabel) {
-        const fontSize = Math.max(10.5 / scale, 1.5);
-        ctx.font = `${selected || hi ? 600 : 500} ${fontSize}px Inter, system-ui, sans-serif`;
-        const text = node.name.length > 34 ? `${node.name.slice(0, 32)}…` : node.name;
-        const w = ctx.measureText(text).width;
-        const ty = y + r * 1.15 + 3 / scale;
-        const padX = 3.5 / scale, padY = 1.5 / scale;
-        ctx.fillStyle = ink.pill;
-        ctx.beginPath();
-        ctx.roundRect(x - w / 2 - padX, ty - padY, w + padX * 2, fontSize + padY * 2, 4 / scale);
-        ctx.fill();
-        ctx.fillStyle = selected ? ink.textStrong : ink.text;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "top";
-        ctx.fillText(text, x, ty);
+        // drawn after all nodes (paintLabels) so flags never cover a name, and de-cluttered there
+        const big = overview && r >= 11;
+        labelJobs.current.push({
+          text: node.name.length > 34 ? `${node.name.slice(0, 32)}…` : node.name,
+          x, y: y + r * 1.15 + 3 / scale, r, alpha: ctx.globalAlpha,
+          forced: selected || hi || node.id === hoverId, strong: selected || hi || big, big,
+          ink: selected || big ? ink.textStrong : ink.text,
+        });
       }
       ctx.globalAlpha = 1;
     },
     // mediaVersion: repaint when flags/photos finish loading
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selectedId, highlight, focusSet, hoverId, mode, ink, mediaVersion],
+    [selectedId, highlight, focusSet, hoverId, mode, ink, mediaVersion, overview, isDim],
+  );
+
+  const paintLabels = useCallback(
+    (ctx: CanvasRenderingContext2D, scale: number) => {
+      const jobs = labelJobs.current.sort((a, b) => Number(b.forced) - Number(a.forced) || b.r - a.r);
+      const boxes: [number, number, number, number][] = [];
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      for (const j of jobs) {
+        const fontSize = Math.max((j.big ? 11.5 : 10.5) / scale, 1.5);
+        ctx.font = `${j.strong ? 650 : 500} ${fontSize}px Inter, system-ui, sans-serif`;
+        const w = ctx.measureText(j.text).width;
+        const box: [number, number, number, number] = [j.x - w / 2 - 2 / scale, j.y, j.x + w / 2 + 2 / scale, j.y + fontSize * 1.15];
+        if (!j.forced && boxes.some((b) => box[0] < b[2] && box[2] > b[0] && box[1] < b[3] && box[3] > b[1])) continue;
+        boxes.push(box);
+        ctx.globalAlpha = j.alpha;
+        if (overview) {
+          // haloed text instead of pills keeps the universe airy
+          ctx.lineJoin = "round";
+          ctx.lineWidth = 3.4 / scale;
+          ctx.strokeStyle = ink.ring;
+          ctx.strokeText(j.text, j.x, j.y);
+        } else {
+          const padX = 3.5 / scale, padY = 1.5 / scale;
+          ctx.fillStyle = ink.pill;
+          ctx.beginPath();
+          ctx.roundRect(j.x - w / 2 - padX, j.y - padY, w + padX * 2, fontSize + padY * 2, 4 / scale);
+          ctx.fill();
+        }
+        ctx.fillStyle = j.ink;
+        ctx.fillText(j.text, j.x, j.y);
+      }
+      ctx.globalAlpha = 1;
+      labelJobs.current = [];
+    },
+    [overview, ink],
   );
 
   const linkColor = useCallback(
@@ -254,7 +537,7 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
   );
 
   return (
-    <div ref={wrap} className="graph-canvas">
+    <div ref={wrap} className={`graph-canvas ${overview ? "is-universe" : ""}`}>
       <ForceGraph2D<GNode, GEdge>
         ref={fg}
         width={size.w}
@@ -264,39 +547,46 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
         nodeId="id"
         nodeRelSize={1}
         nodeVal={(n) => nodeRadius(n) ** 2}
-        nodeLabel={(n) =>
-          `<div class="tip"><b>${escapeHtml(n.name)}</b><span>${n.label}${n.elo ? ` · Elo ${Math.round(n.elo)}` : ""}</span></div>`
-        }
+        nodeLabel={(n) => tooltip(n)}
         nodeCanvasObject={paintNode}
         nodeVisibility={(n) => !hiddenLabels.has(n.label)}
+        onRenderFramePre={paintBackdrop}
+        onRenderFramePost={paintLabels}
         linkVisibility={(l) => {
           const s = l.source as GNode | string, t = l.target as GNode | string;
           return !(typeof s === "object" && hiddenLabels.has(s.label)) && !(typeof t === "object" && hiddenLabels.has(t.label));
         }}
+        linkCanvasObjectMode={(l) => (l.virtual ? "replace" : undefined)}
+        linkCanvasObject={paintLink}
         linkColor={linkColor}
-        linkWidth={(l) => (isPathLink(l) ? 2.2 : l.virtual ? Math.min(4, 0.4 + Math.log10(l.weight ?? 1) * 1.3) : 1)}
-        linkCurvature={(l) => (l.virtual ? 0.12 : 0)}
+        linkWidth={(l) => (isPathLink(l) ? 2.2 : 1)}
+        linkCurvature={(l) => (l.virtual ? CURVATURE : 0)}
         linkDirectionalArrowLength={(l) => (l.virtual ? 0 : 3.2)}
         linkDirectionalArrowRelPos={1}
-        linkDirectionalParticles={(l) => (isPathLink(l) ? 3 : 0)}
+        linkDirectionalParticles={(l) => (isPathLink(l) && !l.virtual ? 3 : 0)}
         linkDirectionalParticleSpeed={0.007}
         linkDirectionalParticleWidth={3.2}
         linkDirectionalParticleColor={() => ink.accent}
         linkLabel={(l) =>
-          `<div class="tip"><b>${l.type}</b>${l.weight ? `<span>${l.weight} meetings</span>` : ""}${l.side ? `<span>${l.side}, ${l.goals ?? 0} goals</span>` : ""}</div>`
+          `<div class="tip"><b>${l.virtual ? linkTitle(l) : l.type}</b>${l.weight ? `<span>${l.weight} meetings</span>` : ""}${l.side ? `<span>${l.side}, ${l.goals ?? 0} goals</span>` : ""}</div>`
         }
-        cooldownTicks={frozen ? 0 : 300}
-        cooldownTime={6000}
-        d3VelocityDecay={0.32}
+        cooldownTicks={frozen ? 0 : 320}
+        cooldownTime={7000}
+        d3VelocityDecay={overview ? 0.38 : 0.32}
+        autoPauseRedraw={!overview}
         onEngineStop={() => {
+          introAt.current = 0;
           if (pendingFit.current) {
             pendingFit.current = false;
-            fit(500);
+            fit(700);
           }
         }}
         onNodeClick={handleClick}
         onNodeRightClick={(n) => onExpand(n)}
-        onNodeHover={(n) => setHoverId(n?.id ?? null)}
+        onNodeHover={(n) => {
+          setHoverId(n?.id ?? null);
+          if (wrap.current) wrap.current.style.cursor = n ? "pointer" : "";
+        }}
         onNodeDragEnd={(n) => {
           n.fx = n.x;
           n.fy = n.y;
@@ -306,6 +596,21 @@ export const GraphCanvas = forwardRef<GraphHandle, Props>(function GraphCanvas(
     </div>
   );
 });
+
+function linkTitle(l: L) {
+  const s = l.source as GNode, t = l.target as GNode;
+  return typeof s === "object" && typeof t === "object" ? `${escapeHtml(s.name)} – ${escapeHtml(t.name)}` : "MET";
+}
+
+function tooltip(n: GNode) {
+  const img = n.label === "Team" || n.label === "Player" ? nodeImageUrl(n) : undefined;
+  const meta = [
+    n.conf ? `${n.conf} · ${CONF_NAME[n.conf] ?? ""}` : n.label,
+    n.elo ? `Elo ${Math.round(n.elo)}` : "",
+    n.conf && n.degree ? `${n.degree.toLocaleString("en-US")} matches` : "",
+  ].filter(Boolean);
+  return `<div class="tip tip--rich">${img ? `<img src="${img}" alt="" />` : ""}<div><b>${escapeHtml(n.name)}</b><span>${meta.join(" · ")}</span></div></div>`;
+}
 
 function escapeHtml(s: string) {
   return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);

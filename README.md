@@ -29,12 +29,13 @@ automatically whenever `football_kg.gpickle` is newer. To force a rebuild, run `
 
 ## What's in the app
 
-- **Graph canvas** (light theme by default, dark toggle top-right): starts with the rivalry network, the
-  80 most active teams linked by meetings. Colour = all-time community (stable across eras),
-  size = Elo rating. Node types also have their own shapes (team ●, player ◉, match ▢, goal ◆,
+- **Graph canvas** (light theme by default, dark toggle top-right): opens on the *football universe*,
+  the 200 most active nations laid out like a world map. Each confederation forms a glowing cluster,
+  and the rivalries they played most are drawn as gradient arcs between them. Size = Elo rating; hover a
+  nation to light up its rivals, click a confederation in the legend to spotlight it. Node types also have their own shapes (team ●, player ◉, match ▢, goal ◆,
   tournament ⬢, country ■, city ▲). Search (Ctrl K), click for details, double-click to expand,
   drag to pin, download the canvas as PNG.
-- **Era time-travel**: replay the rivalry network decade by decade (▶ plays 1900s → 2020s and morphs
+- **Era time-travel**: replay the universe decade by decade (▶ plays 1900s → 2020s and morphs
   between them).
 - **Elo ratings** computed from every match since 1872: rating-history chart per team, pre-match win
   expectancy on every match, and upset detection.
@@ -44,6 +45,10 @@ automatically whenever `football_kg.gpickle` is newer. To force a rebuild, run `
   teams with the most different opponents.
 - **Inspector**: per-entity profiles, relationship-by-type expansion, and **Connect** for shortest
   paths (animated along the path).
+- **Club stats** for ~800 clubs in the top leagues since 2012/13 (transfermarkt-datasets, CC0):
+  club nodes in the graph, a club panel (stadium, coach, win rate by season, top scorers, assisters and
+  appearances) and a club table on player panels (apps, goals, assists per club). International players
+  also get caps and position.
 - **Photos, flags & clubs** from Wikipedia/Wikidata: flags inside team nodes, player photos on the
   canvas, and in the Inspector a player's bio and club career with club logos, or a team's flag banner,
   federation crest and summary. Cached locally after the first load. Set `WIKIMEDIA_CONTACT` in `.env`

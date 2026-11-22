@@ -16,7 +16,7 @@ import networkx as nx
 
 from .build_db import DB_PATH, build, needs_rebuild, normalize
 
-LABELS = ["Team", "Player", "Match", "Goal", "Tournament", "City", "Country", "FormerName"]
+LABELS = ["Team", "Player", "Club", "Match", "Goal", "Tournament", "City", "Country", "FormerName"]
 
 # Hubs make every path trivially short (everything is "in" the Friendly tournament), so
 # path finding ignores them.
@@ -87,7 +87,7 @@ class Store:
             return []
         # Goals have no meaningful names and Matches are better found through their teams,
         # so default search covers the "named" entities and ranks by exactness then importance.
-        labels = [label] if label else ["Team", "Player", "Tournament", "Country", "City", "FormerName"]
+        labels = [label] if label else ["Team", "Player", "Club", "Tournament", "Country", "City", "FormerName"]
         words = [w for w in norm.split() if w]
         where = " AND ".join("name_norm LIKE ?" for _ in words)
         params: list[Any] = [f"%{w}%" for w in words]
@@ -131,8 +131,8 @@ class Store:
         return {
             "record": t[0] if t else None,
             "top_scorers": self.q(
-                "SELECT player_id AS id, name, goals FROM players WHERE team_id = ? AND goals > 0 "
-                "ORDER BY goals DESC LIMIT 8",
+                "SELECT player_id AS id, name, total_goals AS goals FROM players WHERE team_id = ? "
+                "AND total_goals > 0 ORDER BY total_goals DESC LIMIT 8",
                 [tid],
             ),
             "top_opponents": self.q(
@@ -190,6 +190,12 @@ class Store:
                 "AND NOT own_goal GROUP BY ALL ORDER BY goals DESC LIMIT 6",
                 [pid],
             ),
+            "clubs": self.q(
+                "SELECT club_id AS id, club AS name, apps, goals, assists, minutes, league_apps, league_goals, "
+                "europe_apps, europe_goals, first_app, last_app FROM club_careers WHERE player_id = ? "
+                "ORDER BY first_app",
+                [pid],
+            ),
             "goals": self.q(
                 """
                 SELECT g.goal_id AS id, g.match_id, g.date, g.minute, g.penalty, g.own_goal, g.source,
@@ -198,6 +204,38 @@ class Store:
                 WHERE g.player_id = ? ORDER BY g.date DESC, g.minute DESC LIMIT 12
                 """,
                 [pid],
+            ),
+        }
+
+    def _detail_club(self, cid: str) -> dict[str, Any]:
+        c = self.q("SELECT * FROM clubs WHERE club_id = ?", [cid])
+        leaders = """
+            SELECT player_id AS id, player_name AS name, nationality, apps, goals, assists, first_app, last_app
+            FROM club_careers WHERE club_id = ? ORDER BY {col} DESC, apps DESC LIMIT 10
+        """
+        return {
+            "club": c[0] if c else None,
+            "totals": self.q(
+                "SELECT count(*) AS players, sum(apps) AS apps, sum(goals) AS goals, sum(assists) AS assists, "
+                "count(player_id) AS internationals, min(first_app) AS first_app, max(last_app) AS last_app "
+                "FROM club_careers WHERE club_id = ?",
+                [cid],
+            )[0],
+            "top_scorers": self.q(leaders.format(col="goals"), [cid]),
+            "top_assisters": self.q(leaders.format(col="assists"), [cid]),
+            "most_apps": self.q(leaders.format(col="apps"), [cid]),
+            "seasons": self.q(
+                "SELECT season, sum(played) AS played, sum(wins) AS wins, sum(draws) AS draws, "
+                "sum(losses) AS losses, sum(goals_for) AS goals_for, sum(goals_against) AS goals_against, "
+                "sum(played) FILTER (WHERE competition_type = 'domestic_league') AS league_played, "
+                "sum(wins) FILTER (WHERE competition_type = 'domestic_league') AS league_wins "
+                "FROM club_seasons WHERE club_id = ? GROUP BY season ORDER BY season",
+                [cid],
+            ),
+            "nations": self.q(
+                "SELECT nationality AS name, count(*) AS players FROM club_careers WHERE club_id = ? "
+                "AND nationality IS NOT NULL GROUP BY ALL ORDER BY players DESC LIMIT 8",
+                [cid],
             ),
         }
 
@@ -350,40 +388,25 @@ class Store:
                 "ORDER BY date DESC LIMIT 16", teams + teams)]
         return self.subgraph(ids + anchors)
 
-    @cached_property
-    def communities(self) -> dict[str, Any]:
-        """All-time Louvain communities on the team meeting graph, so colours stay stable across eras.
+    # Overview groups = confederations (teams.confederation, derived in build_db). Fixed slot order keeps
+    # colours stable across eras; Non-FIFA sides use the neutral slot 7.
+    CONFEDERATIONS = [
+        ("UEFA", "Europe"), ("CONMEBOL", "South America"), ("CONCACAF", "North & Central America"),
+        ("CAF", "Africa"), ("AFC", "Asia"), ("OFC", "Oceania"),
+    ]
+    CONF_SLOT = {c: i for i, (c, _) in enumerate(CONFEDERATIONS)}
 
-        The 7 largest communities get their own slot; the rest fold into "Other" (slot 7).
-        Each is named after its three most active teams.
-        """
-        pairs = self.q(
-            "SELECT least(home_team_id, away_team_id) AS a, greatest(home_team_id, away_team_id) AS b, "
-            "count(*) AS w FROM matches GROUP BY ALL HAVING count(*) >= 5"
-        )
-        g = nx.Graph()
-        g.add_weighted_edges_from((p["a"], p["b"], p["w"]) for p in pairs)
-        comms = sorted(nx.community.louvain_communities(g, weight="weight", seed=7), key=len, reverse=True)
-        activity = {t["team_id"]: (t["matches"], t["name"]) for t in self.q("SELECT team_id, name, matches FROM teams")}
-        group, names = {}, []
-        for i, c in enumerate(comms[:7]):
-            for n in c:
-                group[n] = i
-            top = sorted(c, key=lambda n: -activity.get(n, (0, ""))[0])[:3]
-            names.append(", ".join(activity[n][1] for n in top if n in activity))
-        names.append("Other")
-        return {"group": group, "names": names}
+    def overview(self, top: int = 200, min_meetings: int | None = None,
+                 start: int | None = None, end: int | None = None, backbone: int = 3) -> dict[str, Any]:
+        """The international football "universe" for an era: the most active teams, linked when they met
+        often, plus each team's `backbone` most frequent opponents so no team floats alone.
 
-    def overview(self, top: int = 80, min_meetings: int | None = None,
-                 start: int | None = None, end: int | None = None) -> dict[str, Any]:
-        """Rivalry network for an era: the most active teams, linked when they met often.
-
-        Node size follows the team's Elo at the end of the era; colour follows its all-time community.
+        Node size follows the team's Elo at the end of the era; colour/grouping follows its confederation.
         """
         start = start or 1872
         end = end or 2100
         span = max(1, min(end, 2026) - max(start, 1872) + 1)
-        min_meetings = min_meetings or max(2, round(span * 0.13))
+        min_meetings = min_meetings or max(4, round(span * 0.1))
         era = "date BETWEEN make_date(?, 1, 1) AND make_date(?, 12, 31)"
         teams = self.q(
             f"""
@@ -394,39 +417,51 @@ class Store:
                 SELECT id, any_value(name) AS name, count(*) AS matches FROM t GROUP BY id
                 ORDER BY matches DESC LIMIT ?
             )
-            SELECT c.*, e.elo FROM counted c
+            SELECT c.*, e.elo, tm.confederation FROM counted c
+            JOIN teams tm ON tm.team_id = c.id
             LEFT JOIN elo_yearly e ON e.team_id = c.id
                  AND e.year = (SELECT max(year) FROM elo_yearly x WHERE x.team_id = c.id AND x.year <= ?)
             ORDER BY c.matches DESC
             """,
             [start, end, start, end, top, end],
         )
+        conf_out = [{"key": c, "name": n, "slot": i, "teams": 0} for i, (c, n) in enumerate(self.CONFEDERATIONS)]
+        conf_out.append({"key": "Non-FIFA", "name": "Non-FIFA sides", "slot": 7, "teams": 0})
+        if not teams:
+            return {"nodes": [], "edges": [], "confederations": conf_out}
         ids = [t["id"] for t in teams]
-        if not ids:
-            return {"nodes": [], "edges": [], "communities": self.communities["names"]}
         ph = ",".join("?" * len(ids))
         pairs = self.q(
             f"""
-            SELECT least(home_team_id, away_team_id) AS a, greatest(home_team_id, away_team_id) AS b,
-                   count(*) AS meetings
-            FROM matches
-            WHERE home_team_id IN ({ph}) AND away_team_id IN ({ph}) AND {era}
-            GROUP BY ALL HAVING count(*) >= ?
+            WITH p AS (
+                SELECT least(home_team_id, away_team_id) AS a, greatest(home_team_id, away_team_id) AS b,
+                       count(*) AS meetings
+                FROM matches
+                WHERE home_team_id IN ({ph}) AND away_team_id IN ({ph}) AND {era}
+                GROUP BY ALL
+            ), ranked AS (
+                SELECT a, b, meetings, row_number() OVER (PARTITION BY a ORDER BY meetings DESC, b) AS r
+                FROM (SELECT a, b, meetings FROM p UNION ALL SELECT b, a, meetings FROM p)
+            )
+            SELECT least(a, b) AS a, greatest(a, b) AS b, any_value(meetings) AS meetings,
+                   bool_and(meetings < ?) AS backbone
+            FROM ranked WHERE meetings >= ? OR r <= ?
+            GROUP BY ALL
             """,
-            ids + ids + [start, end, min_meetings],
+            ids + ids + [start, end, min_meetings, min_meetings, backbone],
         )
-        group = self.communities["group"]
-        nodes = [
-            {"id": t["id"], "label": "Team", "name": t["name"], "degree": t["matches"],
-             "elo": t["elo"], "group": group.get(t["id"], 7)}
-            for t in teams
-        ]
+        nodes = []
+        for t in teams:
+            slot = self.CONF_SLOT.get(t["confederation"], 7)
+            conf_out[slot if slot < 7 else -1]["teams"] += 1
+            nodes.append({"id": t["id"], "label": "Team", "name": t["name"], "degree": t["matches"],
+                          "elo": t["elo"], "group": slot, "conf": t["confederation"]})
         edges = [
             {"id": f"{p['a']}|MET|{p['b']}", "source": p["a"], "target": p["b"], "type": "MET",
-             "weight": p["meetings"], "virtual": True}
+             "weight": p["meetings"], "virtual": True, "backbone": p["backbone"]}
             for p in pairs
         ]
-        return {"nodes": nodes, "edges": edges, "communities": self.communities["names"],
+        return {"nodes": nodes, "edges": edges, "confederations": conf_out,
                 "era": {"start": max(start, 1872), "end": min(end, 2026), "min_meetings": min_meetings}}
 
     # ------------------------------------------------------------------ head to head
@@ -586,7 +621,7 @@ class Store:
             if n not in g:
                 return {"found": False, "reason": f"{n} is not a Player, Team, Match or Goal", "nodes": [], "edges": []}
         view = g if via_teams else nx.subgraph_view(
-            g, filter_node=lambda n: g.nodes[n]["label"] != "Team" or n in (src, dst)
+            g, filter_node=lambda n: g.nodes[n]["label"] not in ("Team", "Club") or n in (src, dst)
         )
         try:
             path = nx.bidirectional_shortest_path(view, src, dst)
@@ -629,7 +664,8 @@ class Store:
     def schema_text(self) -> str:
         """Compact schema description for the agent's system prompt."""
         lines = []
-        for t in ["matches", "goals", "players", "teams", "tournaments", "former_names",
+        for t in ["matches", "goals", "players", "teams", "tournaments", "former_names", "clubs", "club_careers",
+                  "club_seasons",
                   "elo_yearly", "elo_history", "nodes", "edges"]:
             cols = self.q(
                 "SELECT column_name, data_type FROM information_schema.columns "

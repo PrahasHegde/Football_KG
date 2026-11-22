@@ -1,4 +1,4 @@
-import { Compass, Download, Eraser, Globe2, Maximize2, Moon, Pause, Play, Sparkles, Sun } from "lucide-react";
+import { Compass, Download, Eraser, Globe2, Maximize2, Moon, MousePointerClick, Pause, Play, Sparkles, Sun, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "./api";
 import { loadTeamMedia } from "./media";
@@ -10,7 +10,7 @@ import { H2HPanel } from "./components/H2HPanel";
 import { Inspector } from "./components/Inspector";
 import { SearchBox } from "./components/SearchBox";
 import { LABEL_ORDER, LABEL_SHAPE, communityColor, fmt, labelColor } from "./theme";
-import type { AgentEvent, GNode, H2H, Label, Meta, Subgraph } from "./types";
+import type { AgentEvent, Confederation, GNode, H2H, Label, Meta, Subgraph } from "./types";
 import { useGraph } from "./useGraph";
 import { useTheme } from "./useTheme";
 
@@ -28,7 +28,23 @@ export default function App() {
   const [view, setView] = useState<ViewMode>("overview");
   const [era, setEra] = useState<Era>(ALL_TIME);
   const [playing, setPlaying] = useState(false);
-  const [communities, setCommunities] = useState<string[]>([]);
+  const [confeds, setConfeds] = useState<Confederation[]>([]);
+  const [spotlight, setSpotlight] = useState<string | null>(null);
+  const [intro, setIntro] = useState(() => {
+    try {
+      return localStorage.getItem("fkg.intro") !== "off";
+    } catch {
+      return true;
+    }
+  });
+  const closeIntro = () => {
+    setIntro(false);
+    try {
+      localStorage.setItem("fkg.intro", "off");
+    } catch {
+      /* storage unavailable */
+    }
+  };
   const [hidden, setHidden] = useState<Set<Label>>(new Set());
   const [frozen, setFrozen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -58,15 +74,15 @@ export default function App() {
     async (e: Era, morph = false) => {
       try {
         const sub = await api.overview(e === ALL_TIME ? undefined : e);
-        setCommunities(sub.communities ?? []);
+        setConfeds(sub.confederations ?? []);
         setEra(e);
         show(sub, {
           view: "overview",
           morph,
           caption:
             e === ALL_TIME
-              ? "Rivalry network · 80 most active teams, linked when they met 20+ times"
-              : `80 most active teams of the decade, linked when they met ${sub.era?.min_meetings}+ times`,
+              ? `The football universe · ${sub.nodes.length} nations · ${fmt(sub.edges.length)} rivalries`
+              : `${sub.nodes.length} most active nations of the decade · linked when they met ${sub.era?.min_meetings}+ times`,
         });
       } catch (err) {
         notify(`Could not load the graph: ${(err as Error).message}`);
@@ -88,6 +104,7 @@ export default function App() {
     if (view !== "overview") return;
     ungroup();
     setPlaying(false);
+    setSpotlight(null);
     setView("explore");
     setCaption("Exploring · double-click a node to expand it");
   }, [view, ungroup]);
@@ -96,6 +113,20 @@ export default function App() {
   const openEntity = useCallback(
     async (id: string) => {
       try {
+        if (view === "overview" && !has(id)) {
+          // leaving the universe: start a clean canvas around the entity instead of 200 teams
+          const sub = await api.subgraph([id]);
+          if (!sub.nodes.length) {
+            notify(`Unknown entity ${id}`);
+            return;
+          }
+          setSpotlight(null);
+          show(sub, { caption: "Exploring · double-click a node to expand it", select: id });
+          const ctx = await api.expand(id, { limit: 12 });
+          merge(ctx, id);
+          setH2H(null);
+          return;
+        }
         if (!has(id)) {
           const sub = await api.subgraph([id, ...ids()].slice(0, 500));
           if (!sub.nodes.some((n) => n.id === id)) {
@@ -116,7 +147,7 @@ export default function App() {
         notify((e as Error).message);
       }
     },
-    [has, ids, merge, leaveOverview, notify],
+    [has, ids, merge, leaveOverview, notify, view, show],
   );
 
   const expand = useCallback(
@@ -239,6 +270,8 @@ export default function App() {
             highlight={highlight}
             hiddenLabels={hidden}
             frozen={frozen}
+            spotlight={view === "overview" ? spotlight : null}
+            insetLeft={selectedId || h2h ? 400 : view === "overview" && intro ? 330 : 0}
             onSelect={onSelect}
             onExpand={onExpandNode}
           />
@@ -289,13 +322,19 @@ export default function App() {
               </>
             ) : view === "overview" ? (
               <>
-                {communities.map((c, i) => (
-                  <span key={c} className="legend__item" title={c}>
-                    <span className="dot" style={{ background: communityColor(i, theme) }} />
-                    <span className="legend__text" title={c}>{c}</span>
-                  </span>
+                {confeds.filter((c) => c.teams > 0).map((c) => (
+                  <button
+                    key={c.key}
+                    className={`legend__item legend__conf ${spotlight === c.key ? "is-active" : ""} ${spotlight && spotlight !== c.key ? "is-off" : ""}`}
+                    onClick={() => setSpotlight((s) => (s === c.key ? null : c.key))}
+                    title={`${c.name}: spotlight these ${c.teams} teams`}
+                  >
+                    <span className="dot" style={{ background: communityColor(c.slot, theme) }} />
+                    <b>{c.key}</b>
+                    <span className="muted">{c.teams}</span>
+                  </button>
                 ))}
-                <span className="legend__note">Size = Elo at the end of the era · width = meetings</span>
+                <span className="legend__note">Size = Elo at the end of the era · line weight = meetings · click a confederation to spotlight it</span>
               </>
             ) : (
               LABEL_ORDER.filter((l) => counts.has(l)).map((l) => (
@@ -306,6 +345,29 @@ export default function App() {
               ))
             )}
           </div>
+
+          {view === "overview" && intro && !selectedId && !h2h && meta && (
+            <div className="welcome">
+              <button className="icon-btn welcome__close" onClick={closeIntro} aria-label="Dismiss">
+                <X size={15} />
+              </button>
+              <span className="eyebrow">Knowledge graph</span>
+              <h1>
+                {fmt(meta.labels.find((l) => l.label === "Match")?.count)} matches.
+                <br />
+                <span>One football universe.</span>
+              </h1>
+              <p>
+                Every men's international since {meta.first_match.slice(0, 4)}. Nations cluster by confederation and
+                are pulled together by the rivalries they played most.
+              </p>
+              <ul className="welcome__tips">
+                <li><MousePointerClick size={14} /> Hover a nation to light up its rivals; click it for the full story</li>
+                <li><Play size={14} /> Press play to travel through the decades</li>
+                <li><Sparkles size={14} /> Or ask the graph anything on the right</li>
+              </ul>
+            </div>
+          )}
 
           {view === "overview" && <EraBar era={era} playing={playing} onChange={changeEra} onPlay={setPlaying} />}
 
@@ -372,6 +434,7 @@ function ShapeIcon({ label, color }: { label: Label; color: string }) {
       {s === "rounded" && <rect x="1.5" y="1.5" width="9" height="9" rx="2.5" {...common} />}
       {s === "diamond" && <path d="M6 0.5 11.5 6 6 11.5 0.5 6Z" {...common} />}
       {s === "triangle" && <path d="M6 1 11 10.5H1Z" {...common} />}
+      {s === "shield" && <path d="M1 1h10v5.2Q10.6 9.6 6 11.5 1.4 9.6 1 6.2Z" {...common} />}
       {s === "hexagon" && <path d="M6 0.6 10.8 3.3v5.4L6 11.4 1.2 8.7V3.3Z" {...common} />}
       {(s === "circle" || s === "ring") && <circle cx="6" cy="6" r="5" {...common} strokeDasharray={hollow ? "2 1.5" : undefined} />}
       {s === "ring" && <circle cx="6" cy="6" r="1.9" fill="var(--surface)" />}

@@ -1,0 +1,276 @@
+date,home_team,away_team,team,scorer,minute,assist,source,competition
+2021-06-17,Ukraine,North Macedonia,Ukraine,Andriy Yarmolenko,29.0,Oleksandr Karavayev,statsbomb,UEFA Euro 2020
+2021-06-17,Ukraine,North Macedonia,Ukraine,Roman Yaremchuk,34.0,Andriy Yarmolenko,statsbomb,UEFA Euro 2020
+2021-06-23,Portugal,France,France,Karim Benzema,47.0,Paul Pogba,statsbomb,UEFA Euro 2020
+2021-06-20,Switzerland,Turkey,Switzerland,Haris Seferovic,6.0,Steven Zuber,statsbomb,UEFA Euro 2020
+2021-06-20,Switzerland,Turkey,Switzerland,Xherdan Shaqiri,26.0,Steven Zuber,statsbomb,UEFA Euro 2020
+2021-06-20,Switzerland,Turkey,Turkey,İrfan Can Kahveci,62.0,Hakan Çalhanoğlu,statsbomb,UEFA Euro 2020
+2021-06-20,Switzerland,Turkey,Switzerland,Xherdan Shaqiri,68.0,Steven Zuber,statsbomb,UEFA Euro 2020
+2021-06-18,Croatia,Czech Republic,Croatia,Ivan Perišić,47.0,Andrej Kramarić,statsbomb,UEFA Euro 2020
+2021-07-02,Switzerland,Spain,Switzerland,Xherdan Shaqiri,68.0,Remo Freuler,statsbomb,UEFA Euro 2020
+2021-06-27,Belgium,Portugal,Belgium,Thorgan Hazard,42.0,Thomas Meunier,statsbomb,UEFA Euro 2020
+2021-06-27,Netherlands,Czech Republic,Czech Republic,Tomáš Holeš,68.0,Tomáš Kalas,statsbomb,UEFA Euro 2020
+2021-06-27,Netherlands,Czech Republic,Czech Republic,Patrik Schick,80.0,Tomáš Holeš,statsbomb,UEFA Euro 2020
+2021-06-26,Italy,Austria,Italy,Federico Chiesa,95.0,Leonardo Spinazzola,statsbomb,UEFA Euro 2020
+2021-06-26,Italy,Austria,Italy,Matteo Pessina,105.0,Francesco Acerbi,statsbomb,UEFA Euro 2020
+2021-06-26,Italy,Austria,Austria,Saša Kalajdžić,114.0,Louis Schaub,statsbomb,UEFA Euro 2020
+2021-06-29,Sweden,Ukraine,Ukraine,Oleksandr Zinchenko,27.0,Andriy Yarmolenko,statsbomb,UEFA Euro 2020
+2021-06-29,Sweden,Ukraine,Sweden,Emil Forsberg,43.0,Alexander Isak,statsbomb,UEFA Euro 2020
+2021-06-29,Sweden,Ukraine,Ukraine,Artem Dovbyk,120.0,Oleksandr Zinchenko,statsbomb,UEFA Euro 2020
+2021-06-26,Wales,Denmark,Denmark,Kasper Dolberg,27.0,Mikkel Damsgaard,statsbomb,UEFA Euro 2020
+2021-06-26,Wales,Denmark,Denmark,Joakim Mæhle,88.0,Mathias Jensen,statsbomb,UEFA Euro 2020
+2021-06-26,Wales,Denmark,Denmark,Martin Braithwaite,90.0,Andreas Cornelius,statsbomb,UEFA Euro 2020
+2021-07-02,Belgium,Italy,Italy,Nicolò Barella,31.0,Marco Verratti,statsbomb,UEFA Euro 2020
+2021-07-02,Belgium,Italy,Italy,Lorenzo Insigne,44.0,Nicolò Barella,statsbomb,UEFA Euro 2020
+2021-07-03,Ukraine,England,England,Harry Kane,4.0,Raheem Sterling,statsbomb,UEFA Euro 2020
+2021-07-03,Ukraine,England,England,Harry Maguire,46.0,Luke Shaw,statsbomb,UEFA Euro 2020
+2021-07-03,Ukraine,England,England,Harry Kane,50.0,Luke Shaw,statsbomb,UEFA Euro 2020
+2021-07-03,Ukraine,England,England,Jordan Henderson,63.0,Mason Mount,statsbomb,UEFA Euro 2020
+2021-07-06,Italy,Spain,Spain,Álvaro Morata,80.0,Dani Olmo,statsbomb,UEFA Euro 2020
+2021-06-28,Croatia,Spain,Spain,César Azpilicueta,57.0,Ferran Torres,statsbomb,UEFA Euro 2020
+2021-06-28,Croatia,Spain,Spain,Ferran Torres,77.0,Pau Torres,statsbomb,UEFA Euro 2020
+2021-06-28,Croatia,Spain,Croatia,Mario Pašalić,90.0,Mislav Oršić,statsbomb,UEFA Euro 2020
+2021-06-28,Croatia,Spain,Spain,Álvaro Morata,100.0,Dani Olmo,statsbomb,UEFA Euro 2020
+2021-06-28,Croatia,Spain,Spain,Mikel Oyarzabal,103.0,Dani Olmo,statsbomb,UEFA Euro 2020
+2021-07-11,England,Italy,England,Luke Shaw,2.0,Kieran Trippier,statsbomb,UEFA Euro 2020
+2021-06-21,Denmark,Russia,Denmark,Mikkel Damsgaard,38.0,Pierre-Emile Højbjerg,statsbomb,UEFA Euro 2020
+2021-06-21,Denmark,Russia,Denmark,Joakim Mæhle,82.0,Pierre-Emile Højbjerg,statsbomb,UEFA Euro 2020
+2021-06-20,Italy,Wales,Italy,Matteo Pessina,39.0,Marco Verratti,statsbomb,UEFA Euro 2020
+2021-06-19,Germany,Portugal,Portugal,Cristiano Ronaldo,15.0,Diogo Jota,statsbomb,UEFA Euro 2020
+2021-06-19,Germany,Portugal,Germany,Kai Havertz,51.0,Robin Gosens,statsbomb,UEFA Euro 2020
+2021-06-19,Germany,Portugal,Germany,Robin Gosens,60.0,Joshua Kimmich,statsbomb,UEFA Euro 2020
+2021-06-19,Germany,Portugal,Portugal,Diogo Jota,67.0,Cristiano Ronaldo,statsbomb,UEFA Euro 2020
+2021-06-16,Turkey,Wales,Wales,Aaron Ramsey,42.0,Gareth Bale,statsbomb,UEFA Euro 2020
+2021-06-16,Turkey,Wales,Wales,Connor Roberts,90.0,Gareth Bale,statsbomb,UEFA Euro 2020
+2021-06-16,Italy,Switzerland,Italy,Manuel Locatelli,26.0,Domenico Berardi,statsbomb,UEFA Euro 2020
+2021-06-16,Italy,Switzerland,Italy,Manuel Locatelli,52.0,Nicolò Barella,statsbomb,UEFA Euro 2020
+2021-06-19,Spain,Poland,Poland,Robert Lewandowski,54.0,Kamil Jóźwiak,statsbomb,UEFA Euro 2020
+2021-06-13,Austria,North Macedonia,Austria,Stefan Lainer,18.0,Marcel Sabitzer,statsbomb,UEFA Euro 2020
+2021-06-13,Austria,North Macedonia,Austria,Michael Gregoritsch,78.0,David Alaba,statsbomb,UEFA Euro 2020
+2021-06-11,Italy,Turkey,Italy,Lorenzo Insigne,79.0,Ciro Immobile,statsbomb,UEFA Euro 2020
+2021-07-03,Czech Republic,Denmark,Denmark,Thomas Delaney,5.0,Jens Stryger Larsen,statsbomb,UEFA Euro 2020
+2021-07-03,Czech Republic,Denmark,Denmark,Kasper Dolberg,42.0,Joakim Mæhle,statsbomb,UEFA Euro 2020
+2021-07-03,Czech Republic,Denmark,Czech Republic,Patrik Schick,49.0,Vladimír Coufal,statsbomb,UEFA Euro 2020
+2021-06-21,Netherlands,North Macedonia,Netherlands,Memphis Depay,24.0,Donyell Malen,statsbomb,UEFA Euro 2020
+2021-06-21,Netherlands,North Macedonia,Netherlands,Georginio Wijnaldum,50.0,Memphis Depay,statsbomb,UEFA Euro 2020
+2021-06-29,England,Germany,England,Raheem Sterling,75.0,Luke Shaw,statsbomb,UEFA Euro 2020
+2021-06-29,England,Germany,England,Harry Kane,86.0,Jack Grealish,statsbomb,UEFA Euro 2020
+2021-06-23,Germany,Hungary,Hungary,Ádám Szalai,11.0,Roland Sallai,statsbomb,UEFA Euro 2020
+2021-06-23,Germany,Hungary,Hungary,András Schäfer,68.0,Ádám Szalai,statsbomb,UEFA Euro 2020
+2021-06-22,Scotland,Croatia,Croatia,Nikola Vlašić,17.0,Ivan Perišić,statsbomb,UEFA Euro 2020
+2021-06-22,Scotland,Croatia,Croatia,Luka Modrić,62.0,Mateo Kovačić,statsbomb,UEFA Euro 2020
+2021-06-22,Scotland,Croatia,Croatia,Ivan Perišić,77.0,Luka Modrić,statsbomb,UEFA Euro 2020
+2021-06-22,England,Czech Republic,England,Raheem Sterling,12.0,Jack Grealish,statsbomb,UEFA Euro 2020
+2021-06-21,Finland,Belgium,Belgium,Romelu Lukaku,81.0,Kevin De Bruyne,statsbomb,UEFA Euro 2020
+2021-06-21,Ukraine,Austria,Austria,Christoph Baumgartner,21.0,David Alaba,statsbomb,UEFA Euro 2020
+2021-06-16,Russia,Finland,Russia,Aleksei Miranchuk,45.0,Artem Dzyuba,statsbomb,UEFA Euro 2020
+2021-06-17,Denmark,Belgium,Denmark,Yussuf Poulsen,2.0,Pierre-Emile Højbjerg,statsbomb,UEFA Euro 2020
+2021-06-17,Denmark,Belgium,Belgium,Thorgan Hazard,55.0,Kevin De Bruyne,statsbomb,UEFA Euro 2020
+2021-06-17,Denmark,Belgium,Belgium,Kevin De Bruyne,70.0,Eden Hazard,statsbomb,UEFA Euro 2020
+2021-06-13,England,Croatia,England,Raheem Sterling,57.0,Kalvin Phillips,statsbomb,UEFA Euro 2020
+2021-06-13,Netherlands,Ukraine,Ukraine,Andriy Yarmolenko,75.0,Roman Yaremchuk,statsbomb,UEFA Euro 2020
+2021-06-13,Netherlands,Ukraine,Ukraine,Roman Yaremchuk,79.0,Ruslan Malinovskyi,statsbomb,UEFA Euro 2020
+2021-06-13,Netherlands,Ukraine,Netherlands,Denzel Dumfries,85.0,Nathan Aké,statsbomb,UEFA Euro 2020
+2021-06-28,France,Switzerland,Switzerland,Haris Seferovic,15.0,Steven Zuber,statsbomb,UEFA Euro 2020
+2021-06-28,France,Switzerland,France,Karim Benzema,57.0,Kylian Mbappé,statsbomb,UEFA Euro 2020
+2021-06-28,France,Switzerland,Switzerland,Haris Seferovic,81.0,Kevin Mbabu,statsbomb,UEFA Euro 2020
+2021-06-28,France,Switzerland,Switzerland,Mario Gavranović,90.0,Granit Xhaka,statsbomb,UEFA Euro 2020
+2021-06-17,Netherlands,Austria,Netherlands,Denzel Dumfries,67.0,Donyell Malen,statsbomb,UEFA Euro 2020
+2021-06-14,Poland,Slovakia,Poland,Karol Linetty,46.0,Maciej Rybus,statsbomb,UEFA Euro 2020
+2021-06-14,Poland,Slovakia,Slovakia,Milan Škriniar,69.0,Marek Hamšík,statsbomb,UEFA Euro 2020
+2021-06-14,Scotland,Czech Republic,Czech Republic,Patrik Schick,42.0,Vladimír Coufal,statsbomb,UEFA Euro 2020
+2021-06-15,Hungary,Portugal,Portugal,Cristiano Ronaldo,90.0,Rafa Silva,statsbomb,UEFA Euro 2020
+2021-06-12,Denmark,Finland,Finland,Joel Pohjanpalo,60.0,Jere Juhani Uronen,statsbomb,UEFA Euro 2020
+2021-06-23,Spain,Slovakia,Spain,Aymeric Laporte,45.0,Gerard Moreno,statsbomb,UEFA Euro 2020
+2021-06-23,Spain,Slovakia,Spain,Pablo Sarabia,56.0,Jordi Alba,statsbomb,UEFA Euro 2020
+2021-06-23,Spain,Slovakia,Spain,Ferran Torres,67.0,Pablo Sarabia,statsbomb,UEFA Euro 2020
+2021-06-23,Sweden,Poland,Sweden,Emil Forsberg,2.0,Alexander Isak,statsbomb,UEFA Euro 2020
+2021-06-23,Sweden,Poland,Sweden,Emil Forsberg,59.0,Dejan Kulusevski,statsbomb,UEFA Euro 2020
+2021-06-23,Sweden,Poland,Poland,Robert Lewandowski,61.0,Piotr Zieliński,statsbomb,UEFA Euro 2020
+2021-06-23,Sweden,Poland,Poland,Robert Lewandowski,84.0,Przemysław Frankowski,statsbomb,UEFA Euro 2020
+2021-06-23,Sweden,Poland,Sweden,Viktor Claesson,90.0,Dejan Kulusevski,statsbomb,UEFA Euro 2020
+2021-06-12,Russia,Belgium,Belgium,Romelu Lukaku,88.0,Thomas Meunier,statsbomb,UEFA Euro 2020
+2021-06-12,Wales,Switzerland,Switzerland,Breel Embolo,49.0,Xherdan Shaqiri,statsbomb,UEFA Euro 2020
+2021-06-12,Wales,Switzerland,Wales,Kieffer Moore,74.0,Joseff Morrell,statsbomb,UEFA Euro 2020
+2024-06-18,Portugal,Czech Republic,Czech Republic,Lukáš Provod,62.0,Vladimír Coufal,statsbomb,UEFA Euro 2024
+2024-06-15,Hungary,Switzerland,Switzerland,Kwadwo Duah,12.0,Michel Aebischer,statsbomb,UEFA Euro 2024
+2024-06-15,Hungary,Switzerland,Switzerland,Michel Aebischer,45.0,Remo Freuler,statsbomb,UEFA Euro 2024
+2024-06-15,Hungary,Switzerland,Hungary,Barnabás Varga,66.0,Dominik Szoboszlai,statsbomb,UEFA Euro 2024
+2024-06-15,Spain,Croatia,Spain,Álvaro Morata,29.0,Fabián Ruiz,statsbomb,UEFA Euro 2024
+2024-06-15,Spain,Croatia,Spain,Fabián Ruiz,32.0,Pedri,statsbomb,UEFA Euro 2024
+2024-06-15,Spain,Croatia,Spain,Dani Carvajal,45.0,Lamine Yamal,statsbomb,UEFA Euro 2024
+2024-06-20,Slovenia,Serbia,Slovenia,Žan Karničnik,69.0,Timi Max Elšnik,statsbomb,UEFA Euro 2024
+2024-06-20,Slovenia,Serbia,Serbia,Luka Jović,90.0,Ivan Ilić,statsbomb,UEFA Euro 2024
+2024-06-21,Poland,Austria,Austria,Gernot Trauner,9.0,Philipp Mwene,statsbomb,UEFA Euro 2024
+2024-06-21,Poland,Austria,Austria,Christoph Baumgartner,66.0,Marko Arnautović,statsbomb,UEFA Euro 2024
+2024-06-18,Turkey,Georgia,Georgia,Georges Mikautadze,32.0,Giorgi Kochorashvili,statsbomb,UEFA Euro 2024
+2024-06-18,Turkey,Georgia,Turkey,Arda Güler,65.0,Kaan Ayhan,statsbomb,UEFA Euro 2024
+2024-06-17,Romania,Ukraine,Romania,Nicolae Stanciu,29.0,Dennis Man,statsbomb,UEFA Euro 2024
+2024-06-17,Romania,Ukraine,Romania,Denis Drăguș,57.0,Dennis Man,statsbomb,UEFA Euro 2024
+2024-06-21,Slovakia,Ukraine,Slovakia,Ivan Schranz,17.0,Lukáš Haraslín,statsbomb,UEFA Euro 2024
+2024-06-21,Slovakia,Ukraine,Ukraine,Mykola Shaparenko,54.0,Oleksandr Zinchenko,statsbomb,UEFA Euro 2024
+2024-06-21,Slovakia,Ukraine,Ukraine,Roman Yaremchuk,80.0,Mykola Shaparenko,statsbomb,UEFA Euro 2024
+2024-06-16,Poland,Netherlands,Poland,Adam Buksa,16.0,Piotr Zieliński,statsbomb,UEFA Euro 2024
+2024-06-16,Poland,Netherlands,Netherlands,Cody Gakpo,29.0,Nathan Aké,statsbomb,UEFA Euro 2024
+2024-06-26,Georgia,Portugal,Georgia,Khvicha Kvaratskhelia,2.0,Georges Mikautadze,statsbomb,UEFA Euro 2024
+2024-07-06,England,Switzerland,England,Bukayo Saka,80.0,Declan Rice,statsbomb,UEFA Euro 2024
+2024-06-22,Turkey,Portugal,Portugal,Bruno Fernandes,56.0,Cristiano Ronaldo,statsbomb,UEFA Euro 2024
+2024-06-16,Slovenia,Denmark,Denmark,Christian Eriksen,17.0,Jonas Wind,statsbomb,UEFA Euro 2024
+2024-06-23,Germany,Switzerland,Switzerland,Dan Ndoye,28.0,Remo Freuler,statsbomb,UEFA Euro 2024
+2024-06-23,Germany,Switzerland,Germany,Niclas Füllkrug,90.0,David Raum,statsbomb,UEFA Euro 2024
+2024-06-19,Scotland,Switzerland,Scotland,Scott McTominay,13.0,Callum McGregor,statsbomb,UEFA Euro 2024
+2024-07-10,Netherlands,England,England,Ollie Watkins,90.0,Cole Palmer,statsbomb,UEFA Euro 2024
+2024-07-14,Spain,England,Spain,Nico Williams,47.0,Lamine Yamal,statsbomb,UEFA Euro 2024
+2024-07-14,Spain,England,England,Cole Palmer,73.0,Jude Bellingham,statsbomb,UEFA Euro 2024
+2024-07-14,Spain,England,Spain,Mikel Oyarzabal,86.0,Marc Cucurella,statsbomb,UEFA Euro 2024
+2024-07-09,Spain,France,France,Randal Kolo Muani,9.0,Kylian Mbappé,statsbomb,UEFA Euro 2024
+2024-07-06,Netherlands,Turkey,Turkey,Samet Akaydin,35.0,Arda Güler,statsbomb,UEFA Euro 2024
+2024-07-06,Netherlands,Turkey,Netherlands,Stefan de Vrij,70.0,Memphis Depay,statsbomb,UEFA Euro 2024
+2024-06-25,Netherlands,Austria,Netherlands,Cody Gakpo,47.0,Xavi Simons,statsbomb,UEFA Euro 2024
+2024-06-25,Netherlands,Austria,Austria,Romano Schmid,59.0,Florian Grillitsch,statsbomb,UEFA Euro 2024
+2024-06-25,Netherlands,Austria,Netherlands,Memphis Depay,75.0,Wout Weghorst,statsbomb,UEFA Euro 2024
+2024-06-25,Netherlands,Austria,Austria,Marcel Sabitzer,80.0,Christoph Baumgartner,statsbomb,UEFA Euro 2024
+2024-06-20,Denmark,England,Denmark,Morten Hjulmand,34.0,Victor Kristiansen,statsbomb,UEFA Euro 2024
+2024-07-05,Germany,Spain,Spain,Dani Olmo,51.0,Lamine Yamal,statsbomb,UEFA Euro 2024
+2024-07-05,Germany,Spain,Germany,Florian Wirtz,89.0,Joshua Kimmich,statsbomb,UEFA Euro 2024
+2024-07-05,Germany,Spain,Spain,Mikel Merino,119.0,Dani Olmo,statsbomb,UEFA Euro 2024
+2024-06-26,Czech Republic,Turkey,Turkey,Hakan Çalhanoğlu,51.0,İsmail Yüksek,statsbomb,UEFA Euro 2024
+2024-06-26,Czech Republic,Turkey,Turkey,Cenk Tosun,90.0,Orkun Kökçü,statsbomb,UEFA Euro 2024
+2024-07-02,Austria,Turkey,Turkey,Merih Demiral,59.0,Arda Güler,statsbomb,UEFA Euro 2024
+2024-07-02,Romania,Netherlands,Netherlands,Cody Gakpo,20.0,Xavi Simons,statsbomb,UEFA Euro 2024
+2024-07-02,Romania,Netherlands,Netherlands,Donyell Malen,83.0,Cody Gakpo,statsbomb,UEFA Euro 2024
+2024-07-02,Romania,Netherlands,Netherlands,Donyell Malen,90.0,Xavi Simons,statsbomb,UEFA Euro 2024
+2024-06-30,Spain,Georgia,Spain,Rodri,39.0,Nico Williams,statsbomb,UEFA Euro 2024
+2024-06-30,Spain,Georgia,Spain,Fabián Ruiz,51.0,Lamine Yamal,statsbomb,UEFA Euro 2024
+2024-06-30,Spain,Georgia,Spain,Nico Williams,75.0,Fabián Ruiz,statsbomb,UEFA Euro 2024
+2024-06-30,Spain,Georgia,Spain,Dani Olmo,83.0,Mikel Oyarzabal,statsbomb,UEFA Euro 2024
+2024-06-30,England,Slovakia,Slovakia,Ivan Schranz,25.0,David Strelec,statsbomb,UEFA Euro 2024
+2024-06-30,England,Slovakia,England,Jude Bellingham,90.0,Marc Guéhi,statsbomb,UEFA Euro 2024
+2024-06-30,England,Slovakia,England,Harry Kane,91.0,Ivan Toney,statsbomb,UEFA Euro 2024
+2024-06-24,Albania,Spain,Spain,Ferran Torres,13.0,Dani Olmo,statsbomb,UEFA Euro 2024
+2024-06-29,Germany,Denmark,Germany,Jamal Musiala,68.0,Nico Schlotterbeck,statsbomb,UEFA Euro 2024
+2024-06-29,Switzerland,Italy,Switzerland,Remo Freuler,37.0,Rubén Vargas,statsbomb,UEFA Euro 2024
+2024-06-29,Switzerland,Italy,Switzerland,Rubén Vargas,46.0,Michel Aebischer,statsbomb,UEFA Euro 2024
+2024-06-23,Scotland,Hungary,Hungary,Kevin Csoboth,90.0,Roland Sallai,statsbomb,UEFA Euro 2024
+2024-06-19,Croatia,Albania,Albania,Qazim Laçi,11.0,Jasir Asani,statsbomb,UEFA Euro 2024
+2024-06-19,Croatia,Albania,Croatia,Andrej Kramarić,74.0,Ante Budimir,statsbomb,UEFA Euro 2024
+2024-06-19,Germany,Hungary,Germany,Jamal Musiala,22.0,İlkay Gündoğan,statsbomb,UEFA Euro 2024
+2024-06-19,Germany,Hungary,Germany,İlkay Gündoğan,67.0,Maximilian Mittelstädt,statsbomb,UEFA Euro 2024
+2024-06-15,Italy,Albania,Italy,Alessandro Bastoni,11.0,Lorenzo Pellegrini,statsbomb,UEFA Euro 2024
+2024-06-26,Slovakia,Romania,Slovakia,Ondrej Duda,24.0,Juraj Kucka,statsbomb,UEFA Euro 2024
+2024-06-22,Belgium,Romania,Belgium,Youri Tielemans,2.0,Romelu Lukaku,statsbomb,UEFA Euro 2024
+2024-06-14,Germany,Scotland,Germany,Florian Wirtz,10.0,Joshua Kimmich,statsbomb,UEFA Euro 2024
+2024-06-14,Germany,Scotland,Germany,Jamal Musiala,19.0,Kai Havertz,statsbomb,UEFA Euro 2024
+2024-06-14,Germany,Scotland,Germany,Emre Can,90.0,Thomas Müller,statsbomb,UEFA Euro 2024
+2024-06-30,Jamaica,Venezuela,Venezuela,Eduard Bello,49.0,Jon Aramburu,statsbomb,Copa América 2024
+2024-06-30,Jamaica,Venezuela,Venezuela,Salomón Rondón,56.0,Yangel Herrera,statsbomb,Copa América 2024
+2024-06-30,Jamaica,Venezuela,Venezuela,Eric Ramírez,85.0,Kervin Mario Andrade Navarro,statsbomb,Copa América 2024
+2024-06-27,Uruguay,Bolivia,Uruguay,Facundo Pellistri,8.0,Ronald Araújo,statsbomb,Copa América 2024
+2024-06-27,Uruguay,Bolivia,Uruguay,Darwin Núñez,21.0,Maximiliano Araújo,statsbomb,Copa América 2024
+2024-06-27,Uruguay,Bolivia,Uruguay,Maximiliano Araújo,77.0,Nicolás de la Cruz,statsbomb,Copa América 2024
+2024-06-27,Uruguay,Bolivia,Uruguay,Federico Valverde,81.0,Facundo Pellistri,statsbomb,Copa América 2024
+2024-06-27,Uruguay,Bolivia,Uruguay,Rodrigo Bentancur,89.0,Giorgian de Arrascaeta,statsbomb,Copa América 2024
+2024-06-26,Ecuador,Jamaica,Ecuador,Alan Minda,90.0,Carlos Gruezo,statsbomb,Copa América 2024
+2024-06-24,Colombia,Paraguay,Colombia,Daniel Muñoz,32.0,James Rodríguez,statsbomb,Copa América 2024
+2024-06-24,Colombia,Paraguay,Colombia,Jefferson Lerma,42.0,James Rodríguez,statsbomb,Copa América 2024
+2024-06-24,Colombia,Paraguay,Paraguay,Julio Enciso,69.0,Ramón Sosa,statsbomb,Copa América 2024
+2024-06-23,United States,Bolivia,United States,Christian Pulisic,3.0,Timothy Weah,statsbomb,Copa América 2024
+2024-06-23,United States,Bolivia,United States,Folarin Balogun,44.0,Christian Pulisic,statsbomb,Copa América 2024
+2024-06-29,Argentina,Peru,Argentina,Lautaro Martínez,47.0,Ángel Di María,statsbomb,Copa América 2024
+2024-06-22,Mexico,Jamaica,Mexico,Gerardo Arteaga,69.0,Luis Romo,statsbomb,Copa América 2024
+2024-06-22,Ecuador,Venezuela,Venezuela,Jhonder Cádiz,64.0,Salomón Rondón,statsbomb,Copa América 2024
+2024-06-25,Peru,Canada,Canada,Jonathan David,74.0,Jacob Shaffelburg,statsbomb,Copa América 2024
+2024-07-02,Costa Rica,Paraguay,Costa Rica,Francisco Calvo,3.0,Joseph Mora,statsbomb,Copa América 2024
+2024-07-02,Costa Rica,Paraguay,Costa Rica,Josimar Alcócer,7.0,Jefferson Brenes,statsbomb,Copa América 2024
+2024-07-02,Costa Rica,Paraguay,Paraguay,Ramón Sosa,55.0,Mathías Villasanti,statsbomb,Copa América 2024
+2024-07-06,Colombia,Panama,Colombia,Jhon Córdoba,8.0,James Rodríguez,statsbomb,Copa América 2024
+2024-07-06,Colombia,Panama,Colombia,Luis Díaz,41.0,James Rodríguez,statsbomb,Copa América 2024
+2024-07-14,Argentina,Colombia,Argentina,Lautaro Martínez,112.0,Giovani Lo Celso,statsbomb,Copa América 2024
+2024-07-13,Canada,Uruguay,Uruguay,Luis Suárez,90.0,José María Giménez,statsbomb,Copa América 2024
+2024-07-10,Uruguay,Colombia,Colombia,Jefferson Lerma,39.0,James Rodríguez,statsbomb,Copa América 2024
+2024-07-09,Argentina,Canada,Argentina,Julián Álvarez,22.0,Rodrigo De Paul,statsbomb,Copa América 2024
+2024-06-23,Uruguay,Panama,Uruguay,Maximiliano Araújo,16.0,Darwin Núñez,statsbomb,Copa América 2024
+2024-06-23,Uruguay,Panama,Uruguay,Matías Viña,90.0,Nicolás de la Cruz,statsbomb,Copa América 2024
+2024-06-23,Uruguay,Panama,Panama,Michael Amir Murillo,90.0,Freddy Góndola,statsbomb,Copa América 2024
+2024-07-05,Venezuela,Canada,Venezuela,Salomón Rondón,65.0,Jon Aramburu,statsbomb,Copa América 2024
+2024-07-04,Argentina,Ecuador,Argentina,Lisandro Martínez,35.0,Alexis Mac Allister,statsbomb,Copa América 2024
+2024-07-04,Argentina,Ecuador,Ecuador,Kevin Rodríguez,90.0,John Yeboah,statsbomb,Copa América 2024
+2024-06-28,Colombia,Costa Rica,Colombia,Davinson Sánchez,59.0,Jhon Arias,statsbomb,Copa América 2024
+2024-06-28,Colombia,Costa Rica,Colombia,Jhon Córdoba,62.0,James Rodríguez,statsbomb,Copa América 2024
+2024-06-27,United States,Panama,United States,Folarin Balogun,22.0,Antonee Robinson,statsbomb,Copa América 2024
+2024-06-27,United States,Panama,Panama,José Fajardo,83.0,Abdiel Ayarza,statsbomb,Copa América 2024
+2024-07-01,Bolivia,Panama,Panama,José Fajardo,22.0,Cristian Martínez,statsbomb,Copa América 2024
+2024-07-01,Bolivia,Panama,Bolivia,Bruno Miranda,69.0,Ramiro Vaca,statsbomb,Copa América 2024
+2024-07-01,Bolivia,Panama,Panama,Eduardo Guerrero,79.0,Eric Davis,statsbomb,Copa América 2024
+2024-06-20,Argentina,Canada,Argentina,Julián Álvarez,49.0,Alexis Mac Allister,statsbomb,Copa América 2024
+2024-06-20,Argentina,Canada,Argentina,Lautaro Martínez,88.0,Lionel Messi,statsbomb,Copa América 2024
+2024-01-19,Cape Verde,Mozambique,Cape Verde,Kevin Pina,69.0,Deroy Duarte,statsbomb,Africa Cup of Nations 2023
+2024-01-23,Gambia,Cameroon,Cameroon,Karl Toko Ekambi,56.0,Georges-Kévin Nkoudou,statsbomb,Africa Cup of Nations 2023
+2024-01-23,Gambia,Cameroon,Gambia,Ablie Jallow,72.0,Alieu Fadera,statsbomb,Africa Cup of Nations 2023
+2024-01-23,Gambia,Cameroon,Gambia,Ebrima Colley,85.0,Assan Ceesay,statsbomb,Africa Cup of Nations 2023
+2024-01-23,Gambia,Cameroon,Cameroon,Christopher Wooh,90.0,Georges-Kévin Nkoudou,statsbomb,Africa Cup of Nations 2023
+2024-01-19,Senegal,Cameroon,Senegal,Habib Diallo,71.0,Ismaïla Sarr,statsbomb,Africa Cup of Nations 2023
+2024-01-19,Senegal,Cameroon,Cameroon,Jean-Charles Castelletto,83.0,Olivier Ntcham,statsbomb,Africa Cup of Nations 2023
+2024-01-19,Senegal,Cameroon,Senegal,Sadio Mané,90.0,Idrissa Gueye,statsbomb,Africa Cup of Nations 2023
+2024-01-17,DR Congo,Zambia,Zambia,Kings Kangwa,23.0,Patson Daka,statsbomb,Africa Cup of Nations 2023
+2024-01-17,DR Congo,Zambia,DR Congo,Yoane Wissa,27.0,Cédric Bakambu,statsbomb,Africa Cup of Nations 2023
+2024-01-21,South Africa,Namibia,South Africa,Themba Zwane,25.0,Thapelo Morena,statsbomb,Africa Cup of Nations 2023
+2024-01-21,South Africa,Namibia,South Africa,Themba Zwane,40.0,Evidence Makgopa,statsbomb,Africa Cup of Nations 2023
+2024-01-21,South Africa,Namibia,South Africa,Thapelo Maseko,75.0,Teboho Mokoena,statsbomb,Africa Cup of Nations 2023
+2024-01-23,Guinea,Senegal,Senegal,Abdoulaye Seck,61.0,Krépin Diatta,statsbomb,Africa Cup of Nations 2023
+2024-01-23,Guinea,Senegal,Senegal,Iliman Ndiaye,90.0,Sadio Mané,statsbomb,Africa Cup of Nations 2023
+2024-01-20,Tunisia,Mali,Mali,Lassine Sinayoko,10.0,Kamory Doumbia,statsbomb,Africa Cup of Nations 2023
+2024-01-20,Tunisia,Mali,Tunisia,Hamza Rafia,20.0,Ali Abdi,statsbomb,Africa Cup of Nations 2023
+2024-01-15,Cameroon,Guinea,Cameroon,Frank Magri,51.0,Georges-Kévin Nkoudou,statsbomb,Africa Cup of Nations 2023
+2024-01-16,Tunisia,Namibia,Namibia,Deon Hotto,88.0,Muzeu Bethuel,statsbomb,Africa Cup of Nations 2023
+2024-01-20,Mauritania,Angola,Mauritania,Sidi Bouna Amar,43.0,Omaré Gassama,statsbomb,Africa Cup of Nations 2023
+2024-01-17,Morocco,Tanzania,Morocco,Azzedine Ounahi,77.0,Amine Adli,statsbomb,Africa Cup of Nations 2023
+2024-01-17,Morocco,Tanzania,Morocco,Youssef En-Nesyri,80.0,Achraf Hakimi,statsbomb,Africa Cup of Nations 2023
+2024-01-20,Algeria,Burkina Faso,Burkina Faso,Mohamed Konaté,45.0,Abdoul Tapsoba,statsbomb,Africa Cup of Nations 2023
+2024-01-20,Algeria,Burkina Faso,Algeria,Baghdad Bounedjah,90.0,Adam Ounas,statsbomb,Africa Cup of Nations 2023
+2024-01-23,Angola,Burkina Faso,Angola,Mabululu,36.0,Fredy,statsbomb,Africa Cup of Nations 2023
+2024-01-21,Morocco,DR Congo,Morocco,Achraf Hakimi,6.0,Hakim Ziyech,statsbomb,Africa Cup of Nations 2023
+2024-01-21,Morocco,DR Congo,DR Congo,Silas Katompa Mvumpa,76.0,Meschak Elia,statsbomb,Africa Cup of Nations 2023
+2024-01-14,Nigeria,Equatorial Guinea,Equatorial Guinea,Iban Salvador,36.0,Pepín Machín,statsbomb,Africa Cup of Nations 2023
+2024-01-14,Nigeria,Equatorial Guinea,Nigeria,Victor Osimhen,38.0,Ademola Lookman,statsbomb,Africa Cup of Nations 2023
+2024-01-22,Ivory Coast,Equatorial Guinea,Equatorial Guinea,Emilio Nsue,42.0,Carlos Akapo,statsbomb,Africa Cup of Nations 2023
+2024-01-22,Ivory Coast,Equatorial Guinea,Equatorial Guinea,Emilio Nsue,75.0,Pepín Machín,statsbomb,Africa Cup of Nations 2023
+2024-01-18,Equatorial Guinea,Guinea-Bissau,Equatorial Guinea,Emilio Nsue,21.0,Pablo Ganet,statsbomb,Africa Cup of Nations 2023
+2024-01-18,Equatorial Guinea,Guinea-Bissau,Equatorial Guinea,Josete Miranda,46.0,Jesús Owono,statsbomb,Africa Cup of Nations 2023
+2024-01-18,Equatorial Guinea,Guinea-Bissau,Equatorial Guinea,Emilio Nsue,51.0,Basilio Ndong,statsbomb,Africa Cup of Nations 2023
+2024-01-18,Equatorial Guinea,Guinea-Bissau,Equatorial Guinea,Emilio Nsue,61.0,Pepín Machín,statsbomb,Africa Cup of Nations 2023
+2024-01-18,Equatorial Guinea,Guinea-Bissau,Guinea-Bissau,Zé Turbo,90.0,Dálcio,statsbomb,Africa Cup of Nations 2023
+2024-01-22,Mozambique,Ghana,Mozambique,Reinildo Mandava,90.0,Geny Catamo,statsbomb,Africa Cup of Nations 2023
+2024-02-11,Ivory Coast,Nigeria,Ivory Coast,Franck Kessié,62.0,Simon Adingra,statsbomb,Africa Cup of Nations 2023
+2024-02-11,Ivory Coast,Nigeria,Ivory Coast,Sébastien Haller,81.0,Simon Adingra,statsbomb,Africa Cup of Nations 2023
+2024-02-07,Ivory Coast,DR Congo,Ivory Coast,Sébastien Haller,65.0,Max Gradel,statsbomb,Africa Cup of Nations 2023
+2024-01-29,Ivory Coast,Senegal,Senegal,Habib Diallo,4.0,Sadio Mané,statsbomb,Africa Cup of Nations 2023
+2024-01-28,Equatorial Guinea,Guinea,Guinea,Mohamed Bayo,90.0,Ibrahim Diakité,statsbomb,Africa Cup of Nations 2023
+2024-02-03,Ivory Coast,Mali,Mali,Nene Dorgeles,71.0,Diadie Samassékou,statsbomb,Africa Cup of Nations 2023
+2024-01-30,Mali,Burkina Faso,Mali,Lassine Sinayoko,47.0,Hamari Traoré,statsbomb,Africa Cup of Nations 2023
+2024-02-02,Nigeria,Angola,Nigeria,Ademola Lookman,41.0,Moses Simon,statsbomb,Africa Cup of Nations 2023
+2024-01-27,Angola,Namibia,Angola,Gelson Dala,38.0,Fredy,statsbomb,Africa Cup of Nations 2023
+2024-01-27,Angola,Namibia,Angola,Gelson Dala,42.0,Fredy,statsbomb,Africa Cup of Nations 2023
+2024-01-27,Angola,Namibia,Angola,Mabululu,66.0,Gelson,statsbomb,Africa Cup of Nations 2023
+2024-01-30,Morocco,South Africa,South Africa,Evidence Makgopa,57.0,Themba Zwane,statsbomb,Africa Cup of Nations 2023
+2024-01-27,Nigeria,Cameroon,Nigeria,Ademola Lookman,36.0,Victor Osimhen,statsbomb,Africa Cup of Nations 2023
+2024-01-27,Nigeria,Cameroon,Nigeria,Ademola Lookman,90.0,Calvin Bassey,statsbomb,Africa Cup of Nations 2023
+2024-01-18,Egypt,Ghana,Ghana,Mohammed Kudus,45.0,Salis Abdul Samed,statsbomb,Africa Cup of Nations 2023
+2024-01-18,Egypt,Ghana,Ghana,Mohammed Kudus,71.0,Denis Odoi,statsbomb,Africa Cup of Nations 2023
+2024-01-18,Egypt,Ghana,Egypt,Mostafa Mohamed,74.0,Trézéguet,statsbomb,Africa Cup of Nations 2023
+2024-01-14,Egypt,Mozambique,Mozambique,Witi,55.0,Domingos Macandza,statsbomb,Africa Cup of Nations 2023
+2024-01-14,Egypt,Mozambique,Mozambique,Clésio,58.0,Ricardo Guimarães,statsbomb,Africa Cup of Nations 2023
+2024-01-14,Ghana,Cape Verde,Ghana,Alexander Djiku,56.0,Jordan Ayew,statsbomb,Africa Cup of Nations 2023
+2024-01-14,Ghana,Cape Verde,Cape Verde,Garry Rodrigues,90.0,Gilson Tavares,statsbomb,Africa Cup of Nations 2023
+2024-01-22,Cape Verde,Egypt,Cape Verde,Gilson Tavares,45.0,Ryan Mendes,statsbomb,Africa Cup of Nations 2023
+2024-01-22,Cape Verde,Egypt,Egypt,Trézéguet,50.0,Ahmed Hegazy,statsbomb,Africa Cup of Nations 2023
+2024-01-22,Cape Verde,Egypt,Egypt,Mostafa Mohamed,90.0,Trézéguet,statsbomb,Africa Cup of Nations 2023
+2024-01-21,Zambia,Tanzania,Tanzania,Simon Msuva,11.0,Mbwana Samatta,statsbomb,Africa Cup of Nations 2023
+2024-01-21,Zambia,Tanzania,Zambia,Patson Daka,88.0,Cletous Chama,statsbomb,Africa Cup of Nations 2023
+2024-01-19,Guinea,Gambia,Guinea,Aguibou Camara,69.0,Morgan Guilavogui,statsbomb,Africa Cup of Nations 2023
+2024-01-16,Mali,South Africa,Mali,Lassine Sinayoko,66.0,Kamory Doumbia,statsbomb,Africa Cup of Nations 2023
+2024-01-15,Algeria,Angola,Algeria,Baghdad Bounedjah,18.0,Youcef Belaïli,statsbomb,Africa Cup of Nations 2023
+2024-01-15,Senegal,Gambia,Senegal,Pape Gueye,4.0,Sadio Mané,statsbomb,Africa Cup of Nations 2023
+2024-01-15,Senegal,Gambia,Senegal,Lamine Camara,52.0,Ismaïla Sarr,statsbomb,Africa Cup of Nations 2023
+2024-01-15,Senegal,Gambia,Senegal,Lamine Camara,86.0,Iliman Ndiaye,statsbomb,Africa Cup of Nations 2023
+2024-01-13,Ivory Coast,Guinea-Bissau,Ivory Coast,Seko Fofana,4.0,Franck Kessié,statsbomb,Africa Cup of Nations 2023
