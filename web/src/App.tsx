@@ -1,3 +1,4 @@
+import { Gamepad2 } from "lucide-react";
 import { Compass, Download, Eraser, Globe2, Maximize2, Moon, MousePointerClick, Orbit, Pause, Play, Shield, Sparkles, Sun, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "./api";
@@ -6,23 +7,26 @@ import { ChatPanel } from "./components/ChatPanel";
 import { DiscoverPanel } from "./components/DiscoverPanel";
 import { ALL_TIME, EraBar, type Era } from "./components/EraBar";
 import { GraphCanvas, type GraphHandle } from "./components/GraphCanvas";
+import { ComparePanel } from "./components/ComparePanel";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { H2HPanel } from "./components/H2HPanel";
+import { QuizPanel } from "./components/QuizPanel";
 import { Inspector } from "./components/Inspector";
 import { SearchBox } from "./components/SearchBox";
 import { LABEL_ORDER, LABEL_SHAPE, communityColor, fmt, labelColor } from "./theme";
 import type { AgentEvent, Confederation, GNode, H2H, Label, Meta, Subgraph } from "./types";
 import { useGraph } from "./useGraph";
 import { useTheme } from "./useTheme";
+import { parseRoute, routeHash, type Home, type Route } from "./routes";
 
 type ViewMode = "overview" | "explore";
 /** The three home views: nations universe, club universe, nation->club talent pipeline. */
-type Home = "nations" | "clubs" | "pipeline";
 const HOMES: { key: Home; label: string; hint: string; icon: typeof Globe2 }[] = [
   { key: "nations", label: "Nations", hint: "since 1872", icon: Globe2 },
   { key: "clubs", label: "Clubs", hint: "since 2012", icon: Shield },
   { key: "pipeline", label: "Pipeline", hint: "nations → clubs", icon: Orbit },
 ];
-type Tab = "ask" | "discover";
+type Tab = "ask" | "discover" | "play";
 
 export default function App() {
   const { data, merge, replace, remove, clear, has, ids, ungroup } = useGraph();
@@ -58,6 +62,8 @@ export default function App() {
   const [toast, setToast] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>("ask");
   const [h2h, setH2H] = useState<H2H | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [compare, setCompare] = useState<any | null>(null);
 
   const notify = useCallback((msg: string) => {
     setToast(msg);
@@ -139,7 +145,7 @@ export default function App() {
 
   useEffect(() => {
     api.meta().then(setMeta).catch(() => notify("API is not reachable. Is the server running on :8000?"));
-    loadOverview(ALL_TIME);
+    if (!applyRoute.current(window.location.hash)) loadOverview(ALL_TIME);
     loadTeamMedia();
     loadClubMedia();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -188,6 +194,7 @@ export default function App() {
           }
         }
         setH2H(null);
+        setCompare(null);
         setSelectedId(id);
         window.setTimeout(() => canvas.current?.focus(id), 350);
       } catch (e) {
@@ -244,7 +251,25 @@ export default function App() {
           else if (n.label === "Match") n.group = winner.get(n.id) === res.a.id ? 0 : winner.get(n.id) === res.b.id ? 1 : 7;
         }
         show(res.graph, { caption: `${res.a.name} vs ${res.b.name} · latest ${res.graph.nodes.length - 2} meetings` });
+        setCompare(null);
         setH2H(res);
+      } catch (e) {
+        notify((e as Error).message);
+      }
+    },
+    [show, notify],
+  );
+
+  /** Player vs player: the panel, plus both players and their clubs on the canvas. */
+  const openCompare = useCallback(
+    async (a: string, b: string) => {
+      try {
+        const res = await api.comparePlayers(a, b);
+        const sub = await api.subgraph([a, b, ...res.shared_clubs.map((c: { id: string }) => c.id),
+          ...res.a.clubs.map((c: { id: string }) => c.id), ...res.b.clubs.map((c: { id: string }) => c.id)]);
+        show(sub, { caption: `${res.a.profile?.name} vs ${res.b.profile?.name} · their clubs since 2012` });
+        setH2H(null);
+        setCompare(res);
       } catch (e) {
         notify((e as Error).message);
       }
@@ -262,7 +287,41 @@ export default function App() {
 
   const onSelect = useCallback((n: GNode | null) => {
     setSelectedId(n?.id ?? null);
-    if (n) setH2H(null);
+    if (n) {
+      setH2H(null);
+      setCompare(null);
+    }
+  }, []);
+
+  // ------------------------------------------------------------ deep links: the URL follows the view
+  //   #/nations  #/clubs  #/pipeline  #/e/<id>  #/h2h/<team>/<team>  #/vs/<player>/<player>
+  const applyRoute = useRef<(hash: string) => boolean>(() => false);
+  applyRoute.current = (hash: string) => {
+    const r = parseRoute(hash);
+    if (!r) return false;
+    if (r.kind === "home") loadHome(r.home);
+    else if (r.kind === "entity") openEntity(r.id);
+    else if (r.kind === "h2h") openH2H(r.a, r.b);
+    else openCompare(r.a, r.b);
+    return true;
+  };
+  const current: Route | null = compare
+    ? { kind: "vs", a: compare.a.id, b: compare.b.id }
+    : h2h
+      ? { kind: "h2h", a: h2h.a.id, b: h2h.b.id }
+      : selectedId
+        ? { kind: "entity", id: selectedId }
+        : view === "overview"
+          ? { kind: "home", home }
+          : null;
+  const route = current ? routeHash(current) : null;
+  useEffect(() => {
+    if (route && route !== window.location.hash) window.history.pushState(null, "", route);
+  }, [route]);
+  useEffect(() => {
+    const onPop = () => applyRoute.current(window.location.hash);
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
   }, []);
   const onExpandNode = useCallback((n: GNode) => expand(n.id), [expand]);
 
@@ -318,7 +377,7 @@ export default function App() {
             hiddenLabels={hidden}
             frozen={frozen}
             spotlight={view === "overview" ? spotlight : null}
-            insetLeft={selectedId || h2h ? 400 : view === "overview" && intro ? 330 : 0}
+            insetLeft={selectedId || h2h || compare ? 440 : view === "overview" && intro ? 330 : 0}
             onSelect={onSelect}
             onExpand={onExpandNode}
           />
@@ -446,7 +505,12 @@ export default function App() {
             </div>
           )}
 
-          {h2h ? (
+          <ErrorBoundary name="the details panel" key={`${selectedId}|${compare?.a.id}|${h2h?.a.id}`}
+            onReset={() => { setSelectedId(null); setCompare(null); setH2H(null); }}>
+          {compare ? (
+            <ComparePanel data={compare} onClose={() => setCompare(null)} onOpen={openEntity}
+              onPath={(a, b) => { setCompare(null); findPath(a, b, true); }} />
+          ) : h2h ? (
             <H2HPanel data={h2h} onClose={() => setH2H(null)} onOpen={openEntity} />
           ) : (
             selectedId && (
@@ -454,6 +518,7 @@ export default function App() {
                 id={selectedId}
                 mode={theme}
                 onCompare={openH2H}
+                onComparePlayers={openCompare}
                 onClose={() => setSelectedId(null)}
                 onOpen={openEntity}
                 onExpand={expand}
@@ -466,6 +531,7 @@ export default function App() {
               />
             )
           )}
+          </ErrorBoundary>
 
           {toast && <div className="toast">{toast}</div>}
         </section>
@@ -478,13 +544,23 @@ export default function App() {
             <button role="tab" aria-selected={tab === "discover"} className={tab === "discover" ? "is-active" : ""} onClick={() => setTab("discover")}>
               <Compass size={14} /> Discover
             </button>
+            <button role="tab" aria-selected={tab === "play"} className={tab === "play" ? "is-active" : ""} onClick={() => setTab("play")}>
+              <Gamepad2 size={14} /> Play
+            </button>
           </nav>
           <div className="side__body" hidden={tab !== "ask"}>
-            <ChatPanel meta={meta} onGraph={onAgentGraph} onEntity={openEntity} />
+            <ErrorBoundary name="the chat">
+              <ChatPanel meta={meta} onGraph={onAgentGraph} onEntity={openEntity} />
+            </ErrorBoundary>
           </div>
           {tab === "discover" && (
             <div className="side__body side__scroll">
-              <DiscoverPanel onOpen={openEntity} onH2H={openH2H} />
+              <ErrorBoundary name="Discover"><DiscoverPanel onOpen={openEntity} onH2H={openH2H} /></ErrorBoundary>
+            </div>
+          )}
+          {tab === "play" && (
+            <div className="side__body side__scroll">
+              <ErrorBoundary name="the game"><QuizPanel onOpen={openEntity} /></ErrorBoundary>
             </div>
           )}
         </aside>

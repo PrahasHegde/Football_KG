@@ -7,7 +7,9 @@ Every public method opens its own cursor, so it is safe to call from FastAPI's t
 from __future__ import annotations
 
 import math
+import random
 import re
+import secrets
 import threading
 from functools import cached_property
 from typing import Any
@@ -191,6 +193,8 @@ class Store:
                 "AND NOT own_goal GROUP BY ALL ORDER BY goals DESC LIMIT 6",
                 [pid],
             ),
+            "club_teammates": self.club_teammates(pid, 10),
+            "scored_with": self.scored_with(pid, 8),
             "clubs": self.q(
                 "SELECT club_id AS id, club AS name, apps, goals, assists, minutes, league_apps, league_goals, "
                 "europe_apps, europe_goals, first_app, last_app FROM club_careers WHERE player_id = ? "
@@ -207,6 +211,147 @@ class Store:
                 [pid],
             ),
         }
+
+    # ------------------------------------------------------------------ teammates
+    def club_teammates(self, pid: str, limit: int = 10) -> list[dict[str, Any]]:
+        """Players who were at the same club at the same time (overlapping spells, 2012/13+), longest overlap
+        first. `id` is set when the teammate is also in the international graph."""
+        return self.q(
+            """
+            SELECT o.player_id AS id, o.player_name AS name, o.nationality, m.club_id, m.club,
+                   greatest(m.first_app, o.first_app) AS since, least(m.last_app, o.last_app) AS until,
+                   date_diff('day', greatest(m.first_app, o.first_app), least(m.last_app, o.last_app)) AS days
+            FROM club_careers m JOIN club_careers o
+                 ON o.club_id = m.club_id AND o.tm_player_id <> m.tm_player_id
+                AND o.first_app <= m.last_app AND o.last_app >= m.first_app
+            WHERE m.player_id = ? AND o.apps >= 10
+            ORDER BY (o.player_id IS NOT NULL) DESC, days DESC LIMIT ?
+            """,
+            [pid, limit],
+        )
+
+    def scored_with(self, pid: str, limit: int = 8) -> list[dict[str, Any]]:
+        """National-team teammates who scored in the same matches (same side)."""
+        return self.q(
+            """
+            SELECT o.player_id AS id, any_value(o.scorer) AS name, count(DISTINCT o.match_id) AS matches,
+                   min(o.date) AS first, max(o.date) AS last
+            FROM goals m JOIN goals o ON o.match_id = m.match_id AND o.team_id = m.team_id AND o.player_id <> m.player_id
+            WHERE m.player_id = ? AND NOT m.own_goal AND NOT o.own_goal
+            GROUP BY o.player_id ORDER BY matches DESC, last DESC LIMIT ?
+            """,
+            [pid, limit],
+        )
+
+    # ------------------------------------------------------------------ player vs player
+    def compare_players(self, a: str, b: str) -> dict[str, Any] | None:
+        na, nb = self.node(a), self.node(b)
+        if not na or not nb or na["label"] != "Player" or nb["label"] != "Player":
+            return None
+
+        def side(pid: str) -> dict[str, Any]:
+            prof = self.q("SELECT * FROM players WHERE player_id = ?", [pid])
+            club = self.q(
+                "SELECT coalesce(sum(apps), 0) AS apps, coalesce(sum(goals), 0) AS goals, "
+                "coalesce(sum(assists), 0) AS assists, coalesce(sum(minutes), 0) AS minutes FROM club_careers "
+                "WHERE player_id = ?", [pid])[0]
+            return {
+                "id": pid, "profile": prof[0] if prof else None, "club_totals": club,
+                "hat_tricks": self.q("SELECT count(*) AS n FROM (SELECT match_id FROM goals WHERE player_id = ? "
+                                     "AND NOT own_goal GROUP BY match_id HAVING count(*) >= 3)", [pid])[0]["n"],
+                "by_tournament": self.q("SELECT tournament AS name, count(*) AS goals FROM goals WHERE player_id = ? "
+                                        "AND NOT own_goal GROUP BY ALL ORDER BY goals DESC LIMIT 5", [pid]),
+                "clubs": self.q("SELECT club_id AS id, club AS name, apps, goals, assists, first_app, last_app "
+                                "FROM club_careers WHERE player_id = ? ORDER BY first_app", [pid]),
+                "by_year": self.q("SELECT year(date) AS year, count(*) AS goals FROM goals WHERE player_id = ? "
+                                  "AND NOT own_goal GROUP BY ALL ORDER BY year", [pid]),
+            }
+
+        shared_matches = self.q(
+            """
+            SELECT m.match_id AS id, m.date, m.home_team, m.away_team, m.home_score, m.away_score, m.tournament,
+                   (ga.team_id = gb.team_id) AS same_side
+            FROM (SELECT DISTINCT match_id, team_id FROM goals WHERE player_id = ? AND NOT own_goal) ga
+            JOIN (SELECT DISTINCT match_id, team_id FROM goals WHERE player_id = ? AND NOT own_goal) gb USING (match_id)
+            JOIN matches m USING (match_id) ORDER BY m.date DESC LIMIT 12
+            """,
+            [a, b],
+        )
+        shared_clubs = self.q(
+            """
+            SELECT ca.club_id AS id, ca.club AS name,
+                   (ca.first_app <= cb.last_app AND ca.last_app >= cb.first_app) AS together
+            FROM club_careers ca JOIN club_careers cb USING (club_id)
+            WHERE ca.player_id = ? AND cb.player_id = ?
+            """,
+            [a, b],
+        )
+        ta = {(t["id"] or t["name"]) for t in self.club_teammates(a, 400)}
+        tb = {(t["id"] or t["name"]) for t in self.club_teammates(b, 400)}
+        common = sorted(x for x in ta & tb if x not in (a, b))
+        return {"a": side(a), "b": side(b), "shared_matches": shared_matches, "shared_clubs": shared_clubs,
+                "common_teammates": len(common),
+                "common_teammates_sample": [self.node(x)["name"] if x.startswith("P:") and self.node(x) else x
+                                            for x in common[:8]]}
+
+    # ------------------------------------------------------------------ "guess the player" game
+    _quizzes: dict[str, str] = {}
+    _quiz_lock = threading.Lock()
+    QUIZ_LEVELS = {"easy": (40, 1995), "medium": (25, 1975), "hard": (12, 1872)}  # (min goals, last goal since)
+
+    def quiz_new(self, level: str = "easy") -> dict[str, Any]:
+        min_goals, since = self.QUIZ_LEVELS.get(level, self.QUIZ_LEVELS["easy"])
+        pool = self.q(
+            "SELECT player_id FROM players WHERE total_goals >= ? AND year(last_goal_date) >= ?",
+            [min_goals, since],
+        )
+        pid = random.choice(pool)["player_id"]
+        p = self.q("SELECT p.*, t.confederation FROM players p JOIN teams t ON t.team_id = p.team_id "
+                   "WHERE player_id = ?", [pid])[0]
+        top_comp = self.q("SELECT tournament, count(*) AS n FROM goals WHERE player_id = ? AND NOT own_goal "
+                          "GROUP BY ALL ORDER BY n DESC LIMIT 1", [pid])
+        victim = self.q("SELECT opponent, count(*) AS n FROM goals WHERE player_id = ? AND NOT own_goal "
+                        "GROUP BY ALL ORDER BY n DESC LIMIT 1", [pid])
+        clubs = [c["club"] for c in self.q("SELECT club FROM club_careers WHERE player_id = ? ORDER BY apps DESC "
+                                           "LIMIT 3", [pid])]
+        y0, y1 = str(p["first_goal_date"])[:4], str(p["last_goal_date"])[:4]
+        words = p["name"].split()
+        clues = [
+            {"icon": "globe", "label": "Confederation",
+             "text": f"Plays (or played) in {p['confederation']}" + (f" · {p['position']}" if p.get("position") else "")},
+            {"icon": "calendar", "label": "Era", "text": f"Scored for their country between {y0} and {y1}"},
+            {"icon": "trophy", "label": "Favourite competition",
+             "text": f"Most goals in: {top_comp[0]['tournament']} ({top_comp[0]['n']})" if top_comp else "–"},
+            {"icon": "target", "label": "Favourite victim",
+             "text": f"Scored most against {victim[0]['opponent']} ({victim[0]['n']})" if victim else "–"},
+            {"icon": "goal", "label": "Goals", "text": f"{p['total_goals']} international goals in the graph"},
+            {"icon": "shield", "label": "Clubs",
+             "text": ("Clubs since 2012: " + ", ".join(clubs)) if clubs else "No club data (career before 2012)"},
+            {"icon": "flag", "label": "Nation", "text": f"Plays for {p['team']}"},
+            {"icon": "type", "label": "Initials",
+             "text": " ".join(w[0] + "." for w in words) + f" ({len(words)} word{'s' if len(words) > 1 else ''})"},
+        ]
+        token = secrets.token_urlsafe(9)
+        with self._quiz_lock:
+            if len(self._quizzes) > 2000:
+                self._quizzes.clear()
+            self._quizzes[token] = pid
+        return {"token": token, "level": level, "clues": clues}
+
+    def quiz_guess(self, token: str, guess: str | None, reveal: bool = False) -> dict[str, Any] | None:
+        with self._quiz_lock:
+            pid = self._quizzes.get(token)
+        if not pid:
+            return None
+        correct = guess == pid
+        out: dict[str, Any] = {"correct": correct}
+        if correct or reveal:
+            n = self.node(pid)
+            out["answer"] = {"id": pid, "name": n["name"] if n else pid,
+                             "team": self.q("SELECT team FROM players WHERE player_id = ?", [pid])[0]["team"]}
+            with self._quiz_lock:
+                self._quizzes.pop(token, None)
+        return out
 
     def _detail_club(self, cid: str) -> dict[str, Any]:
         c = self.q("SELECT * FROM clubs WHERE club_id = ?", [cid])

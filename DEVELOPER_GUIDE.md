@@ -21,6 +21,7 @@ in this repo, see [CLAUDE.md](CLAUDE.md).
 9. [The frontend](#9-the-frontend-web)
 10. [What happens when…](#10-what-happens-when-end-to-end-walkthroughs)
 11. [Development workflow](#11-development-workflow)
+    - [11½. Testing and quality](#11-testing-and-quality)
 12. [How to extend the project](#12-how-to-extend-the-project)
 13. [Troubleshooting](#13-troubleshooting)
 14. [Known limitations and roadmap](#14-known-limitations-and-roadmap)
@@ -64,7 +65,7 @@ The data comes from the public dataset
 # 1. Python environment
 python -m venv .venv
 .venv\Scripts\activate            # macOS/Linux: source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt   # app + test tools (requirements.txt = app only)
 
 # 2. Data + graph
 python scripts/get_data.py         # clones the dataset into data/international_results/
@@ -83,6 +84,12 @@ uvicorn server.main:app --port 8000
 ```
 
 On its first start the server builds `app_data/football.duckdb` from the graph (about 10 seconds).
+
+Check that everything works (tests, typecheck, build: about 30 seconds, no network needed):
+
+```bash
+python scripts/check.py
+```
 
 ---
 
@@ -140,55 +147,80 @@ The project is a **pipeline of three stages**, then an **app** on top.
 
 ```
 football-kg/
-├── README.md                 How to install and run
+├── README.md                 How to install and run, feature list
 ├── DEVELOPER_GUIDE.md        This file
-├── CLAUDE.md                 Project rules/notes for Claude Code
-├── requirements.txt          Python dependencies
-├── .env.example              Template for GROQ_API_KEY and model settings
-├── .gitignore
+├── CLAUDE.md                 Project rules/notes for Claude Code (schema, data facts, conventions)
+├── requirements.txt          Python dependencies of the app
+├── requirements-dev.txt      + test tools (pytest, httpx)
+├── pytest.ini                Test settings (testpaths, the needs_build marker)
+├── .env.example              Template for GROQ_API_KEY, GROQ_MODEL, WIKIMEDIA_CONTACT
+├── .github/workflows/ci.yml  CI: build from raw data, run every check on each push
 │
 ├── scripts/
-│   └── get_data.py           git clone / pull of the source dataset into data/
+│   ├── get_data.py                git clone / pull of the source dataset into data/
+│   ├── fetch_wikipedia_goals.py   optional: goals missing from the dataset, from Wikipedia goal lists
+│   ├── fetch_statsbomb_assists.py optional: Euro/Copa/AFCON assists from StatsBomb Open Data
+│   ├── fetch_club_data.py         optional: clubs since 2012/13 from transfermarkt-datasets
+│   └── check.py                   runs every check (pytest, UI typecheck + unit tests + build)
+│
+├── data_extra/               Committed outputs of the fetch_* scripts (optional build inputs)
+│   ├── wikipedia_goals.csv   statsbomb_assists.csv
+│   └── clubs.csv  club_player_stats.csv  club_seasons.csv  player_profiles.csv
 │
 ├── src/                      STAGE 1 (the original knowledge-graph project)
-│   ├── build_kg.py           CSVs -> NetworkX graph + Neo4j export
+│   ├── build_kg.py           CSVs (+ data_extra) -> NetworkX graph + Neo4j export
 │   └── explore_kg.py         Command-line showcase queries on the graph
 │
 ├── server/                   STAGES 2 + 3 (backend)
-│   ├── __init__.py
-│   ├── build_db.py           Graph -> DuckDB tables, Elo ratings
-│   ├── store.py              All queries: search, profiles, expand, paths, H2H, discover, safe SQL
+│   ├── build_db.py           Graph -> DuckDB tables, Elo, confederations, club tables
+│   ├── store.py              All queries: search, profiles, expand, paths, H2H, discover, home views,
+│   │                         team-mates, player compare, quiz, safe SQL
 │   ├── agent.py              Groq LLM agent: system prompt, tools, streaming loop
+│   ├── media.py              Flags, crests, photos, club logos (Wikidata/Wikipedia), image proxy
 │   └── main.py               FastAPI app: /api/* endpoints + static UI
 │
-├── web/                      Frontend (React + TypeScript + Vite)
-│   ├── index.html            HTML shell, fonts, favicon
-│   ├── vite.config.ts        Dev server on :5173, proxies /api to :8000
-│   ├── tsconfig.json
-│   ├── package.json
+├── tests/                    Backend tests (pytest) — see §11½
+│   ├── conftest.py           fixtures (store, client, graph), offline mode, skip-if-not-built
+│   ├── test_graph.py         graph schema, ID conventions, structural invariants
+│   ├── test_db.py            data-integrity invariants of the app database
+│   ├── test_store.py         every Store feature + SQL safety
+│   ├── test_api.py           every endpoint, error codes, image-proxy allow-list, chat without a key
+│   ├── test_agent.py         tool validation/execution without the LLM
+│   └── test_scripts.py       import-script parsing/matching rules on synthetic inputs
+│
+├── web/                      Frontend (React + TypeScript + Vite; Vitest for unit tests)
+│   ├── index.html  vite.config.ts  tsconfig.json  package.json
 │   └── src/
 │       ├── main.tsx          React entry point
-│       ├── App.tsx           Layout + app state + all user actions
+│       ├── App.tsx           Layout + app state + all user actions + deep links
+│       ├── routes.ts         URL hash <-> view (parseRoute / routeHash), unit-tested
 │       ├── api.ts            HTTP client + chat stream reader
 │       ├── types.ts          Shared TypeScript types (mirror the API JSON)
-│       ├── theme.ts          Colours, node shapes, sizes, canvas drawing helpers
+│       ├── theme.ts          Colours, node shapes, sizes, layout homes, canvas helpers
+│       ├── media.ts          Client store for flags, photos, club logos
 │       ├── useGraph.ts       Canvas graph state (nodes/links kept stable)
 │       ├── useTheme.ts       Light/dark mode (saved in localStorage)
 │       ├── styles.css        All styling, theme tokens for light + dark
+│       ├── *.test.ts         Vitest unit tests (routes, theme)
 │       └── components/
-│           ├── GraphCanvas.tsx    Force-directed canvas: drawing, physics, clicks
+│           ├── GraphCanvas.tsx    Force-directed canvas: drawing, physics, clicks, the three home views
 │           ├── Inspector.tsx      Entity details panel (per node type)
-│           ├── H2HPanel.tsx       Head-to-head comparison panel
+│           ├── H2HPanel.tsx       Team head to head
+│           ├── ComparePanel.tsx   Player vs player
+│           ├── QuizPanel.tsx      "Guess the player" game (Play tab)
 │           ├── DiscoverPanel.tsx  Insight cards (rankings, upsets, rivalries…)
 │           ├── EraBar.tsx         Decade selector + play button
 │           ├── ChatPanel.tsx      Agent chat: streaming, tool steps, entity links
-│           ├── SearchBox.tsx      Debounced search with keyboard navigation
+│           ├── SearchBox.tsx      Debounced search (optionally one entity type) with keyboard navigation
+│           ├── EntityMedia.tsx    Photos, bios, club careers, flags and crests in the Inspector
+│           ├── Flag.tsx           Flag / avatar images
+│           ├── ErrorBoundary.tsx  Contains a crash to one panel instead of blanking the app
 │           └── charts.tsx         LineChart, ResultBar, ProbBar (SVG)
 │
 ├── data/                     (git-ignored) raw dataset; never edited by code
 ├── football_kg.gpickle       (git-ignored) Stage 1 output
 ├── neo4j_import/             (git-ignored) Stage 1 Neo4j export
-└── app_data/                 (git-ignored) Stage 2 output: football.duckdb
+└── app_data/                 (git-ignored) football.duckdb, media cache, downloads
 ```
 
 ---
@@ -455,7 +487,16 @@ Several layers protect against harmful or runaway agent SQL:
 | GET | `/api/expand/{id}?limit=&type=&direction=` | Neighbourhood subgraph |
 | POST | `/api/subgraph` `{ids: [...]}` | Nodes + edges among them |
 | GET | `/api/overview?start=&end=&top=&min_meetings=&backbone=` | Era "universe" + confederations |
+| GET | `/api/clubs/universe` | Club universe: clubs by league, linked by shared players |
+| GET | `/api/clubs/pipeline` | Nations → clubs rings |
 | GET | `/api/h2h?a=&b=` | Head-to-head data + its graph |
+| GET | `/api/compare/players?a=&b=` | Player vs player (404 unless both are players) |
+| GET | `/api/quiz/new?level=easy\|medium\|hard` | A new "guess the player" round: token + 8 clues |
+| POST | `/api/quiz/guess` `{token, guess, reveal}` | `{correct}`, plus the answer when correct or revealed |
+| GET | `/api/media/teams`, `/api/media/clubs` | Flags/crests and club logos (proxied URLs) |
+| POST | `/api/media/players` `{ids}` | Player photos (queues lookups it doesn't have yet) |
+| GET | `/api/media/entity/{id}` | Bio, club career or team summary for the Inspector |
+| GET | `/api/img?u=` | Disk-cached proxy for Wikimedia images only |
 | GET | `/api/discover` | Insight cards |
 | GET | `/api/path?src=&dst=&via_teams=` | Shortest path subgraph |
 | POST | `/api/chat` `{message, conversation_id}` | **Server-Sent Events** stream (see §8) |
@@ -640,10 +681,11 @@ App.tsx  ── owns all state and actions
 │   ├── caption pill       what you are looking at
 │   ├── toolbar            overview · fit · freeze · PNG · clear
 │   ├── legend             node types / communities / H2H result colours
-│   ├── EraBar             decades + play (overview only)
-│   ├── Inspector          OR  H2HPanel   (floating panel)
+│   ├── home switcher      Nations · Clubs · Pipeline (overview only)
+│   ├── EraBar             decades + play (Nations view only)
+│   ├── Inspector  OR  H2HPanel  OR  ComparePanel   (floating panel, inside an ErrorBoundary)
 │   └── toast              short notices
-└── side (right)  tabs:  ChatPanel  |  DiscoverPanel
+└── side (right)  tabs:  ChatPanel  |  DiscoverPanel  |  QuizPanel   (each inside an ErrorBoundary)
 ```
 
 ### State management
@@ -769,6 +811,37 @@ Inspector.
 
 ---
 
+### Player features (`store.py` + `Inspector.tsx`, `ComparePanel.tsx`, `QuizPanel.tsx`)
+
+| Feature | Backend | Notes |
+|---|---|---|
+| Club team-mates | `Store.club_teammates` | players whose spells at the same club overlapped (2012/13+), longest together first |
+| Scored together | `Store.scored_with` | national-team team-mates who scored in the same match |
+| Player vs player | `Store.compare_players`, `GET /api/compare/players` | stats for both, goals per year, shared clubs, common team-mates, matches both scored in |
+| Guess the player | `Store.quiz_new` / `quiz_guess`, `/api/quiz/*` | the answer stays on the server (keyed by a random token) so it can't be read in the browser; score and streak live in `localStorage["fkg.quiz"]` |
+
+### Deep links (`routes.ts`)
+
+The URL hash mirrors what is on screen: `#/nations`, `#/clubs`, `#/pipeline`, `#/e/<id>`,
+`#/h2h/<team>/<team>`, `#/vs/<player>/<player>`. `App.tsx` computes the current `Route` from its
+state and `pushState`s it when it changes. On load and on browser back/forward, `applyRoute` parses the
+hash and opens that view. `parseRoute` never throws: a malformed link such as `#/e/%E0` just falls back
+to the home view.
+
+### Robustness
+
+- **Error boundaries**: each floating panel and each side tab sits in an `ErrorBoundary`, so a crash in
+  one shows a small "Something went wrong · Retry" card instead of a blank page.
+- **Offline mode** (`FKG_OFFLINE=1`): no Wikimedia calls at all (`_get_json` refuses and the image proxy
+  serves only cached files), and the media warm-up is skipped. Tests and CI use it; you can also use it to
+  work without internet.
+- **Read-only data access**: the runtime DuckDB connection is read-only with external file access
+  disabled, and the agent's SQL is a single SELECT/WITH with a time limit (all covered by tests).
+- **Deterministic imports**: the `fetch_*` scripts sort their output, so re-running them on the same
+  input gives byte-identical CSVs and clean git diffs. Ties between namesakes are broken by fixed rules.
+
+---
+
 ## 10. What happens when… (end-to-end walkthroughs)
 
 ### …you open the app
@@ -831,8 +904,12 @@ cd web && npm run dev          # open http://localhost:5173
 | Rebuild the graph | `python src/build_kg.py` |
 | Rebuild the app database | `python -m server.build_db` (stop the server first on Windows) |
 | CLI showcase queries | `python src/explore_kg.py` |
+| **Run every check** | `python scripts/check.py` (add `--rebuild` to rebuild graph + DB first) |
+| Backend tests only | `python -m pytest` (`-k compare` for a subset, `-x` to stop at the first failure) |
+| UI unit tests | `cd web && npm test` |
 | Type-check the UI | `cd web && npm run typecheck` |
-| Production UI build | `cd web && npm run build` |
+| Production UI build | `cd web && npm run build` (`npm run check` = typecheck + unit tests + build) |
+| Work without internet | set `FKG_OFFLINE=1` before starting the server |
 | API docs | http://localhost:8000/docs |
 
 ### Poking at the data directly
@@ -861,6 +938,53 @@ with TestClient(app).stream("POST", "/api/chat", json={"message": "Top 5 World C
         if line.startswith("data: "):
             print(json.loads(line[6:]))
 ```
+
+---
+
+## 11½. Testing and quality
+
+### What is tested
+
+| Suite | Where | What it guards |
+|---|---|---|
+| Graph | `tests/test_graph.py` | every node has a known label and a conventional ID; every edge follows the schema in `CLAUDE.md`; one Match per results row; each match has one home + one away side; each goal has exactly one scorer, match and team; winners follow the score |
+| Data integrity | `tests/test_db.py` | all tables exist; imported goals never exceed a team's score; goals belong to a team in the match; player goal columns add up; `winner` and `upset` agree with the numbers; Elo is plausible; every team has a confederation; assists have a known source; club tables are referentially sound; linked players fit their era; known namesakes link to the right person |
+| Store | `tests/test_store.py` | search ranking and accents, every entity type, expand limits, paths, H2H, the three home views, discover, compare, quiz rounds, and SQL safety (no writes, no multiple statements, no file access, read-only connection) |
+| API | `tests/test_api.py` | every GET endpoint answers; bad input gets 404/422 (not 500); subgraph limits; the quiz flow; the image proxy only serves Wikimedia; chat without a key returns a readable error |
+| Agent | `tests/test_agent.py` | tool-argument validation, every tool against the real store, entity-link parsing, history compaction, the system prompt lists the tables |
+| Import scripts | `tests/test_scripts.py` | Wikipedia table selection (main table only; hat-trick, youth and summary tables ignored), youth sections, name normalisation, the club linker's name key and era check, StatsBomb minute rounding |
+| UI logic | `web/src/*.test.ts` (Vitest) | deep-link parsing (including malformed links) and round-trips; node sizes, colours and layout tables |
+
+The backend tests run against the **built** database and graph. Tests marked `needs_build` are skipped,
+with a message, when those are missing. Everything runs offline: `conftest.py` sets `FKG_OFFLINE=1` and
+an empty `GROQ_API_KEY`, so no test ever calls Wikimedia or the LLM.
+
+### Running
+
+```bash
+python scripts/check.py              # everything, like CI
+python -m pytest -k "quiz or compare"  # a subset
+cd web && npx vitest                 # UI tests in watch mode
+```
+
+CI (`.github/workflows/ci.yml`) does the full pipeline on every push: clone the dataset, build the
+graph and the database, run pytest, then `npm ci && npm run check`.
+
+### Known source-data faults
+
+The invariant tests encode a few faults of the **source** dataset as explicit exceptions, for example
+`KNOWN_OVER_SCORE` in `test_db.py` (Switzerland 2-0 Romania, 1933, lists two Romanian goals) and the
+Aubameyang father/son goal. `data/` is never edited. If a new fault appears after a dataset update, a
+test will name it. Then decide: either it is a real bug in our code, or it is source data and gets
+added to the list with a comment.
+
+### When you add something
+
+- New endpoint → a case in `test_api.py` (happy path + bad input).
+- New store method → a test in `test_store.py` asserting structure and one known fact.
+- New table or column → an invariant in `test_db.py` (keys unique, references valid, values in range).
+- New import rule → a synthetic-input test in `test_scripts.py`.
+- New pure UI logic → a `*.test.ts` next to it.
 
 ---
 
@@ -898,6 +1022,9 @@ with TestClient(app).stream("POST", "/api/chat", json={"message": "Top 5 World C
 3. If it's a new node **label**: add it to `Label` in `types.ts`, and give it a slot, shape and base
    radius in `theme.ts`, plus `LABELS` in `store.py` and a `_detail_<label>` method if it needs a
    profile.
+4. Add the edge type to `SCHEMA` (and the label to `ID_PATTERN`) in `tests/test_graph.py`. The
+   schema test fails until you do, which is how the test suite keeps `CLAUDE.md` and the build in sync.
+5. Run `python scripts/check.py --rebuild`.
 
 ### Tune the Elo model
 
@@ -924,6 +1051,10 @@ provider, `Agent._loop` is the only place that talks to the LLM API.
 | `football_kg.gpickle not found` | Run `python src/build_kg.py` first (and `scripts/get_data.py` before that). |
 | Graph looks like one tangled ball | Press **Fit**, or toggle **Freeze/Resume** to let the physics settle again. |
 | Requests in an endless loop (browser `ERR_INSUFFICIENT_RESOURCES`) | An effect depends on the whole `useGraph()` object; see the pitfall in §9. |
+| Tests are all "skipped" | The graph/database aren't built. Run `python scripts/check.py --rebuild`. |
+| A `test_db.py` invariant fails after `get_data.py` | The dataset changed. Read the failure: fix our import, or add the new source fault to the known list with a comment (see §11½). |
+| A panel shows "Something went wrong" | An error boundary caught a crash. The browser console has the stack trace; Retry closes the panel. |
+| Club re-import changed many rows | Run `fetch_club_data.py` twice: the output must be byte-identical. If it isn't, a tie-break became non-deterministic. |
 
 ---
 
@@ -936,7 +1067,8 @@ provider, `Agent._loop` is the only place that talks to the LLM API.
   AFCON 2023 only; they are not career totals.
 - Own-goal scorers are attached to the wrong national team in the graph (see §5).
 - Conversations are kept in memory only and vanish on restart.
-- The agent cannot open the head-to-head panel by itself yet.
+- The agent cannot open the head-to-head or compare panels by itself yet.
+- Club data covers 2012/13 to July 2026 only (upstream updates are paused).
 - The free Groq tier limits how fast multi-step questions can be answered.
 
 **Roadmap** (from `CLAUDE.md`)
@@ -948,8 +1080,12 @@ provider, `Agent._loop` is the only place that talks to the LLM API.
 5. ◐ Graph analytics: ✅ confederation clustering · ⬜ community detection, link prediction
 6. ✅ Interactive web explorer + agent
 
-Further ideas: let the agent open head-to-head views, add a team "form guide" (last 10 results),
-persist conversations, and add shareable links to a view.
+Done since the first version: club data, the Clubs and Pipeline views, player compare, team-mates, the
+quiz, shareable deep links, a test suite and CI.
+
+Further ideas: club match data (club head-to-heads, title races, club Elo), an all-time XI builder,
+"on this day" stories in Discover, transfer-flow animation in the Clubs view, `RIVAL_OF` / `TEAMMATE_OF`
+edges for richer paths, persisted conversations, and code-splitting the 660 kB UI bundle.
 
 ---
 

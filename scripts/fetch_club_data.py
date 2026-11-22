@@ -66,6 +66,20 @@ COMPETITION_NAMES = {
 }
 
 
+def plausible(date_of_birth, first_app, last_app, first: int, last: int, median: float) -> bool:
+    """Can a graph player whose international goals span first..last (median year `median`) be this person?
+
+    The median goal year must fall at age 16-40 (from the date of birth); without a date of birth, within 8
+    years of their club career (first_app..last_app). Stops namesakes from other eras; using the median
+    tolerates a stray dataset goal, e.g. a father's goal under the same name (Aubameyang)."""
+    dob = pd.to_datetime(date_of_birth, errors="coerce")
+    if pd.notna(dob):
+        return dob.year + 16 <= median <= dob.year + 40
+    if pd.isna(first_app) or pd.isna(last_app):
+        return False
+    return pd.Timestamp(first_app).year - 8 <= last and first <= pd.Timestamp(last_app).year + 8
+
+
 def download(refresh: bool) -> None:
     if TM_FILE.exists() and not refresh:
         return
@@ -109,6 +123,7 @@ def main() -> None:
     players = tm.execute("""
         SELECT p.player_id, p.name, p.first_name, p.last_name, p.country_of_citizenship, nt.name AS national_team,
                p.position, p.sub_position, p.date_of_birth, p.international_caps, p.international_goals,
+               p.highest_market_value_in_eur AS peak_value,
                (SELECT min(date) FROM appearances a WHERE a.player_id = p.player_id) AS first_app,
                (SELECT max(date) FROM appearances a WHERE a.player_id = p.player_id) AS last_app
         FROM players p LEFT JOIN national_teams nt ON nt.national_team_id = CAST(p.current_national_team_id AS VARCHAR)
@@ -122,41 +137,43 @@ def main() -> None:
         if len(toks) >= 2:
             by_surname[(toks[-1], r.team)].append((r.name, r.min, r.max, r.median))
 
-    def plausible(p, first: int, last: int, median: float) -> bool:
-        """The graph player's international goals must fit this person's playing life: the median goal year
-        aged 16-40 (from the date of birth), or without one, within 8 years of their club career. Stops
-        namesakes from other eras; using the median tolerates a stray dataset goal, e.g. a father's goal under
-        the same name (Aubameyang)."""
-        dob = pd.to_datetime(p.date_of_birth, errors="coerce")
-        if pd.notna(dob):
-            return dob.year + 16 <= median <= dob.year + 40
-        if pd.isna(p.first_app):
-            return False
-        return p.first_app.year - 8 <= last and first <= p.last_app.year + 8
-
-    def link(p) -> str | None:
-        cand_teams = {t for t in (to_team(p.country_of_citizenship), to_team(p.national_team)) if t}
+    def link(p) -> tuple[str | None, int, float]:
+        """(graph player id or None, match quality: 0 exact name / 1 surname, fit): fit = years between the
+        graph player's median goal year and this person's age-27 season (99 without a birth date)."""
+        cand_teams = sorted(t for t in (to_team(p.country_of_citizenship), to_team(p.national_team)) if t)
         names = [p.name, f"{p.first_name or ''} {p.last_name or ''}".strip()]
+        dob = pd.to_datetime(p.date_of_birth, errors="coerce")
+        fit = lambda m: abs(m - (dob.year + 27)) if pd.notna(dob) else 99.0  # noqa: E731
         for team in cand_teams:
             for n in names:
-                hits = [k for k, a, b, m in exact.get((name_key(n), team), []) if plausible(p, a, b, m)]
+                hits = [(k, m) for k, a, b, m in exact.get((name_key(n), team), [])
+                        if plausible(p.date_of_birth, p.first_app, p.last_app, a, b, m)]
                 if hits:
-                    return f"P:{slug(hits[0])}@{slug(team)}"
+                    k, m = min(hits, key=lambda h: (fit(h[1]), h[0]))
+                    return f"P:{slug(k)}@{slug(team)}", 0, fit(m)
         # surname + same first initial, within the same era
         toks = norm(p.name).split()
         if len(toks) >= 2:
             for team in cand_teams:
-                hits = [k for k, a, b, m in by_surname.get((toks[-1], team), [])
-                        if norm(k)[0] == toks[0][0] and plausible(p, a, b, m)]
+                hits = [(k, m) for k, a, b, m in by_surname.get((toks[-1], team), [])
+                        if norm(k)[0] == toks[0][0] and plausible(p.date_of_birth, p.first_app, p.last_app, a, b, m)]
                 if len(hits) == 1:
-                    return f"P:{slug(hits[0])}@{slug(team)}"
-        return None
+                    return f"P:{slug(hits[0][0])}@{slug(team)}", 1, fit(hits[0][1])
+        return None, 9, 99.0
 
-    players["kg_player_id"] = [link(p) for p in players.itertuples()]
-    # one Transfermarkt player per graph player (keep the one with more caps)
-    players = players.sort_values("international_caps", ascending=False)
+    links = [link(p) for p in players.itertuples()]
+    players["kg_player_id"] = [x[0] for x in links]
+    players["quality"] = [x[1] for x in links]
+    players["fit"] = [x[2] for x in links]
+    # One Transfermarkt player per graph player. Namesakes (two Kakás born a year apart, an Andy and an Adam
+    # Johnson) can all pass the era check, and caps are often missing. Keep: an exact-name match over a surname
+    # match, then the higher peak market value (the international star, not the namesake), then the better age
+    # fit, then the lower id. Deterministic.
+    players["value_sort"] = -players.peak_value.fillna(0)
+    players = players.sort_values(["quality", "value_sort", "fit", "player_id"], kind="mergesort")
     dup = players.kg_player_id.notna() & players.duplicated("kg_player_id")
     players.loc[dup, "kg_player_id"] = None
+    players = players.drop(columns=["quality", "fit", "value_sort"]).sort_values("player_id", kind="mergesort")
     linked = players[players.kg_player_id.notna()]
     print(f"Linked {len(linked):,} of {len(players):,} Transfermarkt players to graph players")
 
@@ -207,10 +224,12 @@ def main() -> None:
                        "international_caps"]].rename(columns={"player_id": "tm_player_id"})
 
     OUT.mkdir(exist_ok=True)
-    clubs.drop(columns=["league_slug"]).to_csv(OUT / "clubs.csv", index=False)
-    stats.to_csv(OUT / "club_player_stats.csv", index=False)
-    seasons.drop(columns=["competition_slug"]).to_csv(OUT / "club_seasons.csv", index=False)
-    profiles.to_csv(OUT / "player_profiles.csv", index=False)
+    # sorted output: re-running on the same snapshot gives byte-identical files (clean git diffs)
+    clubs.drop(columns=["league_slug"]).sort_values("club_id").to_csv(OUT / "clubs.csv", index=False)
+    stats.sort_values(["tm_player_id", "club_id"]).to_csv(OUT / "club_player_stats.csv", index=False)
+    seasons.drop(columns=["competition_slug"]).sort_values(["club_id", "season", "competition_id"]) \
+        .to_csv(OUT / "club_seasons.csv", index=False)
+    profiles.sort_values("kg_player_id").to_csv(OUT / "player_profiles.csv", index=False)
     print(f"clubs.csv {len(clubs):,} · club_player_stats.csv {len(stats):,} "
           f"({stats.kg_player_id.notna().sum():,} linked) · club_seasons.csv {len(seasons):,} · "
           f"player_profiles.csv {len(profiles):,}")

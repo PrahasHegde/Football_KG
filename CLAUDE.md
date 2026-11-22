@@ -15,6 +15,12 @@ https://github.com/martj42/international_results.
 - Run app: `cd web && npm run build`, then `uvicorn server.main:app --port 8000` → http://localhost:8000
 - UI dev: `uvicorn server.main:app --reload` + `cd web && npm run dev` (:5173 proxies /api to :8000)
 - Typecheck UI: `cd web && npm run typecheck`
+- **All checks** (run before finishing any change): `python scripts/check.py` (`--rebuild` rebuilds graph + DB
+  first). = `python -m pytest` (backend, offline, needs the built DB) + `cd web && npm run check` (tsc + Vitest +
+  build). Dev deps: `pip install -r requirements-dev.txt`. CI: `.github/workflows/ci.yml`.
+- When adding a feature, add tests (see DEVELOPER_GUIDE §11½). New edge types/labels must be added to
+  `SCHEMA`/`ID_PATTERN` in tests/test_graph.py; source-data faults go in the known lists in tests/test_db.py.
+- `FKG_OFFLINE=1` disables every Wikimedia call (tests/CI set it).
 
 ## Web app
 - `server/` FastAPI app. `store.py` is the only data access layer (read-only DuckDB, external file access
@@ -50,6 +56,12 @@ https://github.com/martj42/international_results.
   else the club's enwiki article page image (`pilicense=any`: most crests are NON-FREE fair-use files on
   en.wikipedia) kept only if crest-like (`CREST_FILE`); else a Wikipedia search whose title must contain the
   club's first distinctive word. Re-run by deleting `__clubs_v2__` from app_data/media.sqlite.
+- Player features: `Store.club_teammates` (overlapping club spells, 2012+), `Store.scored_with` (scored in the
+  same match for the same national team), `Store.compare_players` (`/api/compare/players`, `ComparePanel.tsx`),
+  "Guess the player" game (`Store.quiz_new`/`quiz_guess`, `/api/quiz/*`, `QuizPanel.tsx`, Play tab; answer kept
+  server-side by token, stats in localStorage `fkg.quiz`).
+- Deep links (App.tsx `applyRoute`/`route`): `#/nations|clubs|pipeline`, `#/e/<id>`, `#/h2h/<a>/<b>`,
+  `#/vs/<a>/<b>`; pushState on change, popstate re-applies (browser back works).
 - `web/` React + TS + Vite, canvas via `react-force-graph-2d`. Graph state lives in `useGraph.ts`;
   node objects are kept stable so the simulation keeps positions. Keep hook callbacks off the
   per-render `useGraph()` object (doing so caused an infinite fetch loop once).
@@ -104,6 +116,8 @@ https://github.com/martj42/international_results.
   Linking to graph players: same name (order/hyphen-insensitive) + national team (nationality or current
   national team), else unique surname + first initial; ALWAYS with an era check (median international goal
   year at age 16-40 from the DOB) - namesakes from other eras are common (Bebeto, Ali Karimi). ~3.9k linked.
+  Namesake tie-break (several TM players -> one graph player): exact name > surname match, then highest peak
+  market value, then age fit, then lower id (caps are mostly empty in the snapshot).
   Club nodes for all clubs; PLAYED_FOR_CLUB edges only for linked players. Transfermarkt's
   `international_goals` is stale for some players (Chhetri 89 vs 95): not used.
 - Former team names never appear in results.csv (results use current names).
@@ -113,6 +127,7 @@ https://github.com/martj42/international_results.
 ## Conventions
 - Python 3.10+, pandas + networkx. Keep the build reproducible from the raw CSVs alone.
 - Never edit files in `data/`; derive everything in code.
+- Import scripts must stay deterministic (sorted output, fixed tie-breaks): re-running gives identical CSVs.
 - Neo4j load script requires Neo4j 5.23+ (`CALL (row) {...} IN TRANSACTIONS`).
 
 ## Roadmap

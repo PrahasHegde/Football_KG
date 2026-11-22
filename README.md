@@ -49,6 +49,14 @@ automatically whenever `football_kg.gpickle` is newer. To force a rebuild, run `
   (192 clubs clustered by league like a map of Europe, linked by the players they shared, sized by win rate,
   with club crests) and **Pipeline** (nations on an outer ring, clubs on an inner ring: where each country's
   internationals play). Hover anything to light up its connections; click a legend chip to spotlight a group.
+- **Player vs player**: compare any two players side by side (goals, caps, assists, club numbers, goals
+  over time) and see how they connect: shared clubs, team-mates in common, matches where both scored.
+- **Team-mates**: every player panel lists their longest club team-mates and the countrymen they scored
+  alongside.
+- **Guess the player** (Play tab): clues from the graph are revealed one at a time; three levels, points,
+  streaks.
+- **Shareable links**: the URL follows the view (`#/clubs`, `#/e/P:lionel_messi@argentina`,
+  `#/vs/<player>/<player>`), and the browser back button works.
 - **Club stats** for ~800 clubs in the top leagues since 2012/13 (transfermarkt-datasets, CC0):
   club nodes in the graph, a club panel (stadium, coach, win rate by season, top scorers, assisters and
   appearances) and a club table on player panels (apps, goals, assists per club). International players

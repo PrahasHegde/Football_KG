@@ -1,14 +1,288 @@
 club_id,name,league_id,country,stadium,stadium_seats,coach,squad_size,last_season,league,country_team
+3,1.FC Köln,L1,Germany,RheinEnergieSTADION,50000,Lukas Kwasniok,28,2025,Bundesliga,Germany
+4,1.FC Nuremberg,L1,Germany,Max-Morlock-Stadion,50000,,33,2018,Bundesliga,Germany
+5,AC Milan,IT1,Italy,Giuseppe Meazza,75923,Massimiliano Allegri,32,2025,Serie A,Italy
+6,Adanaspor,TR1,Türkiye,Yeni Adana Stadyumu,33000,,10,2016,Süper Lig,Turkey
 10,Arminia Bielefeld,L1,Germany,SchücoArena,26515,,27,2021,Bundesliga,Germany
-10004,Paris FC,FR1,France,Stade Jean Bouin,19904,Stéphane Gilli,27,2025,Ligue 1,France
-10010,Esporte Clube Bahia,BRA1,Brazil,Arena Fonte Nova,47364,,32,2025,Brasileirão Série A,Brazil
+11,Arsenal FC,GB1,England,Emirates Stadium,60704,Mikel Arteta,29,2025,Premier League,England
+12,Associazione Sportiva Roma,IT1,Italy,Olimpico di Roma,70634,,27,2025,Serie A,Italy
+13,Atlético de Madrid,ES1,Spain,Riyadh Air Metropolitano,70460,Diego Simeone,26,2025,LaLiga,Spain
+14,Austria Vienna,A1,Austria,Generali Arena,15600,Stephan Helm,31,2025,Austrian Bundesliga,Austria
+15,Bayer 04 Leverkusen,L1,Germany,BayArena,30210,Erik ten Hag,36,2025,Bundesliga,Germany
+16,Borussia Dortmund,L1,Germany,SIGNAL IDUNA PARK,81365,Niko Kovac,29,2025,Bundesliga,Germany
+18,Borussia Mönchengladbach,L1,Germany,Stadion im Borussia-Park,54042,Gerardo Seoane,29,2025,Bundesliga,Germany
+19,Brescia Calcio,IT1,Italy,Mario Rigamonti,19550,,28,2019,Serie A,Italy
+20,Bursaspor,TR1,Türkiye,Bursa Büyükşehir Belediye Stadyumu,43361,,26,2018,Süper Lig,Turkey
+23,Eintracht Braunschweig,L1,Germany,EINTRACHT-Stadion,23325,,30,2013,Bundesliga,Germany
+24,Eintracht Frankfurt,L1,Germany,Deutsche Bank Park,59500,Dino Toppmöller,32,2025,Bundesliga,Germany
+26,FC Basel 1893,C1,Switzerland,St. Jakob-Park,38512,Ludovic Magnin,32,2025,Swiss Super League,Switzerland
+27,Bayern Munich,L1,Germany,Allianz Arena,75000,Vincent Kompany,31,2025,Bundesliga,Germany
+29,Everton FC,GB1,England,Hill Dickinson Stadium,52769,David Moyes,23,2025,Premier League,England
+31,Liverpool FC,GB1,England,Anfield,61276,Arne Slot,29,2025,Premier League,England
+33,FC Schalke 04,L1,Germany,Veltins-Arena,62271,,27,2022,Bundesliga,Germany
+35,FC St. Pauli,L1,Germany,Millerntor-Stadion,29546,Alexander Blessin,28,2025,Bundesliga,Germany
+36,Fenerbahce,TR1,Türkiye,Chobani Stadyumu FB Şükrü Saracoğlu Spor Kompleksi,47430,José Mourinho,44,2025,Süper Lig,Turkey
+38,Fortuna Düsseldorf,L1,Germany,MERKUR SPIEL-ARENA,54600,,29,2019,Bundesliga,Germany
+39,1.FSV Mainz 05,L1,Germany,Mewa Arena,33305,Bo Henriksen,30,2025,Bundesliga,Germany
+40,FC Girondins Bordeaux,FR1,France,Matmut Atlantique,42115,,26,2021,Ligue 1,France
+41,Hamburger SV,L1,Germany,Volksparkstadion,57000,Merlin Polzin,26,2025,Bundesliga,Germany
+42,Hannover 96,L1,Germany,Heinz-von-Heiden-Arena,49000,,28,2018,Bundesliga,Germany
+43,Heart of Midlothian FC,SC1,Scotland,Tynecastle Park,19852,Derek McInnes,36,2025,Scottish Premiership,Scotland
+44,Hertha BSC,L1,Germany,Olympiastadion Berlin,74667,,36,2022,Bundesliga,Germany
+46,Inter Milan,IT1,Italy,Giuseppe Meazza,75923,Cristian Chivu,25,2025,Serie A,Italy
+47,Iraklis Thessaloniki,GR1,Greece,Kaftanzoglio Stadio,27770,,27,2016,Greek Super League,Greece
+53,OFK Beograd,SER1,Serbia,Omladinski stadion,19000,Simo Krunic,36,2025,Super Liga Srbije,Serbia
+58,RSC Anderlecht,BE1,Belgium,Lotto Park,21900,Besnik Hasi,27,2025,Jupiler Pro League,Belgium
+60,SC Freiburg,L1,Germany,Europa-Park Stadion,34700,Julian Schuster,30,2025,Bundesliga,Germany
+61,Servette FC,C1,Switzerland,Stade de Genève,30084,Thomas Häberli,36,2025,Swiss Super League,Switzerland
+62,SK Slavia Prague,TS1,Czech Republic,Fortuna Arena,19370,Jindrich Trpisovsky,41,2025,Chance Liga,Czech Republic
+65,SpVgg Greuther Fürth,L1,Germany,Sportpark Ronhof | Thomas Sommer,16626,,28,2021,Bundesliga,Germany
+76,Vålerengens Idrettsforening,NO1,Norway,Intility Arena,16556,,26,2025,Eliteserien,Norway
+79,VfB Stuttgart,L1,Germany,MHPArena Stuttgart,60449,Sebastian Hoeneß,33,2025,Bundesliga,Germany
+80,VfL Bochum,L1,Germany,Vonovia Ruhrstadion,26000,Peter Zeidler,29,2024,Bundesliga,Germany
+82,VfL Wolfsburg,L1,Germany,Volkswagen Arena,28917,Paul Simonis,39,2025,Bundesliga,Germany
+86,SV Werder Bremen,L1,Germany,Weserstadion,41800,Horst Steffen,31,2025,Bundesliga,Germany
+88,Widzew Lodz,PL1,Poland,Stadion Widzewa,18018,Zeljko Sopic,30,2025,Pko Bp Ekstraklasa,Poland
+89,1.FC Union Berlin,L1,Germany,Stadion An der Alten Försterei,22012,Steffen Baumgart,31,2025,Bundesliga,Germany
+105,SV Darmstadt 98,L1,Germany,Merck-Stadion am Böllenfalltor,17810,,27,2023,Bundesliga,Germany
+114,Beşiktaş Jimnastik Kulübü,TR1,Türkiye,Beşiktaş Park,42684,,28,2025,Süper Lig,Turkey
+120,Kocaelispor,TR1,Türkiye,Turka Araç Muayene Kocaeli Stadyumu,34829,Selçuk İnan,28,2025,Süper Lig,Turkey
+121,FK Dinamo Moskva,RU1,Russia,VTB-Arena,25716,,30,2025,Russian Premier League,Russia
+122,Sportklub Puntigamer Sturm Graz,A1,Austria,Merkur Arena,16364,,26,2025,Austrian Bundesliga,Austria
+124,Rangers FC,SC1,Scotland,Ibrox Stadium,50987,Russell Martin,30,2025,Scottish Premiership,Scotland
+126,Caykur Rizespor,TR1,Türkiye,Çaykur Didi,14879,İlhan Palut,30,2025,Süper Lig,Turkey
+127,SC Paderborn 07,L1,Germany,Home Deluxe Arena,15000,,26,2019,Bundesliga,Germany
+128,AO Xanthi,GR1,Greece,Xanthi Arena,7361,,0,2019,Greek Super League,Greece
+130,Parma Calcio 1913,IT1,Italy,Ennio Tardini,22352,Carlos Cuesta,33,2025,Serie A,Italy
+131,FC Barcelona,ES1,Spain,Spotify Camp Nou,62657,Hansi Flick,28,2025,LaLiga,Spain
+132,NAC Breda,NL1,Netherlands,Rat Verlegh Stadion,20500,Jo Jansen,21,2025,Eredivisie,Netherlands
+133,SC Cambuur Leeuwarden,NL1,Netherlands,Cambuurstadion,10250,,16,2022,Eredivisie,Netherlands
+141,Galatasaray,TR1,Türkiye,Ali Sami Yen Spor Kompleksi RAMS Park,53978,Okan Buruk,33,2025,Süper Lig,Turkey
+142,Real Zaragoza,ES1,Spain,La Romareda,33608,,23,2012,LaLiga,Spain
+144,HNK Rijeka,KR1,Croatia,Stadion Rujevica,8136,Radomir Djalovic,34,2025,Supersport Hnl,Croatia
+148,Tottenham Hotspur,GB1,England,Tottenham Hotspur Stadium,62850,Thomas Frank,37,2025,Premier League,England
+150,Real Betis Balompié,ES1,Spain,La Cartuja,71374,Manuel Pellegrini,26,2025,LaLiga,Spain
+152,Samsunspor,TR1,Türkiye,Samsun Yeni 19 Mayıs,34303,Thomas Reis,38,2025,Süper Lig,Turkey
+157,KAA Gent,BE1,Belgium,Planet Group arena,20185,Ivan Leko,33,2025,Jupiler Pro League,Belgium
+159,Red Star Belgrade,SER1,Serbia,Rajko Mitić,49167,Vladan Milojevic,37,2025,Super Liga Srbije,Serbia
+162,AS Monaco,FR1,France,Stade Louis-II,18525,Adi Hütter,28,2025,Ligue 1,France
+167,FC Augsburg,L1,Germany,WWK ARENA,30660,Sandro Wagner,30,2025,Bundesliga,Germany
+168,Zaglebie Lubin,PL1,Poland,KGHM Zagłębie Arena,16086,Leszek Ojrzyński,32,2025,Pko Bp Ekstraklasa,Poland
+169,Panionios Athens,GR1,Greece,Stadio Neas Smyrnis,11700,,34,2019,Greek Super League,Greece
+170,Rapid Vienna,A1,Austria,Allianz-Stadion,28345,Peter Stöger,33,2025,Austrian Bundesliga,Austria
+172,Royal Charleroi Sporting Club,BE1,Belgium,Stade du Pays de Charleroi,14968,,27,2025,Jupiler Pro League,Belgium
+173,Odense Boldklub,DK1,Denmark,Nature Energy Park,15761,Alexander Zorniger,25,2025,Danish Superliga,Denmark
+180,Southampton FC,GB1,England,St Mary's Stadium,32384,Russell Martin,27,2024,Premier League,England
+189,Club Atlético Boca Juniors,ARG1,Argentina,Alberto J. Armando,54000,,36,2025,Argentine Primera División,Argentina
+190,FC Copenhagen,DK1,Denmark,Parken - connected by 3,38065,Jacob Neestrup,29,2025,Danish Superliga,Denmark
+192,Roda JC Kerkrade,NL1,Netherlands,Parkstad Limburg Stadion,19979,,25,2017,Eredivisie,Netherlands
+195,Rosenborg Ballklub,NO1,Norway,Lerkendal Stadion,21510,,29,2025,Eliteserien,Norway
+197,AC Sparta Prague,TS1,Czech Republic,epet Arena,18243,Brian Priske,33,2025,Chance Liga,Czech Republic
+199,Sport Club Corinthians Paulista,BRA1,Brazil,Neo Química Arena,49205,,34,2025,Brasileirão Série A,Brazil
+200,FC Utrecht,NL1,Netherlands,"Stadion ""Galgenwaard""",23750,Ron Jans,31,2025,Eredivisie,Netherlands
+202,FC Groningen,NL1,Netherlands,Euroborg,22550,Dick Lukkien,24,2025,Eredivisie,Netherlands
+204,Lierse SK (- 2018),BE1,Belgium,Herman Vanderpoortenstadion,14538,,0,2014,Jupiler Pro League,Belgium
+206,Bröndby IF,DK1,Denmark,Brøndby Stadion,28000,Frederik Birk,30,2025,Danish Superliga,Denmark
+209,Club Atlético River Plate,ARG1,Argentina,Mâs Monumental,85018,,37,2025,Argentine Primera División,Argentina
+210,Grêmio Foot-Ball Porto Alegrense,BRA1,Brazil,Arena do Grêmio,60540,,34,2025,Brasileirão Série A,Brazil
+218,San Jose Earthquakes,MLS1,United States,PayPal Park,18000,,30,2025,Major League Soccer,United States
+221,Santos Futebol Clube,BRA1,Brazil,Estádio Urbano Caldeira,16068,,37,2025,Brasileirão Série A,Brazil
+223,HNK Sibenik,KR1,Croatia,Subicevac,3701,Mario Carevic,15,2024,Supersport Hnl,Croatia
+232,FK Spartak Moskva,RU1,Russia,Lukoil Arena,44571,,26,2025,Russian Premier League,Russia
+234,Feyenoord Rotterdam,NL1,Netherlands,"Stadion Feyenoord ""De Kuip""",47500,Robin van Persie,37,2025,Eredivisie,Netherlands
+235,RKC Waalwijk,NL1,Netherlands,Mandemakers Stadion,7186,Henk Fraser,31,2024,Eredivisie,Netherlands
+237,RCD Mallorca,ES1,Spain,Mallorca Son Moix,25736,Jagoba Arrasate,24,2025,LaLiga,Spain
+238,Lech Poznan,PL1,Poland,Enea Poznań,42837,Niels Frederiksen,28,2025,Pko Bp Ekstraklasa,Poland
+239,Viking Fotballklubb,NO1,Norway,Lyse Arena,15900,,25,2025,Eliteserien,Norway
+242,FC Winterthur,C1,Switzerland,Schützenwiese,8700,Uli Forte,27,2025,Swiss Super League,Switzerland
+244,Olympique Marseille,FR1,France,Orange Vélodrome,67394,Roberto De Zerbi,26,2025,Ligue 1,France
+252,Genoa CFC,IT1,Italy,Luigi Ferraris,34901,Patrick Vieira,31,2025,Serie A,Italy
+255,Legia Warszawa,PL1,Poland,Stadion Miejski im. Marszałka Józefa Piłsudskiego,31103,Edward Iordănescu,25,2025,Pko Bp Ekstraklasa,Poland
+257,FC St. Gallen 1879,C1,Switzerland,kybunpark,20660,Enrico Maaßen,30,2025,Swiss Super League,Switzerland
+260,FC Zürich,C1,Switzerland,Stadion Letzigrund,26104,Mitchell van der Gaag,25,2025,Swiss Super League,Switzerland
+265,Panathinaikos Athlitikos Omilos,GR1,Greece,Apostolos Nikolaidis,15000,,33,2025,Greek Super League,Greece
+266,SV Ried,A1,Austria,BWT X Oberösterreichische Arena,7300,Maximilian Senft,28,2025,Austrian Bundesliga,Austria
+267,Idrettsklubben Start,NO1,Norway,Sparebanken Sør Arena,14300,,28,2025,Eliteserien,Norway
+269,Holstein Kiel,L1,Germany,Holstein-Stadion,15034,Marcel Rapp,29,2024,Bundesliga,Germany
+272,Allmänna Idrottsklubben,SE1,Sweden,Strawberry Arena,50000,,28,2025,Allsvenskan,Sweden
+273,Stade Rennais FC,FR1,France,Roazhon Park,29778,Habib Beye,34,2025,Ligue 1,France
+276,Hellas Verona,IT1,Italy,Marcantonio Bentegodi,39211,Paolo Zanetti,29,2025,Serie A,Italy
+281,Manchester City,GB1,England,Etihad Stadium,61000,Pep Guardiola,32,2025,Premier League,England
+288,Club Estudiantes de La Plata,ARG1,Argentina,Jorge Luis Hirschi,32530,,32,2025,Argentine Primera División,Argentina
+289,Sunderland AFC,GB1,England,Stadium of Light,48707,Régis Le Bris,31,2025,Premier League,England
+290,AJ Auxerre,FR1,France,Stade de l'Abbé-Deschamps,18541,Christophe Pélissier,31,2025,Ligue 1,France
+294,SL Benfica,PO1,Portugal,Estádio da Luz,68100,Bruno Lage,30,2025,Liga Portugal,Portugal
+301,FCSB,RO1,Romania,Arena Națională,55634,Elias Charalambous,25,2025,Superliga,Romania
+306,SC Heerenveen,NL1,Netherlands,Abe Lenstra Stadion,27224,Robin Veldman,23,2025,Eredivisie,Netherlands
+311,Football Club Pohang Steelers,RSK1,"Korea, South",Pohang Steelyard,17443,,35,2025,K League 1,South Korea
+312,FC Dinamo 1948,RO1,Romania,National Arena,55600,Zeljko Kopic,39,2025,Superliga,Romania
+316,Grazer AK 1902,A1,Austria,Merkur Arena,15322,Ferdinand Feldhofer,22,2025,Austrian Bundesliga,Austria
+317,FC Twente Enschede,NL1,Netherlands,De Grolsch Veste,30205,Joseph Oosting,31,2025,Eredivisie,Netherlands
+321,FC Sion,C1,Switzerland,Tourbillon,14850,Didier Tholot,32,2025,Swiss Super League,Switzerland
+322,Yverdon Sport FC,C1,Switzerland,Stade Municipal,4200,Alessandro Mangiarratti,30,2024,Swiss Super League,Switzerland
+324,Pogon Szczecin,PL1,Poland,Stadion Miejski im. Floriana Krygiera,21163,Robert Kolendowicz,33,2025,Pko Bp Ekstraklasa,Poland
+327,NK Osijek,KR1,Croatia,Opus Arena,13005,Simon Rozman,32,2025,Supersport Hnl,Croatia
+330,Clube Atlético Mineiro,BRA1,Brazil,Arena MRV,44892,,33,2025,Brasileirão Série A,Brazil
+331,CA Osasuna,ES1,Spain,El Sadar,23576,Alessio Lisci,20,2025,LaLiga,Spain
+333,Club Atlético Lanús,ARG1,Argentina,Ciudad de Lanús - Néstor Díaz Pérez,46619,,29,2025,Argentine Primera División,Argentina
+336,Sporting CP,PO1,Portugal,Estádio José Alvalade,52095,Rui Borges,30,2025,Liga Portugal,Portugal
+338,Dynamo Kyiv,UKR1,Ukraine,Valeriy Lobanovsky Stadion,16873,Oleksandr Shovkovskyi,42,2025,Ukrainian Premier League,Ukraine
+339,Dnipro Dnipropetrovsk (-2020),UKR1,Ukraine,Meteor,24381,,0,2016,Ukrainian Premier League,Ukraine
+347,FC Metz,FR1,France,Stade Saint-Symphorien,28786,Stéphane Le Mignan,22,2025,Ligue 1,France
+350,Sheffield United,GB1,England,Bramall Lane,32702,,28,2023,Premier League,England
+353,Lillestrøm Sportsklubb,NO1,Norway,Åråsen stadion,11637,,27,2025,Eliteserien,Norway
+354,KV Mechelen,BE1,Belgium,Achter de Kazerne,16672,Frederik Vanderbiest,29,2025,Jupiler Pro League,Belgium
+366,Real Valladolid CF,ES1,Spain,José Zorrilla,27618,Paulo Pezzolano,28,2024,LaLiga,Spain
+367,Rayo Vallecano,ES1,Spain,Estadio de Vallecas,14708,Iñigo Pérez,24,2025,LaLiga,Spain
+368,Sevilla FC,ES1,Spain,Ramón Sánchez-Pizjuán,43883,Matías Almeyda,27,2025,LaLiga,Spain
+369,Lyngby Boldklub,DK1,Denmark,Lyngby Stadion,10000,Morten Karlsen,25,2024,Danish Superliga,Denmark
+370,Aberdeen FC,SC1,Scotland,Pittodrie Stadium,20866,Jimmy Thelin,30,2025,Scottish Premiership,Scotland
+371,Celtic FC,SC1,Scotland,Celtic Park,60411,Brendan Rodgers,30,2025,Scottish Premiership,Scotland
+377,FC Baník Ostrava a.s.,TS1,Czech Republic,Městský stadion  - Vitkovice Aréna,15123,,29,2025,Chance Liga,Czech Republic
+379,West Ham United,GB1,England,London Stadium,62500,Graham Potter,27,2025,Premier League,England
+380,US Salernitana 1919,IT1,Italy,Arechi,29739,,30,2023,Serie A,Italy
+383,PSV Eindhoven,NL1,Netherlands,Philips Stadion,35000,Peter Bosz,27,2025,Eredivisie,Netherlands
+385,Fortuna Sittardia Combinatie,NL1,Netherlands,Fortuna Sittard Stadion,12800,,28,2025,Eredivisie,Netherlands
+398,Società Sportiva Lazio S.p.A.,IT1,Italy,Olimpico di Roma,70634,,28,2025,Serie A,Italy
+399,Leeds United,GB1,England,Elland Road,37890,Daniel Farke,29,2025,Premier League,England
+403,Willem II Tilburg,NL1,Netherlands,Koning Willem II Stadion,14700,Peter Maes,26,2024,Eredivisie,Netherlands
+405,Aston Villa,GB1,England,Villa Park,43205,Unai Emery,29,2025,Premier League,England
+409,Fußballclub Red Bull Salzburg,A1,Austria,Red Bull Arena Salzburg,30188,,30,2025,Austrian Bundesliga,Austria
+410,Udinese Calcio,IT1,Italy,Bluenergy Stadium,25144,Kosta Runjaić,39,2025,Serie A,Italy
+413,LASK,A1,Austria,Raiffeisen Arena,19080,João Sacramento,26,2025,Austrian Bundesliga,Austria
+415,FC Toulouse,FR1,France,Stadium Municipal,33150,Carles Martínez,24,2025,Ligue 1,France
+416,Torino FC,IT1,Italy,Olimpico Grande Torino,28177,Marco Baroni,27,2025,Serie A,Italy
+417,OGC Nice,FR1,France,Allianz Riviera,36178,Franck Haise,27,2025,Ligue 1,France
+418,Real Madrid,ES1,Spain,Santiago Bernabéu,83186,Xabi Alonso,30,2025,LaLiga,Spain
+419,GNK Dinamo Zagreb,KR1,Croatia,Maksimir,35123,,33,2025,Supersport Hnl,Croatia
+428,Górnik Zabrze,PL1,Poland,Arena Zabrze,28236,Michal Gasparik,37,2025,Pko Bp Ekstraklasa,Poland
+430,ACF Fiorentina,IT1,Italy,Artemio Franchi,43147,Stefano Pioli,36,2025,Serie A,Italy
+432,Chicago Fire Soccer Club,MLS1,United States,Soldier Field,61500,,29,2025,Major League Soccer,United States
+434,FC Luzern,C1,Switzerland,swissporarena,15680,Mario Frick,26,2025,Swiss Super League,Switzerland
+441,Apollon Smyrnis,GR1,Greece,Stadio Neas Smyrnis,11700,,27,2021,Greek Super League,Greece
+443,Vejle Boldklub,DK1,Denmark,Vejle Stadion,11060,Ivan Prelec,28,2025,Danish Superliga,Denmark
+447,HNK Hajduk Split,KR1,Croatia,Poljud,34183,Gonzalo García,38,2025,Supersport Hnl,Croatia
+448,FK Vojvodina Novi Sad,SER1,Serbia,Stadion Karadjordje,14852,Miroslav Tanjga,42,2025,Super Liga Srbije,Serbia
+449,Trabzonspor,TR1,Türkiye,Papara Park,41000,Fatih Tekke,39,2025,Süper Lig,Turkey
+450,FK Dukla Prague,TS1,Czech Republic,Stadion Juliska,8150,David Holoubek,32,2025,Chance Liga,Czech Republic
+452,BSC Young Boys,C1,Switzerland,Stadion Wankdorf,31500,Giorgio Contini,31,2025,Swiss Super League,Switzerland
+455,FC Rapid 1923,RO1,Romania,Superbet Arena - Giulești,14050,Constantin Gâlcă,36,2025,Superliga,Romania
+456,HNK Vukovar 1991,KR1,Croatia,Gradski Stadion u Borovu naselju,6000,Gordon Schildenfeld,13,2025,Supersport Hnl,Croatia
+458,Palermo FC,IT1,Italy,"Comunale Renzo Barbera ""La Favorita""",36365,,28,2016,Serie A,Italy
+465,St. Mirren FC,SC1,Scotland,The SMISA Stadium,7937,Stephen Robinson,25,2025,Scottish Premiership,Scotland
+467,NEC Nijmegen,NL1,Netherlands,Goffertstadion,12650,Dick Schreuder,25,2025,Eredivisie,Netherlands
+468,Sparta Rotterdam,NL1,Netherlands,Sparta-stadion - Het Kasteel,10599,Maurice Steijn,23,2025,Eredivisie,Netherlands
+472,UD Las Palmas,ES1,Spain,Estadio de Gran Canaria,32400,Luis Carrión,27,2024,LaLiga,Spain
+475,Sint-Truidense VV,BE1,Belgium,Daio Wasabi Stayen Stadium,11337,Wouter Vrancken,23,2025,Jupiler Pro League,Belgium
+496,Malmö Fotbollförening,SE1,Sweden,Eleda Stadion,22500,,34,2025,Allsvenskan,Sweden
+498,KSC Lokeren (- 2020),BE1,Belgium,Daknamstadion,12000,,0,2018,Jupiler Pro League,Belgium
+499,Vitesse Arnhem,NL1,Netherlands,GelreDome,21248,,25,2023,Eredivisie,Netherlands
+501,Fotballklubben Bodø/Glimt,NO1,Norway,Aspmyra Stadion,8500,,26,2025,Eliteserien,Norway
+504,Grasshopper Club Zurich,C1,Switzerland,Stadion Letzigrund,26104,Gerald Scheiblehner,30,2025,Swiss Super League,Switzerland
+506,Juventus FC,IT1,Italy,Allianz Stadium,41507,Igor Tudor,29,2025,Serie A,Italy
+511,Dundee FC,SC1,Scotland,Kilmac Stadium at Dens Park,11850,Steven Pressley,19,2025,Scottish Premiership,Scotland
+512,Stoke City,GB1,England,bet365 Stadium,30089,,24,2017,Premier League,England
+520,Cercle Brugge,BE1,Belgium,Jan Breydelstadion,29062,Onur Cinel,24,2025,Jupiler Pro League,Belgium
+524,Gaziantepspor (- 2020),TR1,Türkiye,Gaziantep Stadyumu,33502,,0,2016,Süper Lig,Turkey
+527,Football Club Lausanne-Sport,C1,Switzerland,Stade de la Tuilière,12544,,27,2025,Swiss Super League,Switzerland
+533,TSG 1899 Hoffenheim,L1,Germany,PreZero Arena,30150,Christian Ilzer,36,2025,Bundesliga,Germany
+537,S. A. F. Botafogo,BRA1,Brazil,Estádio Olímpico Nilton Santos,46931,,34,2025,Brasileirão Série A,Brazil
+543,Wolverhampton Wanderers,GB1,England,Molineux Stadium,31750,Vítor Pereira,32,2025,Premier League,England
+553,Ionikos Nikeas,GR1,Greece,Dimotiko Gipedo Neapolis,5500,,17,2022,Greek Super League,Greece
+566,Beerschot AC,BE1,Belgium,Olympisch Stadion,12771,,0,2012,Jupiler Pro League,Belgium
+583,Paris Saint-Germain,FR1,France,Parc des Princes,48583,Luis Enrique,27,2025,Ligue 1,France
+585,São Paulo Futebol Clube,BRA1,Brazil,MorumBIS,72039,,42,2025,Brasileirão Série A,Brazil
+589,Antalyaspor,TR1,Türkiye,Corendon Airlines Park Antalya Stadı,29307,Emre Belözoğlu,29,2025,Süper Lig,Turkey
+593,Kyoto Purple Sanga,JAP1,Japan,Sanga Stadium by KYOCERA,21600,,36,2025,J1 League,Japan
+595,SC Bastia,FR1,France,Stade Armand-Cesari,16480,,25,2016,Ligue 1,France
+596,Gamba Osaka,JAP1,Japan,PANASONIC Stadium Suita,39694,,32,2025,J1 League,Japan
+599,NK Varazdin,KR1,Croatia,Gradski stadion Andelko Herjavec,10800,Nikola Safaric,31,2025,Supersport Hnl,Croatia
+601,KV Kortrijk,BE1,Belgium,Guldensporenstadion,8974,Freyr Alexandersson,27,2024,Jupiler Pro League,Belgium
+603,Cardiff City,GB1,England,Cardiff City Stadium,33280,,28,2018,Premier League,England
+605,Aris Thessalonikis,GR1,Greece,"Gipedo ""Kleanthis Vikelidis""",22800,,32,2025,Greek Super League,Greece
+607,Venezia FC,IT1,Italy,Pier Luigi Penzo,12048,Eusebio Di Francesco,29,2024,Serie A,Italy
+609,Cruzeiro Esporte Clube,BRA1,Brazil,Estádio Governador Magalhães Pinto,61927,,30,2025,Brasileirão Série A,Brazil
+610,Ajax Amsterdam,NL1,Netherlands,Johan Cruijff ArenA,55885,John Heitinga,26,2025,Eredivisie,Netherlands
+614,Clube de Regatas do Flamengo,BRA1,Brazil,Estádio Jornalista Mário Filho,82238,,28,2025,Brasileirão Série A,Brazil
+618,AS Saint-Étienne,FR1,France,Stade Geoffroy-Guichard,41965,Olivier Dall'Oglio,29,2024,Ligue 1,France
+621,Athletic Bilbao,ES1,Spain,San Mamés,53289,Ernesto Valverde,32,2025,LaLiga,Spain
+623,Red Bull New York,MLS1,United States,Sports Illustrated Stadium,25000,,30,2025,Major League Soccer,United States
+626,New England Revolution,MLS1,United States,Gillette Stadium,68756,,26,2025,Major League Soccer,United States
+631,Chelsea FC,GB1,England,Stamford Bridge,41631,Enzo Maresca,38,2025,Premier League,England
+641,Middlesbrough FC,GB1,England,Riverside Stadium,33746,,25,2016,Premier League,England
+642,De Graafschap Doetinchem,NL1,Netherlands,"Stadion ""De Vijverberg""",12600,,30,2018,Eredivisie,Netherlands
+653,Omilos Filathlon Irakliou FC,GR1,Greece,Pankritio Stadio,25780,,31,2025,Greek Super League,Greece
+660,FC Shakhtar Donetsk,UKR1,Ukraine,Arena Lviv,34725,,34,2025,Ukrainian Premier League,Ukraine
+667,RC Strasbourg Alsace,FR1,France,Stade de la Meinau,32000,Liam Rosenior,34,2025,Ligue 1,France
+669,FK Partizan Belgrade,SER1,Serbia,Partizan Stadium,32712,Srdjan Blagojevic,44,2025,Super Liga Srbije,Serbia
+672,JEF United,JAP1,Japan,Fukuda Denshi Arena,19781,,34,2025,J1 League,Japan
+677,Ipswich Town,GB1,England,Portman Road,30056,Kieran McKenna,26,2024,Premier League,England
+678,Aarhus GF,DK1,Denmark,Ceres Park Vejlby,12000,Jakob Poulsen,27,2025,Danish Superliga,Denmark
+679,Clube Atlético Paranaense,BRA1,Brazil,Estádio Mário Celso Petraglia,42372,,33,2025,Brasileirão Série A,Brazil
+681,Real Sociedad,ES1,Spain,Anoeta,40000,Sergio Francisco,28,2025,LaLiga,Spain
+683,Olympiakos Syndesmos Filathlon Peiraios,GR1,Greece,Stadio Georgios Karaiskakis,33345,,29,2025,Greek Super League,Greece
+687,Molde Fotballklubb,NO1,Norway,Aker Stadion,11800,,29,2025,Eliteserien,Norway
+697,FC Slovan Liberec,TS1,Czech Republic,Stadion U Nisy,9900,Radoslav Kovac,34,2025,Chance Liga,Czech Republic
+703,Nottingham Forest,GB1,England,The City Ground,30404,Nuno Espírito Santo,27,2025,Premier League,England
+714,RCD Espanyol Barcelona,ES1,Spain,RCDE Stadium,37776,Manolo González,28,2025,LaLiga,Spain
+715,"Bohemians Praha 1905, a.s.",TS1,Czech Republic,Ďolíček,6300,,27,2025,Chance Liga,Czech Republic
+720,FC Porto,PO1,Portugal,Estádio do Dragão,50033,Francesco Farioli,29,2025,Liga Portugal,Portugal
+723,Almere City FC,NL1,Netherlands,Yanmar Stadion,4501,Hedwiges Maduro,27,2024,Eredivisie,Netherlands
+724,FC Volendam,NL1,Netherlands,Kras Stadion,6800,Rick Kruys,25,2025,Eredivisie,Netherlands
+738,Le Havre AC,FR1,France,Stade Océane,25178,Didier Digard,20,2025,Ligue 1,France
+749,FC Empoli,IT1,Italy,Carlo Castellani,19847,Roberto D'Aversa,33,2024,Serie A,Italy
+750,FC Sochaux-Montbéliard,FR1,France,Stade Auguste-Bonal,20005,,29,2013,Ligue 1,France
+759,Slask Wroclaw,PL1,Poland,Tarczyński Arena Wrocław,42771,Jacek Magiera,31,2024,Pko Bp Ekstraklasa,Poland
+762,Newcastle United,GB1,England,St James' Park,52258,Eddie Howe,25,2025,Premier League,England
+776,Coritiba Foot Ball Club,BRA1,Brazil,Estádio Major Antônio Couto Pereira,40502,,32,2025,Brasileirão Série A,Brazil
+788,FK Napredak Krusevac,SER1,Serbia,Stadion Mladost,10331,Milan Nikolic,32,2025,Super Liga Srbije,Serbia
+798,Excelsior Rotterdam,NL1,Netherlands,"Stadion ""Woudestein""",4400,Ruben den Uil,21,2025,Eredivisie,Netherlands
+800,Atalanta BC,IT1,Italy,New Balance Arena - Bergamo,24950,Ivan Jurić,31,2025,Serie A,Italy
+801,Idrottsföreningen Kamraterna Göteborg,SE1,Sweden,Gamla Ullevi,18454,,25,2025,Allsvenskan,Sweden
+813,Columbus Crew,MLS1,United States,ScottsMiracle-Gro Field,20011,,29,2025,Major League Soccer,United States
+814,FK Teplice,TS1,Czech Republic,Aréna Na Stínadlech,17078,Zdenko Frtala,32,2025,Chance Liga,Czech Republic
+820,Gençlerbirliği Spor Kulübü,TR1,Türkiye,Eryaman Stadyumu,20000,,33,2025,Süper Lig,Turkey
+825,Eskisehirspor,TR1,Türkiye,Eskişehir Yeni Stadyum,34930,,41,2015,Süper Lig,Turkey
+826,RC Lens,FR1,France,Stade Bollaert-Delelis,38223,Pierre Sage,30,2025,Ligue 1,France
+828,Urawa Red Diamonds,JAP1,Japan,Saitama Stadium 2002,63700,,29,2025,J1 League,Japan
+830,Club Atlético Banfield,ARG1,Argentina,Florencio Sola,34901,,28,2025,Argentine Primera División,Argentina
+833,Denizlispor,TR1,Türkiye,Denizli Atatürk Stadı,18745,,27,2020,Süper Lig,Turkey
+855,EA Guingamp,FR1,France,Stade du Roudourou,18120,,27,2018,Ligue 1,France
+862,Chievo Verona,IT1,Italy,Marcantonio Bentegodi,31045,,0,2018,Serie A,Italy
+865,FC Midtjylland,DK1,Denmark,MCH Arena,12055,Thomas Thomasberg,32,2025,Danish Superliga,Denmark
+868,MKE Ankaragücü,TR1,Türkiye,Eryaman Stadyumu,20672,,34,2023,Süper Lig,Turkey
+873,Crystal Palace,GB1,England,Selhurst Park,25486,Oliver Glasner,31,2025,Premier League,England
+875,Adelaide United,AUS1,Australia,Coopers Stadium,16500,Airton Andrioli,29,2025,A-League Men,Australia
+897,Deportivo de La Coruña,ES1,Spain,Abanca Riazor,32912,,24,2017,LaLiga,Spain
+903,Hibernian FC,SC1,Scotland,Easter Road Stadium,20250,David Gray,27,2025,Scottish Premiership,Scotland
+924,Istanbulspor,TR1,Türkiye,Esenyurt Necmi Kadıoğlu Stadyumu,4274,,32,2023,Süper Lig,Turkey
+928,Club Atlético Platense,ARG1,Argentina,Ciudad de Vicente López,28530,,32,2025,Argentine Primera División,Argentina
+931,Fulham FC,GB1,England,Craven Cottage,29589,Marco Silva,22,2025,Premier League,England
+932,"Футбольный клуб ""Локомотив"" Москва",RU1,Russia,RZD Arena,27084,,28,2025,Russian Premier League,Russia
+938,FC Thun,C1,Switzerland,Visana Stadion,10014,Mauro Lustrinelli,25,2025,Swiss Super League,Switzerland
+940,Celta de Vigo,ES1,Spain,Abanca Balaídos,22803,Claudio Giráldez,29,2025,LaLiga,Spain
+941,FC Viktoria Plzen,TS1,Czech Republic,Doosan Aréna,11700,Miroslav Koubek,31,2025,Chance Liga,Czech Republic
+943,Yokohama FC,JAP1,Japan,NHK Spring Mitsuzawa Stadium,15454,Shuhei Yomoda,29,2024,J1 League,Japan
+952,UTA Arad,RO1,Romania,Francisc von Neumann (2020),12584,Dorin Stana,36,2025,Superliga,Romania
+964,AO FK Zenit Sankt-Peterburg,RU1,Russia,Gazprom Arena,63026,,27,2025,Russian Premier League,Russia
+968,KVC Westerlo,BE1,Belgium,Het Kuipje,9062,Issame Charaï,19,2025,Jupiler Pro League,Belgium
+969,Montpellier HSC,FR1,France,Stade de la Mosson,22000,Michel Der Zakarian,23,2024,Ligue 1,France
+970,Perth Glory,AUS1,Australia,HBF Park,20500,David Zdrilic,27,2025,A-League Men,Australia
+976,CF União Madeira (-2021),PO1,Portugal,Centro Desportivo da Madeira,2500,,0,2015,Liga Portugal,Portugal
+978,Club de Regatas Vasco da Gama,BRA1,Brazil,Estádio São Januário,24584,,32,2025,Brasileirão Série A,Brazil
+979,Moreirense FC,PO1,Portugal,Estádio C. J. de Almeida Freitas,6150,António da Costa,24,2025,Liga Portugal,Portugal
+982,CD Nacional,PO1,Portugal,Estádio da Madeira,5200,Tiago Margarido,28,2025,Liga Portugal,Portugal
+984,West Bromwich Albion,GB1,England,The Hawthorns,26850,,25,2020,Premier League,England
+985,Manchester United,GB1,England,Old Trafford,74879,Rúben Amorim,32,2025,Premier League,England
+987,Motherwell FC,SC1,Scotland,Fir Park,13677,Jens Berthel Askou,23,2025,Scottish Premiership,Scotland
+989,AFC Bournemouth,GB1,England,Vitality Stadium,11307,Andoni Iraola,30,2025,Premier League,England
+993,Córdoba CF,ES1,Spain,Nuevo Arcángel,21822,,24,2014,LaLiga,Spain
+995,FC Nantes,FR1,France,Stade de la Beaujoire,35322,Luís Castro,26,2025,Ligue 1,France
+999,NK Istra 1961,KR1,Croatia,Aldo Drosina,9056,Goran Tomic,32,2025,Supersport Hnl,Croatia
 1003,Leicester City,GB1,England,King Power Stadium,32259,Steve Cooper,29,2024,Premier League,England
 1005,US Lecce,IT1,Italy,Ettore Giardiniero,31559,Eusebio Di Francesco,39,2025,Serie A,Italy
-10090,Asociación Deportivo Pasto,COL1,,Estadio Departamental Libertad,20000,Gustavo Florentín,26,2025,Nan,
-10093,Independiente Medellín,COL1,,Estadio Atanasio Girardot,45943,Alfredo Arias,26,2025,Nan,
 1010,Watford FC,GB1,England,Vicarage Road,21577,,30,2021,Premier League,England
 1011,Halmstads BK,SE1,Sweden,Örjans Vall,10873,,22,2025,Allsvenskan,Sweden
-10217,Sarpsborg 08 Fotballforening,NO1,Norway,Sarpsborg Stadion,8022,,25,2025,Eliteserien,Norway
 1022,Cerezo Osaka,JAP1,Japan,YANMAR Hanasaka Stadium,24481,,29,2025,J1 League,Japan
 1023,Sociedade Esportiva Palmeiras,BRA1,Brazil,Nubank Parque,43713,,31,2025,Brasileirão Série A,Brazil
 1025,Bologna Football Club 1909,IT1,Italy,Stadio Renato Dall’Ara,36462,,27,2025,Serie A,Italy
@@ -21,13 +295,8 @@ club_id,name,league_id,country,stadium,stadium_seats,coach,squad_size,last_seaso
 1041,Olympique Lyon,FR1,France,Groupama Stadium,59186,Paulo Fonseca,34,2025,Ligue 1,France
 1044,Djurgårdens Idrottsförening,SE1,Sweden,3Arena,30000,,25,2025,Allsvenskan,Sweden
 1047,Como 1907,IT1,Italy,Giuseppe Sinigaglia,12039,Cesc Fàbregas,40,2025,Serie A,Italy
-10484,Kasimpasa,TR1,Türkiye,Recep Tayyip Erdoğan Stadyumu,13797,Shota Arveladze,37,2025,Süper Lig,Turkey
 1049,Valencia CF,ES1,Spain,Mestalla,49430,Carlos Corberán,27,2025,LaLiga,Spain
-10492,Esporte Clube Juventude,BRA1,Brazil,Estádio Alfredo Jaconi,23726,Roger Machado,29,2024,Brasileirão Série A,Brazil
-105,SV Darmstadt 98,L1,Germany,Merck-Stadion am Böllenfalltor,17810,,27,2023,Bundesliga,Germany
 1050,Villarreal CF,ES1,Spain,La Cerámica,23500,Marcelino,27,2025,LaLiga,Spain
-10503,Deportes Tolima,COL1,,Estadio Manuel Murillo Toro,28100,David González,25,2025,Nan,
-10511,CA San Martín (San Juan),ARG1,Argentina,Ingeniero Hilario Sánchez,26500,Leandro Romagnoli,30,2024,Argentine Primera División,Argentina
 1053,Aalborg BK,DK1,Denmark,Aalborg Portland Park,13310,Menno van Dam,26,2024,Danish Superliga,Denmark
 1057,Bryne FK,NO1,Norway,Bryne Stadion,5500,Ole Kevin Knappen,23,2024,Eliteserien,Norway
 1059,Hammarby IF,SE1,Sweden,3Arena,30000,,25,2025,Allsvenskan,Sweden
@@ -35,105 +304,62 @@ club_id,name,league_id,country,stadium,stadium_seats,coach,squad_size,last_seaso
 1062,S-Pulse,JAP1,Japan,IAI Stadium Nihondaira,20299,,37,2025,J1 League,Japan
 1063,Viborg FF,DK1,Denmark,Energi Viborg Arena,9566,Nickolai Lund,26,2025,Danish Superliga,Denmark
 1066,Nagoya Grampus Eight,JAP1,Japan,Toyota Stadium,45000,,30,2025,J1 League,Japan
-10690,Zorya Lugansk,UKR1,Ukraine,Valeriy Lobanovsky Stadion,16873,Viktor Skrypnyk,23,2025,Ukrainian Premier League,Ukraine
 1071,Wigan Athletic,GB1,England,DW Stadium,25133,,26,2012,Premier League,England
 1075,SC Braga,PO1,Portugal,Estádio Municipal de Braga,30286,Carlos Vicens,38,2025,Liga Portugal,Portugal
 1082,LOSC Lille,FR1,France,Decathlon Arena-Stade Pierre-Mauroy,50186,Bruno Genesio,30,2025,Ligue 1,France
 1083,FK Rostov,RU1,Russia,Rostov Arena,45415,,29,2025,Russian Premier League,Russia
 1084,Málaga CF,ES1,Spain,La Rosaleda,30044,,27,2017,LaLiga,Spain
 1085,Vitória Setúbal FC,PO1,Portugal,Estádio do Bonfim,18642,,29,2019,Liga Portugal,Portugal
-10870,Fortaleza Esporte Clube,BRA1,Brazil,Estádio Governador Plácido Castelo,63904,Juan Pablo Vojvoda,29,2024,Brasileirão Série A,Brazil
 1090,AZ Alkmaar,NL1,Netherlands,AFAS Stadion,19500,Maarten Martens,31,2025,Eredivisie,Netherlands
 1091,Panthessalonikios Athlitikos Omilos Konstantinoupoliton,GR1,Greece,Toumba Stadium,28703,,31,2025,Greek Super League,Greece
 1092,Idrottsföreningen  Brommapojkarna,SE1,Sweden,Grimsta IP,5000,,31,2025,Allsvenskan,Sweden
 1095,ESTAC Troyes,FR1,France,Stade de l'Aube,21877,,29,2022,Ligue 1,France
 1096,Royal Antwerp FC,BE1,Belgium,Bosuilstadion,21000,Stef Wils,23,2025,Jupiler Pro League,Belgium
-10997,Clube do Remo,BRA1,Brazil,Estádio Evandro Almeida,13792,,37,2025,Brasileirão Série A,Brazil
-11,Arsenal FC,GB1,England,Emirates Stadium,60704,Mikel Arteta,29,2025,Premier League,England
 1100,Sportsklubben Brann,NO1,Norway,Brann Stadion,17500,,29,2025,Eliteserien,Norway
 1101,Idrottsföreningen Elfsborg,SE1,Sweden,Borås Arena,16200,,29,2025,Allsvenskan,Sweden
-110302,Avs Futebol,PO1,Portugal,Estádio do Clube Desportivo das Aves,6230,José Mota,22,2025,Liga Portugal,Portugal
 1106,Club de Gimnasia y Esgrima La Plata,ARG1,Argentina,Juan Carmelo Zerillo,30973,,31,2025,Argentine Primera División,Argentina
 1108,Deportivo Alavés,ES1,Spain,Mendizorroza,19840,Eduardo Coudet,27,2025,LaLiga,Spain
 1109,BK Häcken,SE1,Sweden,Nordic Wellness Arena,6316,,27,2025,Allsvenskan,Sweden
 1110,Huddersfield Town,GB1,England,John Smith's Stadium,24500,,33,2018,Premier League,England
-11126,Mordovia Saransk (-2020),RU1,Russia,Mordovia Arena,44442,,0,2015,Russian Premier League,Russia
-11127,Ural Yekaterinburg,RU1,Russia,Yekaterinburg Arena,23000,,30,2023,Russian Premier League,Russia
 1114,Al-Hilal Saudi Football Club,SA1,Saudi Arabia,Kingdom Arena,30000,,27,2025,Saudi Pro League,Saudi Arabia
-11141,Toronto FC,MLS1,United States,BMO Field,30991,,27,2025,Major League Soccer,United States
 1118,Örgryte IS,SE1,Sweden,Gamla Ullevi,18454,,28,2025,Allsvenskan,Sweden
-11194,NK Lokomotiva Zagreb,KR1,Croatia,Kranjceviceva,8850,Nikica Jelavic,47,2025,Supersport Hnl,Croatia
 1123,Norwich City,GB1,England,Carrow Road,27244,,25,2021,Premier League,England
 1124,Fakel Voronezh,RU1,Russia,Fakel,10052,Igor Cherevchenko,24,2024,Russian Premier League,Russia
-11282,Alanyaspor,TR1,Türkiye,Alanya Oba Stadyumu,9727,João Pereira,28,2025,Süper Lig,Turkey
 1132,Burnley FC,GB1,England,Turf Moor,21994,Scott Parker,30,2025,Premier League,England
-11380,ASFC Buzau (2016-2025),RO1,Romania,Gloria,12336,Andrei Prepeliță,0,2024,Superliga,Romania
-114,Beşiktaş Jimnastik Kulübü,TR1,Türkiye,Beşiktaş Park,42684,,28,2025,Süper Lig,Turkey
 1146,Club Necaxa,MEX1,Mexico,Estadio Victoria,23851,Fernando Gago,26,2025,Liga MX,Mexico
 1147,AC Ajaccio,FR1,France,Stade François-Coty,10446,,24,2022,Ligue 1,France
 1148,Brentford FC,GB1,England,Gtech Community Stadium,17250,Keith Andrews,34,2025,Premier League,England
-114977,San Diego Football Club,MLS1,United States,Snapdragon Stadium,35000,,28,2025,Major League Soccer,United States
 1158,FC Lorient,FR1,France,Stade du Moustoir,16787,Olivier Pantaloni,23,2025,Ligue 1,France
 1159,AS Nancy-Lorraine,FR1,France,Stade Marcel-Picot,20087,,27,2016,Ligue 1,France
 1160,Nîmes Olympique,FR1,France,Stade des Antonins,8033,,26,2020,Ligue 1,France
 1162,SM Caen,FR1,France,Stade Michel-d'Ornano,20500,,27,2018,Ligue 1,France
-11648,Independiente Santa Fe,COL1,,Estadio Nemesio Camacho (El Campín),36343,Pablo Peirano,26,2025,Nan,
-11688,Giresunspor,TR1,Türkiye,Çotanak Spor Kompleksi,21500,,17,2022,Süper Lig,Turkey
 1177,Silkeborg IF,DK1,Denmark,JYSK Park,10000,Kent Nielsen,24,2025,Danish Superliga,Denmark
-11831,Club Atlético Tigre,ARG1,Argentina,José Dellagiovanna,26282,,30,2025,Argentine Primera División,Argentina
-118373,Auckland FC,AUS1,Australia,Mount Smart Stadium,25000,Steve Corica,29,2025,A-League Men,Australia
 1184,KRC Genk,BE1,Belgium,Cegeka Arena,23718,Thorsten Fink,28,2025,Jupiler Pro League,Belgium
-11854,Junior FC,COL1,,Metropolitano Roberto Meléndez,46692,Arturo Reyes,26,2025,Nan,
 1186,Torpedo Moscow,RU1,Russia,Luzhniki Stadium,81000,,28,2022,Russian Premier League,Russia
 1191,Falkirk FC,SC1,Scotland,The Falkirk Stadium,7937,John McGlynn,22,2025,Scottish Premiership,Scotland
-12,Associazione Sportiva Roma,IT1,Italy,Olimpico di Roma,70634,,27,2025,Serie A,Italy
-120,Kocaelispor,TR1,Türkiye,Turka Araç Muayene Kocaeli Stadyumu,34829,Selçuk İnan,28,2025,Süper Lig,Turkey
-121,FK Dinamo Moskva,RU1,Russia,VTB-Arena,25716,,30,2025,Russian Premier League,Russia
 1210,US Livorno 1915,IT1,Italy,Armando Picchi,19238,,29,2013,Serie A,Italy
-12179,Club Sportivo Independiente Rivadavia,ARG1,Argentina,Bautista Gargantini,24000,,28,2025,Argentine Primera División,Argentina
-122,Sportklub Puntigamer Sturm Graz,A1,Austria,Merkur Arena,16364,,26,2025,Austrian Bundesliga,Austria
-12301,Club Atlético Aldosivi,ARG1,Argentina,José María Minella,35180,,33,2025,Argentine Primera División,Argentina
-12321,Girona FC,ES1,Spain,Montilivi,14624,Míchel,25,2025,LaLiga,Spain
 1234,Club Atlético Independiente de Avellaneda,ARG1,Argentina,Libertadores de América-Ricardo Enrique Bochini,48069,,26,2025,Argentine Primera División,Argentina
 1236,Östers IF,SE1,Sweden,Spiris Arena,12000,Martin Foyston,25,2024,Allsvenskan,Sweden
 1237,Brighton & Hove Albion,GB1,England,AMEX Stadium,31876,Fabian Hürzeler,37,2025,Premier League,England
-124,Rangers FC,SC1,Scotland,Ibrox Stadium,50987,Russell Martin,30,2025,Scottish Premiership,Scotland
 1241,Livingston FC,SC1,Scotland,Home of the Set Fare Arena,9512,David Martindale,26,2025,Scottish Premiership,Scotland
-12438,Volga Nizhniy Novgorod (- 2016),RU1,Russia,Zentralstadion Lokomotiv,17856,,0,2013,Russian Premier League,Russia
 1244,CD Leganés,ES1,Spain,Ontime Butarque,14422,Borja Jiménez,24,2024,LaLiga,Spain
 1245,KAS Eupen,BE1,Belgium,Kehrweg-Stadion,8361,,25,2023,Jupiler Pro League,Belgium
-12454,Club Atlético Sarmiento,ARG1,Argentina,Eva Perón,23156,,30,2025,Argentine Primera División,Argentina
 1247,Colorado Rapids,MLS1,United States,Dick's Sporting Goods Park,33680,,30,2025,Major League Soccer,United States
-12574,CD Godoy Cruz Antonio Tomba,ARG1,Argentina,Feliciano Gambarte,23000,Daniel Oldrá,31,2024,Argentine Primera División,Argentina
-126,Caykur Rizespor,TR1,Türkiye,Çaykur Didi,14879,İlhan Palut,30,2025,Süper Lig,Turkey
 1268,ADO Den Haag,NL1,Netherlands,Bingoal Stadion,15000,,34,2020,Eredivisie,Netherlands
 1269,PEC Zwolle,NL1,Netherlands,MAC³PARK stadion,14000,Mirjam Clifford,21,2025,Eredivisie,Netherlands
-127,SC Paderborn 07,L1,Germany,Home Deluxe Arena,15000,,26,2019,Bundesliga,Germany
-128,AO Xanthi,GR1,Greece,Xanthi Arena,7361,,0,2019,Greek Super League,Greece
 1283,FC Emmen,NL1,Netherlands,De Oude Meerdijk,8309,,17,2022,Eredivisie,Netherlands
 1286,Club Atlético Newell’s Old Boys,ARG1,Argentina,Marcelo Bielsa,49000,,34,2025,Argentine Primera División,Argentina
 1293,Tromsø Idrettslag,NO1,Norway,Romssa Arena,7500,,24,2025,Eliteserien,Norway
-13,Atlético de Madrid,ES1,Spain,Riyadh Air Metropolitano,70460,Diego Simeone,26,2025,LaLiga,Spain
-130,Parma Calcio 1913,IT1,Italy,Ennio Tardini,22352,Carlos Cuesta,33,2025,Serie A,Italy
 1301,CS Marítimo,PO1,Portugal,Estádio do Marítimo,10600,,29,2022,Liga Portugal,Portugal
 1304,Heracles Almelo,NL1,Netherlands,Asito Stadion,12242,Bas Sibum,30,2025,Eredivisie,Netherlands
-131,FC Barcelona,ES1,Spain,Spotify Camp Nou,62657,Hansi Flick,28,2025,LaLiga,Spain
-132,NAC Breda,NL1,Netherlands,Rat Verlegh Stadion,20500,Jo Jansen,21,2025,Eredivisie,Netherlands
 1321,SK Dynamo Ceske Budejovice,TS1,Czech Republic,Fotbalový stadion Střelecký ostrov,6746,Jiri Lerch,35,2024,Chance Liga,Czech Republic
 1322,FK Jablonec,TS1,Czech Republic,Střelnice,6108,Lubos Kozel,29,2025,Chance Liga,Czech Republic
-133,SC Cambuur Leeuwarden,NL1,Netherlands,Cambuurstadion,10250,,16,2022,Eredivisie,Netherlands
-13353,Club Tijuana,MEX1,Mexico,Estadio Caliente,29333,Sebastián Abreu,24,2025,Liga MX,Mexico
-13726,MFK Karvina,TS1,Czech Republic,Městský stadion,4833,Marek Jarolim,21,2025,Chance Liga,Czech Republic
 1387,Siena FC,IT1,Italy,Artemio Franchi,15373,,20,2012,Serie A,Italy
 1390,Cagliari Calcio,IT1,Italy,Unipol Domus,16416,Fabio Pisacane,32,2025,Serie A,Italy
-14,Austria Vienna,A1,Austria,Generali Arena,15600,Stephan Helm,31,2025,Austrian Bundesliga,Austria
 1403,Santos Laguna,MEX1,Mexico,Estadio Territorio Santos Modelo Corona,29237,Francisco Rodríguez,31,2025,Liga MX,Mexico
-141,Galatasaray,TR1,Türkiye,Ali Sami Yen Spor Kompleksi RAMS Park,53978,Okan Buruk,33,2025,Süper Lig,Turkey
 1411,RAEC Mons (- 2015),BE1,Belgium,Stade Charles Tondreau,12662,,0,2013,Jupiler Pro League,Belgium
 1416,Amiens SC,FR1,France,Stade Crédit Agricole la Licorne,12999,,24,2019,Ligue 1,France
-14171,Thonon Évian Grand Genève FC,FR1,France,Stade Camille Fournier,2500,,27,2014,Ligue 1,France
 1418,Club Atlético Rosario Central,ARG1,Argentina,Gigante de Arroyito,46755,,28,2025,Argentine Primera División,Argentina
-142,Real Zaragoza,ES1,Spain,La Romareda,33608,,23,2012,LaLiga,Spain
 1420,Angers SCO,FR1,France,Stade Raymond-Kopa,19350,Alexandre Dujeux,22,2025,Ligue 1,France
 1421,Stade Reims,FR1,France,Stade Auguste-Delaune,20519,Luka Elsner,24,2024,Ligue 1,France
 1423,Valenciennes FC,FR1,France,Stade du Hainaut,25000,,30,2013,Ligue 1,France
@@ -142,506 +368,206 @@ club_id,name,league_id,country,stadium,stadium_seats,coach,squad_size,last_seaso
 1434,SC Telstar,NL1,Netherlands,BUKO Stadion,5338,Anthony Correia,19,2025,Eredivisie,Netherlands
 1435,Go Ahead Eagles,NL1,Netherlands,De Adelaarshorst,10400,Mike Klein,26,2025,Eredivisie,Netherlands
 1436,SC Beira-Mar,PO1,Portugal,Estádio Municipal de Aveiro,32830,,26,2012,Liga Portugal,Portugal
-144,HNK Rijeka,KR1,Croatia,Stadion Rujevica,8136,Radomir Djalovic,34,2025,Supersport Hnl,Croatia
 1444,Racing Club Asociación Civil de Avellaneda,ARG1,Argentina,Presidente Perón,55000,,31,2025,Argentine Primera División,Argentina
 1455,FC Dordrecht,NL1,Netherlands,Matchoholic Stadion,4235,,29,2014,Eredivisie,Netherlands
-14554,Club Atlético Tucumán,ARG1,Argentina,Monumental José Fierro,35200,,30,2025,Argentine Primera División,Argentina
-14589,FC Orenburg,RU1,Russia,Gazovik,10046,,31,2025,Russian Premier League,Russia
-14602,Asociación Atlética Estudiantes,ARG1,Argentina,Antonio Candini,12000,,32,2025,Argentine Primera División,Argentina
-14649,Boyacá Chicó FC,COL1,,Estadio de la Independencia,20630,Jhon Jaime Gómez,29,2025,Nan,
 1465,GD Estoril Praia,PO1,Portugal,Estádio António Coimbra da Mota,5094,Ian Cathro,26,2025,Liga Portugal,Portugal
 1467,Göztepe,TR1,Türkiye,Gürsel Aksel Stadyumu,23376,Stanimir Stoilov,28,2025,Süper Lig,Turkey
-14680,Unión Magdalena,COL1,,Estadio Sierra Nevada (Santa Marta),16126,Álvaro Hernández,26,2025,Nan,
-14687,Club Atlético Gimnasia y Esgrima de Mendoza,ARG1,Argentina,Víctor Antonio Legrotaglie,14000,,30,2025,Argentine Primera División,Argentina
-148,Tottenham Hotspur,GB1,England,Tottenham Hotspur Stadium,62850,Thomas Frank,37,2025,Premier League,England
 1496,FK Pardubice,TS1,Czech Republic,Stadion Arnošta Košťála,4620,David Strihavka,35,2025,Chance Liga,Czech Republic
-15,Bayer 04 Leverkusen,L1,Germany,BayArena,30210,Erik ten Hag,36,2025,Bundesliga,Germany
-150,Real Betis Balompié,ES1,Spain,La Cartuja,71374,Manuel Pellegrini,26,2025,LaLiga,Spain
 1506,Kardemir Karabükspor,TR1,Türkiye,Dr. Necmettin Şeyhoğlu,12400,,0,2017,Süper Lig,Turkey
 1519,Dundee United FC,SC1,Scotland,Tannadice Park,14223,Jim Goodwin,20,2025,Scottish Premiership,Scotland
-152,Samsunspor,TR1,Türkiye,Samsun Yeni 19 Mayıs,34303,Thomas Reis,38,2025,Süper Lig,Turkey
-15276,FK Spartak Subotica,SER1,Serbia,Gradski stadion Subotica,13020,Dusan Djordjevic,31,2025,Super Liga Srbije,Serbia
 1531,Elche CF,ES1,Spain,Manuel Martínez Valero,31388,Eder Sarabia,23,2025,LaLiga,Spain
 1533,SD Eibar,ES1,Spain,Ipurua,8164,,26,2020,LaLiga,Spain
-157,KAA Gent,BE1,Belgium,Planet Group arena,20185,Ivan Leko,33,2025,Jupiler Pro League,Belgium
-159,Red Star Belgrade,SER1,Serbia,Rajko Mitić,49167,Vladan Milojevic,37,2025,Super Liga Srbije,Serbia
-15906,Termalica Bruk-Bet Nieciecza Klub Sportowy,PL1,Poland,Stadion Bruk-Bet,4653,,27,2025,Pko Bp Ekstraklasa,Poland
-16,Borussia Dortmund,L1,Germany,SIGNAL IDUNA PARK,81365,Niko Kovac,29,2025,Bundesliga,Germany
-162,AS Monaco,FR1,France,Stade Louis-II,18525,Adi Hütter,28,2025,Ligue 1,France
-16239,Desna Chernigiv,UKR1,Ukraine,Stadion im. Yuriya Gagarina,12060,,0,2021,Ukrainian Premier League,Ukraine
-16245,FK Sevastopol (- 2014),UKR1,Ukraine,SK Sevastopol,5826,,0,2013,Ukrainian Premier League,Ukraine
-16247,PFK Stal Kamyanske (-2018),UKR1,Ukraine,Obolon,5100,,0,2017,Ukrainian Premier League,Ukraine
 1627,Catania FC,IT1,Italy,Cibali - Angelo Massimino,20204,,27,2013,Serie A,Italy
-167,FC Augsburg,L1,Germany,WWK ARENA,30660,Sandro Wagner,30,2025,Bundesliga,Germany
-16704,FK Krasnodar,RU1,Russia,OZON Arena,35179,,29,2025,Russian Premier League,Russia
-16795,Granada CF,ES1,Spain,Nuevo Los Cármenes,19336,,24,2023,LaLiga,Spain
-168,Zaglebie Lubin,PL1,Poland,KGHM Zagłębie Arena,16086,Leszek Ojrzyński,32,2025,Pko Bp Ekstraklasa,Poland
-169,Panionios Athens,GR1,Greece,Stadio Neas Smyrnis,11700,,34,2019,Greek Super League,Greece
-170,Rapid Vienna,A1,Austria,Allianz-Stadion,28345,Peter Stöger,33,2025,Austrian Bundesliga,Austria
-172,Royal Charleroi Sporting Club,BE1,Belgium,Stade du Pays de Charleroi,14968,,27,2025,Jupiler Pro League,Belgium
-17209,Al-Wehda FC,SA1,Saudi Arabia,King Abdul Aziz Stadium,38000,Josef Zinnbauer,28,2024,Saudi Pro League,Saudi Arabia
-173,Odense Boldklub,DK1,Denmark,Nature Energy Park,15761,Alexander Zorniger,25,2025,Danish Superliga,Denmark
-17425,Internacional de Bogotá,COL1,,Estadio Metropolitano de Techo,8000,Juan Mahecha,24,2025,Nan,
 1775,Club Atlético San Lorenzo de Almagro,ARG1,Argentina,Pedro Bidegain,47964,,34,2025,Argentine Primera División,Argentina
-17776,Associação Chapecoense de Futebol,BRA1,Brazil,Arena Condá,22600,,34,2025,Brasileirão Série A,Brazil
-18,Borussia Mönchengladbach,L1,Germany,Stadion im Borussia-Park,54042,Gerardo Seoane,29,2025,Bundesliga,Germany
-180,Southampton FC,GB1,England,St Mary's Stadium,32384,Russell Martin,27,2024,Premier League,England
 1804,Deportivo Toluca,MEX1,Mexico,Estadio Nemesio Díez Riega,31000,Antonio Mohamed,30,2025,Liga MX,Mexico
-18105,PFK Lviv,UKR1,Ukraine,Stadion SKIF,3742,,3,2022,Ukrainian Premier League,Ukraine
 1829,Instituto Atlético Central Córdoba,ARG1,Argentina,Juan Domingo Perón,25000,,31,2025,Argentine Primera División,Argentina
-18303,FC Oleksandriya,UKR1,Ukraine,KSK Nika,7000,Kyrylo Nesterenko,30,2025,Ukrainian Premier League,Ukraine
-18487,Al-Ahli Saudi Football Club,SA1,Saudi Arabia,King Abdullah Sports City,62345,,26,2025,Saudi Pro League,Saudi Arabia
-18544,Al-Nassr Football Club,SA1,Saudi Arabia,Al-Awwal Park,25000,,27,2025,Saudi Pro League,Saudi Arabia
-189,Club Atlético Boca Juniors,ARG1,Argentina,Alberto J. Armando,54000,,36,2025,Argentine Primera División,Argentina
 1894,Hvidovre IF,DK1,Denmark,PRO VENTILATION Arena,12000,,25,2023,Danish Superliga,Denmark
 1897,FC Hradec Kralove,TS1,Czech Republic,FINEP Arena,9300,David Horejs,28,2025,Chance Liga,Czech Republic
-19,Brescia Calcio,IT1,Italy,Mario Rigamonti,19550,,28,2019,Serie A,Italy
-190,FC Copenhagen,DK1,Denmark,Parken - connected by 3,38065,Jacob Neestrup,29,2025,Danish Superliga,Denmark
-192,Roda JC Kerkrade,NL1,Netherlands,Parkstad Limburg Stadion,19979,,25,2017,Eredivisie,Netherlands
-195,Rosenborg Ballklub,NO1,Norway,Lerkendal Stadion,21510,,29,2025,Eliteserien,Norway
-19657,Vendsyssel FF,DK1,Denmark,Nord Energi Arena,10000,,24,2018,Danish Superliga,Denmark
-19684,Jeju SK Football Club,RSK1,"Korea, South",Jeju World Cup Stadium,29791,,32,2025,K League 1,South Korea
-197,AC Sparta Prague,TS1,Czech Republic,epet Arena,18243,Brian Priske,33,2025,Chance Liga,Czech Republic
-19771,Akhisarspor,TR1,Türkiye,Spor Toto Akhisar Stadyumu,12139,,14,2018,Süper Lig,Turkey
-19775,Asociación de Fomento Deportivo Riestra Barrio Colón,ARG1,Argentina,Guillermo Laza,10000,,33,2025,Argentine Primera División,Argentina
-19789,Yeni Malatyaspor,TR1,Türkiye,Yeni Malatya Stadyumu,25745,,10,2021,Süper Lig,Turkey
-199,Sport Club Corinthians Paulista,BRA1,Brazil,Neo Química Arena,49205,,34,2025,Brasileirão Série A,Brazil
-20,Bursaspor,TR1,Türkiye,Bursa Büyükşehir Belediye Stadyumu,43361,,26,2018,Süper Lig,Turkey
-200,FC Utrecht,NL1,Netherlands,"Stadion ""Galgenwaard""",23750,Ron Jans,31,2025,Eredivisie,Netherlands
-20100,FC Vestsjaelland,DK1,Denmark,Harboe Arena,10000,,0,2014,Danish Superliga,Denmark
-202,FC Groningen,NL1,Netherlands,Euroborg,22550,Dick Lukkien,24,2025,Eredivisie,Netherlands
 2029,Ceará Sporting Club,BRA1,Brazil,Estádio Governador Plácido Castelo,63904,Anderson Batatais,29,2024,Brasileirão Série A,Brazil
 2036,1. Fußballclub Heidenheim 1846,L1,Germany,Voith-Arena,15000,,29,2025,Bundesliga,Germany
-204,Lierse SK (- 2018),BE1,Belgium,Herman Vanderpoortenstadion,14538,,0,2014,Jupiler Pro League,Belgium
-20590,Rionegro Águilas,COL1,,Estadio Cincuentenario,4000,José Luis García,25,2025,Nan,
-206,Bröndby IF,DK1,Denmark,Brøndby Stadion,28000,Frederik Birk,30,2025,Danish Superliga,Denmark
 2063,Club Atlético Huracán,ARG1,Argentina,Tomás Adolfo Ducó,43482,,30,2025,Argentine Primera División,Argentina
-20698,Balikesirspor,TR1,Türkiye,Balıkesir Atatürk,15800,,22,2014,Süper Lig,Turkey
 2079,Veria NPS,GR1,Greece,Dimotiko Stadio Verias,6350,,29,2016,Greek Super League,Greece
-20887,FK Jedinstvo Ub,SER1,Serbia,Stadion Dragan Dzajic,4000,Ivan Radovanovic,29,2024,Super Liga Srbije,Serbia
-209,Club Atlético River Plate,ARG1,Argentina,Mâs Monumental,85018,,37,2025,Argentine Primera División,Argentina
-210,Grêmio Foot-Ball Porto Alegrense,BRA1,Brazil,Arena do Grêmio,60540,,34,2025,Brasileirão Série A,Brazil
-21101,Kristiansund Ballklubb,NO1,Norway,Nordmøre stadion,4444,,25,2025,Eliteserien,Norway
 2118,Wisla Plock,PL1,Poland,ORLEN Stadion im. Kazimierza Górskiego,15004,Mariusz Misiura,25,2025,Pko Bp Ekstraklasa,Poland
 2125,Esporte Clube Vitória,BRA1,Brazil,Estádio Manoel Barradas,30793,,39,2025,Brasileirão Série A,Brazil
-21459,Gangwon Football Club,RSK1,"Korea, South",Gangneung High1 Arena,21416,,44,2025,K League 1,South Korea
 2157,FC Blau-Weiss Linz,A1,Austria,Hofmann Personal Stadion,5595,Mitja Mörec,21,2025,Austrian Bundesliga,Austria
-218,San Jose Earthquakes,MLS1,United States,PayPal Park,18000,,30,2025,Major League Soccer,United States
-21957,AO Platanias,GR1,Greece,Dimotiko Gipedo Perivolia,3700,,0,2017,Greek Super League,Greece
-21975,Football Club Mito HollyHock,JAP1,Japan,K's denki Stadium Mito,12000,,34,2025,J1 League,Japan
-221,Santos Futebol Clube,BRA1,Brazil,Estádio Urbano Caldeira,16068,,37,2025,Brasileirão Série A,Brazil
-22110,FC Helsingör,DK1,Denmark,Helsingør Ny Stadion,4000,,23,2017,Danish Superliga,Denmark
-22171,Fagiano Okayama Sports Club,JAP1,Japan,JFE Hare no Kuni Stadium,20000,,32,2025,J1 League,Japan
 2227,SK Tavriya Simferopol ( - 2022),UKR1,Ukraine,RS Lokomotiv,19978,,0,2013,Ukrainian Premier League,Ukraine
-223,HNK Sibenik,KR1,Croatia,Subicevac,3701,Mario Carevic,15,2024,Supersport Hnl,Croatia
-22381,Al-Raed SFC,SA1,Saudi Arabia,Al-Raed Club Stadium,5000,Odair Hellmann,22,2024,Saudi Pro League,Saudi Arabia
 2239,US Cremonese,IT1,Italy,Giovanni Zini,16003,Giovanni Persico,33,2025,Serie A,Italy
 2241,Kashima Antlers FC,JAP1,Japan,Kashima Soccer Stadium,40728,,29,2025,J1 League,Japan
-22431,Stal Mielec,PL1,Poland,Stadion Miejski imienia Grzegorza Lato w Mielcu,6864,Kamil Kieres,26,2024,Pko Bp Ekstraklasa,Poland
 2282,Club Brugge KV,BE1,Belgium,Jan Breydelstadion,29062,Nicky Hayen,27,2025,Jupiler Pro League,Belgium
 2288,Swansea City,GB1,England,Swansea.com Stadium,21088,,22,2017,Premier League,England
-22902,Alianza FC,COL1,,Estadio Armando Maestre Pavajeau,11500,Hubert Bodhert,28,2025,Nan,
 2292,Elazigspor,TR1,Türkiye,Elazığ Stadyumu,23000,,28,2013,Süper Lig,Turkey
 2293,Konyaspor,TR1,Türkiye,Medaş Konya Büyükşehir Stadyumu,41600,Recep Uçar,25,2025,Süper Lig,Turkey
-23,Eintracht Braunschweig,L1,Germany,EINTRACHT-Stadion,23325,,30,2013,Bundesliga,Germany
 2300,Jagiellonia Bialystok,PL1,Poland,Chorten Arena,22372,Adrian Siemieniec,24,2025,Pko Bp Ekstraklasa,Poland
 2311,"SK Sigma Olomouc, a.s.",TS1,Czech Republic,Andrův stadion,12451,,32,2025,Chance Liga,Czech Republic
-23184,KFUM-Kameratene Oslo,NO1,Norway,KFUM Arena,3300,,27,2025,Eliteserien,Norway
-232,FK Spartak Moskva,RU1,Russia,Lukoil Arena,44571,,26,2025,Russian Premier League,Russia
 2323,Orduspor,TR1,Türkiye,19 Eylül Stadyum,11024,,3,2012,Süper Lig,Turkey
-234,Feyenoord Rotterdam,NL1,Netherlands,"Stadion Feyenoord ""De Kuip""",47500,Robin van Persie,37,2025,Eredivisie,Netherlands
-235,RKC Waalwijk,NL1,Netherlands,Mandemakers Stadion,7186,Henk Fraser,31,2024,Eredivisie,Netherlands
 2350,Millonarios FC,COL1,,Estadio Nemesio Camacho (El Campín),36343,Alberto Gamero,28,2025,Nan,
 2352,CD América de Cali,COL1,,Estadio Olímpico Pascual Guerrero,42300,Jorge da Silva,27,2025,Nan,
-23568,Zelvia,JAP1,Japan,Machida GION Stadium,15320,,26,2025,J1 League,Japan
-23581,V-Varen Nagasaki,JAP1,Japan,Peace Stadium connected by SoftBank,20027,,34,2025,J1 League,Japan
-23611,Olimpik Donetsk,UKR1,Ukraine,NTK im. B. M. Bannikova,1678,,0,2020,Ukrainian Premier League,Ukraine
 2362,Slaven Belupo Koprivnica,KR1,Croatia,Gradski Stadion Ivan Kusek Apas,5000,Mario Gregurina,42,2025,Supersport Hnl,Croatia
-237,RCD Mallorca,ES1,Spain,Mallorca Son Moix,25736,Jagoba Arrasate,24,2025,LaLiga,Spain
 2375,Altay SK,TR1,Türkiye,Alsancak Mustafa Denizli Stadı,15000,,31,2021,Süper Lig,Turkey
-238,Lech Poznan,PL1,Poland,Enea Poznań,42837,Niels Frederiksen,28,2025,Pko Bp Ekstraklasa,Poland
 2381,Sivasspor,TR1,Türkiye,BG Grup 4 Eylül Stadyumu,27817,Bülent Uygun,26,2024,Süper Lig,Turkey
-23826,RB Leipzig,L1,Germany,Red Bull Arena,47069,Ole Werner,33,2025,Bundesliga,Germany
-239,Viking Fotballklubb,NO1,Norway,Lyse Arena,15900,,25,2025,Eliteserien,Norway
-24,Eintracht Frankfurt,L1,Germany,Deutsche Bank Park,59500,Dino Toppmöller,32,2025,Bundesliga,Germany
 2402,Club Social y Deportivo Defensa y Justicia,ARG1,Argentina,Norberto Tomaghello,18750,,29,2025,Argentine Primera División,Argentina
 2407,CF Monterrey,MEX1,Mexico,Estadio BBVA,53500,Domènec Torrent,29,2025,Liga MX,Mexico
 2410,PFK CSKA Moskva,RU1,Russia,VEB Arena,30114,,28,2025,Russian Premier League,Russia
 2414,AC Horsens,DK1,Denmark,Nordstern Arena Horsens,10400,,19,2022,Danish Superliga,Denmark
 2417,Club Atlético Belgrano,ARG1,Argentina,Julio César Villagra,38550,,27,2025,Argentine Primera División,Argentina
-242,FC Winterthur,C1,Switzerland,Schützenwiese,8700,Uli Forte,27,2025,Swiss Super League,Switzerland
 2420,Vitória Guimarães SC,PO1,Portugal,Estádio D. Afonso Henriques,30029,Luís Pinto,27,2025,Liga Portugal,Portugal
 2423,CD Santa Clara,PO1,Portugal,Estádio de São Miguel,12500,Vasco Matos,35,2025,Liga Portugal,Portugal
 2424,Gil Vicente FC,PO1,Portugal,Estádio Cidade de Barcelos,12046,César Peixoto,27,2025,Liga Portugal,Portugal
-24245,Ümraniyespor,TR1,Türkiye,Ümraniye Belediyesi Şehir Stadı,3513,,12,2022,Süper Lig,Turkey
 2425,Rio Ave FC,PO1,Portugal,Estádio do Rio Ave FC,5300,Sotiris Sylaidopoulos,25,2025,Liga Portugal,Portugal
 2431,CF Estrela Amadora,PO1,Portugal,Estádio José Gomes,9288,José Faria,29,2025,Liga Portugal,Portugal
 2439,Kuban Krasnodar (-2018),RU1,Russia,Kuban Stadium,31654,,0,2015,Russian Premier League,Russia
-244,Olympique Marseille,FR1,France,Orange Vélodrome,67394,Roberto De Zerbi,26,2025,Ligue 1,France
 2440,D.C. United,MLS1,United States,Audi Field,20000,,26,2025,Major League Soccer,United States
 2441,Athlitiki Enosi Konstantinoupoleos,GR1,Greece,Allwyn Arena,32500,,30,2025,Greek Super League,Greece
 2446,WSG Tirol,A1,Austria,Tivoli Stadion Tirol,15400,Philipp Semlic,22,2025,Austrian Bundesliga,Austria
 2448,Sporting Gijón,ES1,Spain,El Molinón - Enrique Castro Quini,29029,,28,2016,LaLiga,Spain
 2451,Inverness Caledonian Thistle FC,SC1,Scotland,Tulloch Caledonian Stadium,7750,,26,2016,Scottish Premiership,Scotland
 2457,B SAD,PO1,Portugal,Estádio Nacional do Jamor,37593,,25,2021,Liga Portugal,Portugal
-24575,HNK Gorica,KR1,Croatia,SRC Velika Gorica,5050,Mario Carevic,35,2025,Supersport Hnl,Croatia
 2462,Fluminense Football Club,BRA1,Brazil,Estádio Jornalista Mário Filho,82238,,33,2025,Brasileirão Série A,Brazil
 2477,Karpaty Lviv (-2021),UKR1,Ukraine,Stadion Ukraina,28051,,0,2019,Ukrainian Premier League,Ukraine
 2497,Real Oviedo,ES1,Spain,Carlos Tartiere,30500,Veljko Paunovic,21,2025,LaLiga,Spain
 2503,Boavista FC,PO1,Portugal,Estádio do Bessa Século XXI,28263,Cristiano Bacci,9,2024,Liga Portugal,Portugal
-25184,Club Atlético Barracas Central,ARG1,Argentina,Claudio Chiqui Tapia,18000,,29,2025,Argentine Primera División,Argentina
-252,Genoa CFC,IT1,Italy,Luigi Ferraris,34901,Patrick Vieira,31,2025,Serie A,Italy
 2521,FC Alverca,PO1,Portugal,Complexo Desportivo FC Alverca,6932,Custódio,23,2025,Liga Portugal,Portugal
-25467,Philadelphia Union,MLS1,United States,Subaru Park,18500,,29,2025,Major League Soccer,United States
-255,Legia Warszawa,PL1,Poland,Stadion Miejski im. Marszałka Józefa Piłsudskiego,31103,Edward Iordănescu,25,2025,Pko Bp Ekstraklasa,Poland
 2553,Kilmarnock FC,SC1,Scotland,"BBSP Stadium, Rugby Park",18128,Stuart Kettlewell,24,2025,Scottish Premiership,Scotland
-25580,Melbourne City FC,AUS1,Australia,AAMI Park,30050,Aurelio Vidmar,26,2025,A-League Men,Australia
-257,FC St. Gallen 1879,C1,Switzerland,kybunpark,20660,Enrico Maaßen,30,2025,Swiss Super League,Switzerland
 2578,St. Johnstone FC,SC1,Scotland,McDiarmid Park,10696,Craig Levein,24,2024,Scottish Premiership,Scotland
-26,FC Basel 1893,C1,Switzerland,St. Jakob-Park,38512,Ludovic Magnin,32,2025,Swiss Super League,Switzerland
-260,FC Zürich,C1,Switzerland,Stadion Letzigrund,26104,Mitchell van der Gaag,25,2025,Swiss Super League,Switzerland
-26069,Al-Qadsiah Saudi Football Club,SA1,Saudi Arabia,Prince Mohamed bin Fahd Stadium,26000,,24,2025,Saudi Pro League,Saudi Arabia
-26459,NK Veres Rivne,UKR1,Ukraine,Stadion Avangard (2022),7122,Oleg Shandruk,21,2025,Ukrainian Premier League,Ukraine
-265,Panathinaikos Athlitikos Omilos,GR1,Greece,Apostolos Nikolaidis,15000,,33,2025,Greek Super League,Greece
-266,SV Ried,A1,Austria,BWT X Oberösterreichische Arena,7300,Maximilian Senft,28,2025,Austrian Bundesliga,Austria
-267,Idrettsklubben Start,NO1,Norway,Sparebanken Sør Arena,14300,,28,2025,Eliteserien,Norway
 2671,PAS Giannina,GR1,Greece,Stadio Zosimades,7652,,21,2023,Greek Super League,Greece
 2672,APO Levadiakos Football Club,GR1,Greece,"Stadio Livadias ""Lampros Katsonis""",5915,,28,2025,Greek Super League,Greece
 2687,Cádiz CF,ES1,Spain,Nuevo Mirandilla,21094,,26,2023,LaLiga,Spain
-269,Holstein Kiel,L1,Germany,Holstein-Stadion,15034,Marcel Rapp,29,2024,Bundesliga,Germany
 2696,PFK Krylya Sovetov Samara,RU1,Russia,Solidarnost Samara Arena,42347,,27,2025,Russian Premier League,Russia
 2697,Sanfrecce Hiroshima,JAP1,Japan,EDION Peace Wing Hiroshima,28529,,27,2025,J1 League,Japan
 2698,FC Rubin Kazan,RU1,Russia,Ak Bars Arena,45379,,33,2025,Russian Premier League,Russia
-27,Bayern Munich,L1,Germany,Allianz Arena,75000,Vincent Kompany,31,2025,Bundesliga,Germany
 2700,Anzhi Makhachkala ( -2022),RU1,Russia,RDYuSSh MinObrNauki RD Politekh Makhachkala,1600,,0,2018,Russian Premier League,Russia
 2703,Spartak Vladikavkaz (-2020),RU1,Russia,Republican Stadium Spartak,32464,,0,2012,Russian Premier League,Russia
 2715,RFC Seraing,BE1,Belgium,Stade du Paray,6744,,22,2022,Jupiler Pro League,Belgium
 2719,Mjällby Almänna Idrottsförening,SE1,Sweden,Strandvallen,7500,,28,2025,Allsvenskan,Sweden
-272,Allmänna Idrottsklubben,SE1,Sweden,Strawberry Arena,50000,,28,2025,Allsvenskan,Sweden
 2722,SPAL,IT1,Italy,Paolo Mazza,16134,,32,2019,Serie A,Italy
-27221,Al-Fateh Club,SA1,Saudi Arabia,Al-Fateh Club Stadium,11000,,32,2025,Saudi Pro League,Saudi Arabia
 2727,Oud-Heverlee Leuven,BE1,Belgium,King Power at Den Dreef Stadion,9809,David Hubert,23,2025,Jupiler Pro League,Belgium
-273,Stade Rennais FC,FR1,France,Roazhon Park,29778,Habib Beye,34,2025,Ligue 1,France
 2740,Vorskla Poltava,UKR1,Ukraine,Vorskla im. Oleksiy Butovskyi,23842,Sergiy Dolganskyi,19,2024,Ukrainian Premier League,Ukraine
 2741,FK Baltika,RU1,Russia,Rostec Arena,30600,,28,2025,Russian Premier League,Russia
 2759,Ross County FC,SC1,Scotland,Global Energy Stadium,6541,Don Cowie,26,2024,Scottish Premiership,Scotland
-276,Hellas Verona,IT1,Italy,Marcantonio Bentegodi,39211,Paolo Zanetti,29,2025,Serie A,Italy
 2760,Partick Thistle FC,SC1,Scotland,The Energy Check Stadium at Firhill,10102,,19,2017,Scottish Premiership,Scotland
 2761,FK Haugesund,NO1,Norway,Haugesund Sparebank Arena,8983,Sancheev Manoharan,23,2024,Eliteserien,Norway
 2778,FC Nordsjaelland,DK1,Denmark,Right to Dream Park,10300,Jens Olsen,30,2025,Danish Superliga,Denmark
 2783,Metalurg Donetsk (- 2015),UKR1,Ukraine,Metalurg,5090,,0,2014,Ukrainian Premier League,Ukraine
 2790,FC Lugano,C1,Switzerland,AIL Arena,8793,Mattia Croci-Torti,34,2025,Swiss Super League,Switzerland
-28095,FK Ufa,RU1,Russia,Neftyanik,15132,,26,2021,Russian Premier League,Russia
-281,Manchester City,GB1,England,Etihad Stadium,61000,Pep Guardiola,32,2025,Premier League,England
 2817,Strømsgodset IF,NO1,Norway,Marienlyst Stadion,8935,Jørgen Isnes,22,2024,Eliteserien,Norway
 2832,Gaziantep FK,TR1,Türkiye,Gaziantep Stadyumu,30320,İsmet Taşdemir,23,2025,Süper Lig,Turkey
 2844,IFK Norrköping,SE1,Sweden,Platinumcars Arena,17234,Andreas Alm,26,2024,Allsvenskan,Sweden
 2861,KV Oostende,BE1,Belgium,Diaz Arena,8432,,26,2022,Jupiler Pro League,Belgium
-28643,SK Beveren,BE1,Belgium,Freethielstadion,13290,,27,2020,Jupiler Pro League,Belgium
-28760,SK Austria Klagenfurt,A1,Austria,Wörtherseestadion,32000,Peter Pacult,24,2024,Austrian Bundesliga,Austria
-288,Club Estudiantes de La Plata,ARG1,Argentina,Jorge Luis Hirschi,32530,,32,2025,Argentine Primera División,Argentina
-28844,Al-Taawoun Football Club,SA1,Saudi Arabia,Al-Taawoun Club Stadium,5961,,28,2025,Saudi Pro League,Saudi Arabia
-28893,Puszcza Niepolomice,PL1,Poland,Stadion Miejski w Niepołomicach,2500,Tomasz Tulacz,22,2024,Pko Bp Ekstraklasa,Poland
-289,Sunderland AFC,GB1,England,Stadium of Light,48707,Régis Le Bris,31,2025,Premier League,England
-28956,AEL Kalloni,GR1,Greece,Stadio Mytilinis,4000,,0,2015,Greek Super League,Greece
-29,Everton FC,GB1,England,Hill Dickinson Stadium,52769,David Moyes,23,2025,Premier League,England
-290,AJ Auxerre,FR1,France,Stade de l'Abbé-Deschamps,18541,Christophe Pélissier,31,2025,Ligue 1,France
 2919,AC Monza,IT1,Italy,Brianteo,17102,Alessandro Nesta,29,2024,Serie A,Italy
 2921,Delfino Pescara 1936,IT1,Italy,Adriatico,20476,,28,2016,Serie A,Italy
-29228,Royal Excel Mouscron (-2022),BE1,Belgium,Le Canonnier,10830,,0,2020,Jupiler Pro League,Belgium
-294,SL Benfica,PO1,Portugal,Estádio da Luz,68100,Bruno Lage,30,2025,Liga Portugal,Portugal
 2944,Ankaraspor,TR1,Türkiye,Osmanlı Stadı,19626,,30,2017,Süper Lig,Turkey
 2969,Dijon FCO,FR1,France,Stade Gaston-Gérard,16098,,29,2020,Ligue 1,France
-29700,AFC Unirea 04 Slobozia,RO1,Romania,1 Mai,6000,Andrei Prepeliță,23,2025,Superliga,Romania
-29831,FCV Farul Constanta,RO1,Romania,Central - Complex Gheorghe Hagi,4554,Ianis Zicu,42,2025,Superliga,Romania
 2990,Académica Coimbra,PO1,Portugal,Estádio Cidade de Coimbra,29744,,26,2015,Liga Portugal,Portugal
 2995,FC Paços de Ferreira,PO1,Portugal,Estádio Capital do Móvel,9076,,32,2022,Liga Portugal,Portugal
 2996,Incheon United Football Club,RSK1,"Korea, South",Incheon Football Stadium,20356,,34,2025,K League 1,South Korea
 2999,Hamilton Academical FC,SC1,Scotland,Fountain of Youth Stadium,6018,,28,2020,Scottish Premiership,Scotland
-3,1.FC Köln,L1,Germany,RheinEnergieSTADION,50000,Lukas Kwasniok,28,2025,Bundesliga,Germany
 3008,Hull City,GB1,England,MKM Stadium,25586,,28,2016,Premier League,England
-301,FCSB,RO1,Romania,Arena Națională,55634,Elias Charalambous,25,2025,Superliga,Romania
-30120,Athlitiki Enosi Kifisias,GR1,Greece,Gipedo Neapolis,4999,,35,2025,Greek Super League,Greece
 3057,Standard Liège,BE1,Belgium,Maurice Dufrasne Stadion,27221,Mircea Rednic,27,2025,Jupiler Pro League,Belgium
-306,SC Heerenveen,NL1,Netherlands,Abe Lenstra Stadion,27224,Robin Veldman,23,2025,Eredivisie,Netherlands
 3060,APS Atromitos Athinon,GR1,Greece,Stadio Peristeriou,9050,,30,2025,Greek Super League,Greece
 3062,Athens Kallithea,GR1,Greece,Grigoris Lamprakis Stadium,6300,Massimo Donati,29,2024,Greek Super League,Greece
-30925,Gwangju Football Club,RSK1,"Korea, South",Gwangju World Cup Stadium,39655,,37,2025,K League 1,South Korea
-31,Liverpool FC,GB1,England,Anfield,61276,Arne Slot,29,2025,Premier League,England
-31008,Al-Riyadh Saudi Club,SA1,Saudi Arabia,Prince Turki bin Abdul Aziz Stadium,15000,,28,2025,Saudi Pro League,Saudi Arabia
-311,Football Club Pohang Steelers,RSK1,"Korea, South",Pohang Steelyard,17443,,35,2025,K League 1,South Korea
-312,FC Dinamo 1948,RO1,Romania,National Arena,55600,Zeljko Kopic,39,2025,Superliga,Romania
-31284,Club Atlético Central Córdoba,ARG1,Argentina,Único Madre de Ciudades,30000,,27,2025,Argentine Primera División,Argentina
 3137,FK TSC Backa Topola,SER1,Serbia,TSC Arena,4500,Darije Kalezic,25,2025,Super Liga Srbije,Serbia
-316,Grazer AK 1902,A1,Austria,Merkur Arena,15322,Ferdinand Feldhofer,22,2025,Austrian Bundesliga,Austria
-31622,Suwon FC,RSK1,"Korea, South",Suwon Sports Complex,11808,Eun-joong Kim,38,2024,K League 1,South Korea
-317,FC Twente Enschede,NL1,Netherlands,De Grolsch Veste,30205,Joseph Oosting,31,2025,Eredivisie,Netherlands
-32041,Fortaleza CEIF,COL1,,Parque Estadio Olaya Herrera,2500,Sebastián Oliveros,27,2025,Nan,
 3205,Kayserispor,TR1,Türkiye,RHG Enertürk Enerji Stadyumu,31856,Markus Gisdol,26,2025,Süper Lig,Turkey
 3209,Pendikspor,TR1,Türkiye,Pendik Stadı,4105,,30,2023,Süper Lig,Turkey
-321,FC Sion,C1,Switzerland,Tourbillon,14850,Didier Tholot,32,2025,Swiss Super League,Switzerland
-32113,FK IMT Belgrad,SER1,Serbia,Stadion Lagator,8500,Zoran Vasiljevic,36,2025,Super Liga Srbije,Serbia
 3216,Mersin Talimyurdu SK,TR1,Türkiye,Mersin Stadyumu,25000,,0,2015,Süper Lig,Turkey
-322,Yverdon Sport FC,C1,Switzerland,Stade Municipal,4200,Alessandro Mangiarratti,30,2024,Swiss Super League,Switzerland
-32328,Al-Najma Sport Club,SA1,Saudi Arabia,Department of Education Stadium,10000,,29,2025,Saudi Pro League,Saudi Arabia
-324,Pogon Szczecin,PL1,Poland,Stadion Miejski im. Floriana Krygiera,21163,Robert Kolendowicz,33,2025,Pko Bp Ekstraklasa,Poland
 3268,Casa Pia AC,PO1,Portugal,Estádio Municipal de Rio Maior,7000,João Pereira,23,2025,Liga Portugal,Portugal
-327,NK Osijek,KR1,Croatia,Opus Arena,13005,Simon Rozman,32,2025,Supersport Hnl,Croatia
-33,FC Schalke 04,L1,Germany,Veltins-Arena,62271,,27,2022,Bundesliga,Germany
-330,Clube Atlético Mineiro,BRA1,Brazil,Arena MRV,44892,,33,2025,Brasileirão Série A,Brazil
 3302,UD Almería,ES1,Spain,Power Horse Stadium,18331,,24,2023,LaLiga,Spain
-331,CA Osasuna,ES1,Spain,El Sadar,23576,Alessio Lisci,20,2025,LaLiga,Spain
 3325,GD Chaves,PO1,Portugal,Estádio Municipal Eng.º Manuel Branco Teixeira,8396,,29,2023,Liga Portugal,Portugal
 3327,FC Penafiel,PO1,Portugal,Estádio Municipal 25 de Abril,5230,,28,2014,Liga Portugal,Portugal
 3329,FC Famalicão,PO1,Portugal,Estádio Municipal de Famalicão,5186,Hugo Oliveira,26,2025,Liga Portugal,Portugal
-333,Club Atlético Lanús,ARG1,Argentina,Ciudad de Lanús - Néstor Díaz Pérez,46619,,29,2025,Argentine Primera División,Argentina
-33328,FK Radnik Surdulica,SER1,Serbia,Gradski stadion Surdulica,3312,Marko Jaksic,29,2025,Super Liga Srbije,Serbia
 3336,Desportivo Aves (- 2020),PO1,Portugal,Estádio CD das Aves,5441,,0,2019,Liga Portugal,Portugal
 3349,CD Feirense,PO1,Portugal,Estádio Marcolino de Castro,5401,,24,2018,Liga Portugal,Portugal
-336,Sporting CP,PO1,Portugal,Estádio José Alvalade,52095,Rui Borges,30,2025,Liga Portugal,Portugal
 3368,Levante UD,ES1,Spain,Ciutat de València,26354,Julián Calero,22,2025,LaLiga,Spain
-338,Dynamo Kyiv,UKR1,Ukraine,Valeriy Lobanovsky Stadion,16873,Oleksandr Shovkovskyi,42,2025,Ukrainian Premier League,Ukraine
 3385,Panserraikos Serres,GR1,Greece,Dimotiko Gipedo Serron,9500,,34,2025,Greek Super League,Greece
-339,Dnipro Dnipropetrovsk (-2020),UKR1,Ukraine,Meteor,24381,,0,2016,Ukrainian Premier League,Ukraine
-33966,ACSM Politehnica Iasi,RO1,Romania,Emil Alexandrescu,11481,Tony,24,2024,Superliga,Romania
 3426,Esbjerg fB,DK1,Denmark,Blue Water Arena,16942,,27,2019,Danish Superliga,Denmark
-347,FC Metz,FR1,France,Stade Saint-Symphorien,28786,Stéphane Le Mignan,22,2025,Ligue 1,France
-34911,Neom Sports Club,SA1,Saudi Arabia,King Khalid Sport City Stadium,12000,,29,2025,Saudi Pro League,Saudi Arabia
-35,FC St. Pauli,L1,Germany,Millerntor-Stadion,29546,Alexander Blessin,28,2025,Bundesliga,Germany
-350,Sheffield United,GB1,England,Bramall Lane,32702,,28,2023,Premier League,England
 3508,Zulte Waregem,BE1,Belgium,Elindus Arena,12698,Sven Vandenbroeck,26,2025,Jupiler Pro League,Belgium
 3522,Spezia Calcio,IT1,Italy,Alberto Picco,11676,,32,2022,Serie A,Italy
 3524,Clermont Foot 63,FR1,France,Stade Gabriel-Montpied,10800,,30,2023,Ligue 1,France
 3527,Motor Lublin Spółka Akcyjna,PL1,Poland,Motor Lublin Arena,15247,,31,2025,Pko Bp Ekstraklasa,Poland
-353,Lillestrøm Sportsklubb,NO1,Norway,Åråsen stadion,11637,,27,2025,Eliteserien,Norway
 3535,Ulsan Hyundai Football Club,RSK1,"Korea, South",Ulsan Munsu Football Stadium,44474,,34,2025,K League 1,South Korea
-354,KV Mechelen,BE1,Belgium,Achter de Kazerne,16672,Frederik Vanderbiest,29,2025,Jupiler Pro League,Belgium
 3551,Sportclub Rheindorf Altach,A1,Austria,Schnabelholz,8500,,27,2025,Austrian Bundesliga,Austria
 3558,GFC Ajaccio,FR1,France,Stade Ange-Casanova,4050,,5,2015,Ligue 1,France
-35759,Bucheon Football Club 1995,RSK1,"Korea, South",Bucheon Sports Complex,35000,,36,2025,K League 1,South Korea
 3592,Kryvbas Kryvyi Rig,UKR1,Ukraine,Girnyk,3219,Patrick van Leeuwen,18,2025,Ukrainian Premier League,Ukraine
-36,Fenerbahce,TR1,Türkiye,Chobani Stadyumu FB Şükrü Saracoğlu Spor Kompleksi,47430,José Mourinho,44,2025,Süper Lig,Turkey
 3609,Rotor Volgograd,RU1,Russia,Volgograd Arena,45568,,27,2020,Russian Premier League,Russia
-36100,Western Sydney Wanderers,AUS1,Australia,CommBank Stadium,30000,Alen Stajcic,28,2025,A-League Men,Australia
 3622,IFK Värnamo,SE1,Sweden,Finnvedsvallen,5000,Anes Mravac,22,2024,Allsvenskan,Sweden
 3631,CF América,MEX1,Mexico,Estadio Azteca,87523,André Jardine,29,2025,Liga MX,Mexico
 3641,Degerfors IF,SE1,Sweden,Stora Valla,5880,,25,2025,Allsvenskan,Sweden
 3654,Kalmar Fotbollförening,SE1,Sweden,Guldfågeln Arena,12182,,27,2025,Allsvenskan,Sweden
-366,Real Valladolid CF,ES1,Spain,José Zorrilla,27618,Paulo Pezzolano,28,2024,LaLiga,Spain
-367,Rayo Vallecano,ES1,Spain,Estadio de Vallecas,14708,Iñigo Pérez,24,2025,LaLiga,Spain
-368,Sevilla FC,ES1,Spain,Ramón Sánchez-Pizjuán,43883,Matías Almeyda,27,2025,LaLiga,Spain
-369,Lyngby Boldklub,DK1,Denmark,Lyngby Stadion,10000,Morten Karlsen,25,2024,Danish Superliga,Denmark
 3690,SKA Khabarovsk,RU1,Russia,Lenin Stadion,15200,,27,2017,Russian Premier League,Russia
 3691,Tom Tomsk,RU1,Russia,Trud,10028,,0,2016,Russian Premier League,Russia
-36922,FK Tekstilac Odzaci,SER1,Serbia,Gradski stadion Odžaci,1500,Branko Mirjacic,32,2024,Super Liga Srbije,Serbia
-370,Aberdeen FC,SC1,Scotland,Pittodrie Stadium,20866,Jimmy Thelin,30,2025,Scottish Premiership,Scotland
 3709,Getafe CF,ES1,Spain,Coliseum,16800,José Bordalás,22,2025,LaLiga,Spain
-371,Celtic FC,SC1,Scotland,Celtic Park,60411,Brendan Rodgers,30,2025,Scottish Premiership,Scotland
 3711,CD Cruz Azul,MEX1,Mexico,Estadio Olímpico Universitario,62700,Nicolás Larcamón,24,2025,Liga MX,Mexico
 3714,Enisey Krasnoyarsk,RU1,Russia,Zentralstadion Krasnoyarsk,15000,,26,2018,Russian Premier League,Russia
 3719,FC Khimki (-2025),RU1,Russia,Arena Khimki,18636,Franc Artiga,0,2024,Russian Premier League,Russia
 3725,RFK Akhmat Grozny,RU1,Russia,Akhmat-Arena,30200,,27,2025,Russian Premier League,Russia
-37255,FK Csikszereda Miercurea Ciuc,RO1,Romania,Municipal Miercurea Ciuc,2480,Robert Ilyes,29,2025,Superliga,Romania
 3729,Arsenal Tula,RU1,Russia,Arsenal,19241,,27,2021,Russian Premier League,Russia
 3734,Tokyo Verdy,JAP1,Japan,Ajinomoto Stadium,49970,,35,2025,J1 League,Japan
-37624,FC Metaloglobus Bucharest,RO1,Romania,Clinceni Arena,4500,Mihai Teja,20,2025,Superliga,Romania
-377,FC Baník Ostrava a.s.,TS1,Czech Republic,Městský stadion  - Vitkovice Aréna,15123,,29,2025,Chance Liga,Czech Republic
-379,West Ham United,GB1,England,London Stadium,62500,Graham Potter,27,2025,Premier League,England
-38,Fortuna Düsseldorf,L1,Germany,MERKUR SPIEL-ARENA,54600,,29,2019,Bundesliga,Germany
-380,US Salernitana 1919,IT1,Italy,Arechi,29739,,30,2023,Serie A,Italy
 3828,Yokohama Marinos,JAP1,Japan,NISSAN Stadium,72327,,34,2025,J1 League,Japan
-383,PSV Eindhoven,NL1,Netherlands,Philips Stadion,35000,Peter Bosz,27,2025,Eredivisie,Netherlands
 3837,Fredrikstad Fotballklubb,NO1,Norway,Fredrikstad Stadion,12560,,26,2025,Eliteserien,Norway
 3840,Adana Demirspor,TR1,Türkiye,Yeni Adana Stadyumu,30960,Hikmet Karaman,24,2024,Süper Lig,Turkey
-385,Fortuna Sittardia Combinatie,NL1,Netherlands,Fortuna Sittard Stadion,12800,,28,2025,Eredivisie,Netherlands
-38628,Llaneros FC,COL1,,Estadio Bello Horizonte,15000,Martín Cardetti,26,2025,Nan,
 3876,Mirasol Futebol Clube,BRA1,Brazil,Estádio Municipal José María de Campos Maia,14534,,32,2025,Brasileirão Série A,Brazil
-38898,Football Club Anyang,RSK1,"Korea, South",Anyang Sports Complex Stadium,25000,,36,2025,K League 1,South Korea
-39,1.FSV Mainz 05,L1,Germany,Mewa Arena,33305,Bo Henriksen,30,2025,Bundesliga,Germany
 3901,RAAL La Louvière,BE1,Belgium,Easi Arena,8050,Frédéric Taquin,29,2025,Jupiler Pro League,Belgium
-39097,Obolon Kyiv,UKR1,Ukraine,Obolon-Arena,5103,Oleksandr Antonenko,24,2025,Ukrainian Premier League,Ukraine
 3911,Stade Brestois 29,FR1,France,Stade Francis-Le Blé,15220,Éric Roy,19,2025,Ligue 1,France
 3938,Club Atlético Talleres,ARG1,Argentina,Mario Alberto Kempes,57000,,32,2025,Argentine Primera División,Argentina
 3948,Union Saint-Gilloise,BE1,Belgium,Stade Joseph Mariën,9512,Sébastien Pocognoli,31,2025,Jupiler Pro League,Belgium
-39536,Al-Orobah FC,SA1,Saudi Arabia,Al-Orobah Club Stadium,3000,Álvaro Pacheco,25,2024,Saudi Pro League,Saudi Arabia
 3958,Rakuten Vissel Kobe,JAP1,Japan,NOEVIR Stadium Kobe,30132,,42,2025,J1 League,Japan
-39722,Erzurumspor FK,TR1,Türkiye,Erzurum Kazım Karabekir,23700,,28,2020,Süper Lig,Turkey
-398,Società Sportiva Lazio S.p.A.,IT1,Italy,Olimpico di Roma,70634,,28,2025,Serie A,Italy
-399,Leeds United,GB1,England,Elland Road,37890,Daniel Farke,29,2025,Premier League,England
 3999,PAS Lamia 1964,GR1,Greece,"Stadio Lamia ""Athanasios Diakos""",5500,Marinos Satsias,28,2024,Greek Super League,Greece
-4,1.FC Nuremberg,L1,Germany,Max-Morlock-Stadion,50000,,33,2018,Bundesliga,Germany
-40,FC Girondins Bordeaux,FR1,France,Matmut Atlantique,42115,,26,2021,Ligue 1,France
 4000,Lechia Gdansk,PL1,Poland,Polsat Plus Arena Gdańsk,41620,John Carver,20,2025,Pko Bp Ekstraklasa,Poland
-40058,New York City Football Club,MLS1,United States,Yankee Stadium,30321,,33,2025,Major League Soccer,United States
-40188,Atlético de San Luis,MEX1,Mexico,Estadio Alfonso Lastras Ramírez,27029,Guillermo Abascal,29,2025,Liga MX,Mexico
-403,Willem II Tilburg,NL1,Netherlands,Koning Willem II Stadion,14700,Peter Maes,26,2024,Eredivisie,Netherlands
 4035,CF Pachuca,MEX1,Mexico,Estadio Hidalgo,30000,Jaime Lozano,20,2025,Liga MX,Mexico
-40426,FC Tosno (-2018),RU1,Russia,Petrovsky,20985,,0,2017,Russian Premier League,Russia
-405,Aston Villa,GB1,England,Villa Park,43205,Unai Emery,29,2025,Premier League,England
 4078,Club de Foot Montréal,MLS1,United States,Stade Saputo,20801,,28,2025,Major League Soccer,United States
-40812,Universitatea Craiova,RO1,Romania,Ion Oblemenco (2017),30983,Mirel Rădoi,33,2025,Superliga,Romania
 4083,FC Crotone,IT1,Italy,Ezio Scida,16640,,25,2020,Serie A,Italy
-409,Fußballclub Red Bull Salzburg,A1,Austria,Red Bull Arena Salzburg,30188,,30,2025,Austrian Bundesliga,Austria
-41,Hamburger SV,L1,Germany,Volksparkstadion,57000,Merlin Polzin,26,2025,Bundesliga,Germany
-410,Udinese Calcio,IT1,Italy,Bluenergy Stadium,25144,Kosta Runjaić,39,2025,Serie A,Italy
 4102,AC Carpi,IT1,Italy,Sandro Cabassi,5510,,25,2015,Serie A,Italy
-41201,PFK Tambov (-2021),RU1,Russia,Mordovia Arena,44149,,0,2020,Russian Premier League,Russia
-41231,FK Sochi,RU1,Russia,Fisht Olympic Stadium,45994,,28,2025,Russian Premier League,Russia
-41274,Beerschot VA,BE1,Belgium,Olympisch Stadion,12771,Dirk Kuyt,32,2024,Jupiler Pro League,Belgium
-41278,ACSC FC Arges,RO1,Romania,Orășenesc Mioveni,10000,Bogdan Andone,29,2025,Superliga,Romania
 4128,Amkar Perm,RU1,Russia,Zvezda,17000,,26,2017,Russian Premier League,Russia
-413,LASK,A1,Austria,Raiffeisen Arena,19080,João Sacramento,26,2025,Austrian Bundesliga,Austria
-415,FC Toulouse,FR1,France,Stadium Municipal,33150,Carles Martínez,24,2025,Ligue 1,France
-416,Torino FC,IT1,Italy,Olimpico Grande Torino,28177,Marco Baroni,27,2025,Serie A,Italy
-417,OGC Nice,FR1,France,Allianz Riviera,36178,Franck Haise,27,2025,Ligue 1,France
 4171,Benevento Calcio,IT1,Italy,Ciro Vigorito,16867,,31,2020,Serie A,Italy
 4172,Pisa Sporting Club,IT1,Italy,Cetilar® Arena,12508,Alberto Gilardino,35,2025,Serie A,Italy
-418,Real Madrid,ES1,Spain,Santiago Bernabéu,83186,Xabi Alonso,30,2025,LaLiga,Spain
-419,GNK Dinamo Zagreb,KR1,Croatia,Maksimir,35123,,33,2025,Supersport Hnl,Croatia
-42,Hannover 96,L1,Germany,Heinz-von-Heiden-Arena,49000,,28,2018,Bundesliga,Germany
-428,Górnik Zabrze,PL1,Poland,Arena Zabrze,28236,Michal Gasparik,37,2025,Pko Bp Ekstraklasa,Poland
 4284,Sporting Kansas City,MLS1,United States,Sporting Park,21000,,25,2025,Major League Soccer,United States
 4291,Portland Timbers,MLS1,United States,Providence Park,25218,,26,2025,Major League Soccer,United States
 4294,SC Farense,PO1,Portugal,Estádio de São Luís,7000,José Mota,32,2024,Liga Portugal,Portugal
-43,Heart of Midlothian FC,SC1,Scotland,Tynecastle Park,19852,Derek McInnes,36,2025,Scottish Premiership,Scotland
-430,ACF Fiorentina,IT1,Italy,Artemio Franchi,43147,Stefano Pioli,36,2025,Serie A,Italy
 4309,Hamarkameratene,NO1,Norway,Briskeby Stadion,6608,,27,2025,Eliteserien,Norway
-432,Chicago Fire Soccer Club,MLS1,United States,Soldier Field,61500,,29,2025,Major League Soccer,United States
-434,FC Luzern,C1,Switzerland,swissporarena,15680,Mario Frick,26,2025,Swiss Super League,Switzerland
-44,Hertha BSC,L1,Germany,Olympiastadion Berlin,74667,,36,2022,Bundesliga,Germany
-44006,Bodrum FK,TR1,Türkiye,Bodrum İlçe Stadyumu,4243,İsmet Taşdemir,31,2024,Süper Lig,Turkey
-441,Apollon Smyrnis,GR1,Greece,Stadio Neas Smyrnis,11700,,27,2021,Greek Super League,Greece
-443,Vejle Boldklub,DK1,Denmark,Vejle Stadion,11060,Ivan Prelec,28,2025,Danish Superliga,Denmark
 4441,Wolfsberger AC,A1,Austria,Lavanttal-Arena,7300,Dietmar Kühbauer,26,2025,Austrian Bundesliga,Austria
 4467,TSV Hartberg,A1,Austria,Profertil Arena Hartberg,5024,Manfred Schmid,19,2025,Austrian Bundesliga,Austria
-447,HNK Hajduk Split,KR1,Croatia,Poljud,34183,Gonzalo García,38,2025,Supersport Hnl,Croatia
-448,FK Vojvodina Novi Sad,SER1,Serbia,Stadion Karadjordje,14852,Miroslav Tanjga,42,2025,Super Liga Srbije,Serbia
 4482,Volyn Lutsk,UKR1,Ukraine,Stadion Avangard,12080,,0,2016,Ukrainian Premier League,Ukraine
-449,Trabzonspor,TR1,Türkiye,Papara Park,41000,Fatih Tekke,39,2025,Süper Lig,Turkey
-450,FK Dukla Prague,TS1,Czech Republic,Stadion Juliska,8150,David Holoubek,32,2025,Chance Liga,Czech Republic
-452,BSC Young Boys,C1,Switzerland,Stadion Wankdorf,31500,Giorgio Contini,31,2025,Swiss Super League,Switzerland
-455,FC Rapid 1923,RO1,Romania,Superbet Arena - Giulești,14050,Constantin Gâlcă,36,2025,Superliga,Romania
-456,HNK Vukovar 1991,KR1,Croatia,Gradski Stadion u Borovu naselju,6000,Gordon Schildenfeld,13,2025,Supersport Hnl,Croatia
-45604,Orlando City Soccer Club,MLS1,United States,Inter&Co Stadium,25500,,26,2025,Major League Soccer,United States
-458,Palermo FC,IT1,Italy,"Comunale Renzo Barbera ""La Favorita""",36365,,28,2016,Serie A,Italy
-46,Inter Milan,IT1,Italy,Giuseppe Meazza,75923,Cristian Chivu,25,2025,Serie A,Italy
 4603,Athlitiki Enosi Larisas,GR1,Greece,AEL Novibet Arena,16118,,30,2025,Greek Super League,Greece
 4633,FK Novi Pazar,SER1,Serbia,Gradski stadion Novi Pazar,6900,Vladimir Gacinovic,22,2025,Super Liga Srbije,Serbia
 4645,FK Radnicki 1923 Kragujevac,SER1,Serbia,Čika Dača Stadion,15100,Fedja Dudic,35,2025,Super Liga Srbije,Serbia
-465,St. Mirren FC,SC1,Scotland,The SMISA Stadium,7937,Stephen Robinson,25,2025,Scottish Premiership,Scotland
-467,NEC Nijmegen,NL1,Netherlands,Goffertstadion,12650,Dick Schreuder,25,2025,Eredivisie,Netherlands
-468,Sparta Rotterdam,NL1,Netherlands,Sparta-stadion - Het Kasteel,10599,Maurice Steijn,23,2025,Eredivisie,Netherlands
-47,Iraklis Thessaloniki,GR1,Greece,Kaftanzoglio Stadio,27770,,27,2016,Greek Super League,Greece
-472,UD Las Palmas,ES1,Spain,Estadio de Gran Canaria,32400,Luis Carrión,27,2024,LaLiga,Spain
-475,Sint-Truidense VV,BE1,Belgium,Daio Wasabi Stayen Stadium,11337,Wouter Vrancken,23,2025,Jupiler Pro League,Belgium
 4750,SC Olhanense,PO1,Portugal,Estádio José Arcanjo,10080,,10,2013,Liga Portugal,Portugal
 4795,FC Ingolstadt 04,L1,Germany,Audi Sportpark,15800,,28,2016,Bundesliga,Germany
-48332,Kolos Kovalivka,UKR1,Ukraine,Kolos,5050,Ruslan Kostyshyn,29,2025,Ukrainian Premier League,Ukraine
-48726,Rukh Lviv,UKR1,Ukraine,Arena Lviv,34725,Ivan Fedyk,10,2025,Ukrainian Premier League,Ukraine
-49283,FC Juárez,MEX1,Mexico,Estadio Olímpico Benito Juárez,22300,Martín Varini,28,2025,Liga MX,Mexico
-49364,Ingulets Petrove,UKR1,Ukraine,Stadion Ingulets,1869,Vasyl Kobin,30,2024,Ukrainian Premier League,Ukraine
 4941,Club León FC,MEX1,Mexico,Nou Camp,33943,Eduardo Berizzo,28,2025,Liga MX,Mexico
 4959,SC Otelul Galati,RO1,Romania,Oţelul,13500,Stjepan Tomas,26,2025,Superliga,Romania
-496,Malmö Fotbollförening,SE1,Sweden,Eleda Stadion,22500,,34,2025,Allsvenskan,Sweden
 4961,Querétaro FC,MEX1,Mexico,Estadio La Corregidora,34107,Benjamín Mora,25,2025,Liga MX,Mexico
-49702,FK Nizhny Novgorod,RU1,Russia,Nizhny Novgorod Stadium,44242,,29,2025,Russian Premier League,Russia
-498,KSC Lokeren (- 2020),BE1,Belgium,Daknamstadion,12000,,0,2018,Jupiler Pro League,Belgium
-499,Vitesse Arnhem,NL1,Netherlands,GelreDome,21248,,25,2023,Eredivisie,Netherlands
-5,AC Milan,IT1,Italy,Giuseppe Meazza,75923,Massimiliano Allegri,32,2025,Serie A,Italy
-501,Fotballklubben Bodø/Glimt,NO1,Norway,Aspmyra Stadion,8500,,26,2025,Eliteserien,Norway
-504,Grasshopper Club Zurich,C1,Switzerland,Stadion Letzigrund,26104,Gerald Scheiblehner,30,2025,Swiss Super League,Switzerland
-50531,Al-Fayha FC,SA1,Saudi Arabia,Al-Majma'ah Sports City,7000,,29,2025,Saudi Pro League,Saudi Arabia
-50532,Damac Football Club,SA1,Saudi Arabia,Damac Club Stadium,5000,,29,2025,Saudi Pro League,Saudi Arabia
-506,Juventus FC,IT1,Italy,Allianz Stadium,41507,Igor Tudor,29,2025,Serie A,Italy
-511,Dundee FC,SC1,Scotland,Kilmac Stadium at Dens Park,11850,Steven Pressley,19,2025,Scottish Premiership,Scotland
-512,Stoke City,GB1,England,bet365 Stadium,30089,,24,2017,Premier League,England
-51663,Atlanta United Football Club,MLS1,United States,Mercedes-Benz Stadium,73019,,26,2025,Major League Soccer,United States
-51772,Football Club Cincinnati,MLS1,United States,TQL Stadium,26000,,28,2025,Major League Soccer,United States
-51828,Los Angeles Football Club,MLS1,United States,BMO Stadium,22000,,26,2025,Major League Soccer,United States
-520,Cercle Brugge,BE1,Belgium,Jan Breydelstadion,29062,Onur Cinel,24,2025,Jupiler Pro League,Belgium
 5202,Västerås Sportklubb FK,SE1,Sweden,Hitachi Energy Arena,9100,,27,2025,Allsvenskan,Sweden
 5219,AOK Kerkyra,GR1,Greece,Ethniko Stadio Kerkyras,3000,,8,2017,Greek Super League,Greece
 5220,GS Ergotelis,GR1,Greece,Pankritio Stadio,25780,,3,2014,Greek Super League,Greece
-524,Gaziantepspor (- 2020),TR1,Türkiye,Gaziantep Stadyumu,33502,,0,2016,Süper Lig,Turkey
-527,Football Club Lausanne-Sport,C1,Switzerland,Stade de la Tuilière,12544,,27,2025,Swiss Super League,Switzerland
-53,OFK Beograd,SER1,Serbia,Omladinski stadion,19000,Simo Krunic,36,2025,Super Liga Srbije,Serbia
-533,TSG 1899 Hoffenheim,L1,Germany,PreZero Arena,30150,Christian Ilzer,36,2025,Bundesliga,Germany
 5358,SD Huesca,ES1,Spain,El Alcoraz,9128,,24,2020,LaLiga,Spain
-53646,FK Polissya Zhytomyr,UKR1,Ukraine,Tsentralnyi Polissya,5928,,31,2025,Ukrainian Premier League,Ukraine
-537,S. A. F. Botafogo,BRA1,Brazil,Estádio Olímpico Nilton Santos,46931,,34,2025,Brasileirão Série A,Brazil
-54189,RWD Molenbeek,BE1,Belgium,Edmond Machtensstadion,8090,,23,2023,Jupiler Pro League,Belgium
-543,Wolverhampton Wanderers,GB1,England,Molineux Stadium,31750,Vítor Pereira,32,2025,Premier League,England
-54585,Sepsi OSK Sf. Gheorghe,RO1,Romania,Sepsi Duna Arena,8400,Bernd Storck,31,2024,Superliga,Romania
-553,Ionikos Nikeas,GR1,Greece,Dimotiko Gipedo Neapolis,5500,,17,2022,Greek Super League,Greece
 5544,1.FC Slovacko,TS1,Czech Republic,Městský fotbalový stadion Miroslava Valenty,8000,Jan Kamenik,25,2025,Chance Liga,Czech Republic
 5545,FC Zlin,TS1,Czech Republic,Stadion Letná,5898,Bronislav Cervenka,28,2025,Chance Liga,Czech Republic
 5546,FK Mlada Boleslav,TS1,Czech Republic,Lokotrans Arena,5000,Ales Majer,28,2025,Chance Liga,Czech Republic
 5551,Newcastle United Jets,AUS1,Australia,McDonald Jones Stadium,33000,Mark Milligan,22,2025,A-League Men,Australia
-55686,TOV FK Metalist 1925 Kharkiv,UKR1,Ukraine,Tsentralnyi Polissya,5928,,31,2025,Ukrainian Premier League,Ukraine
 5572,Niki Volou,GR1,Greece,Panthessaliko Stadio,22700,,26,2014,Greek Super League,Greece
-56089,Minnesota United FC,MLS1,United States,Allianz Field,19600,,29,2025,Major League Soccer,United States
 5619,Aalesunds Fotballklubb,NO1,Norway,Color Line Stadion,10778,,26,2025,Eliteserien,Norway
-566,Beerschot AC,BE1,Belgium,Olympisch Stadion,12771,,0,2012,Jupiler Pro League,Belgium
 5662,Puebla FC,MEX1,Mexico,Estadio Cuauhtémoc,48000,Pablo Guede,28,2025,Liga MX,Mexico
 5689,Cracovia,PL1,Poland,Stadion Cracovii im. Józefa Piłsudskiego,15016,Luka Elsner,25,2025,Pko Bp Ekstraklasa,Poland
 5724,Randers FC,DK1,Denmark,Cepheus Park Randers,10300,Rasmus Bertelsen,28,2025,Danish Superliga,Denmark
 5776,FC Fredericia,DK1,Denmark,Monjasa Park,6000,Stig Pedersen,21,2025,Danish Superliga,Denmark
-58,RSC Anderlecht,BE1,Belgium,Lotto Park,21900,Besnik Hasi,27,2025,Jupiler Pro League,Belgium
-58049,FC Hermannstadt,RO1,Romania,Municipal Sibiu (2022),12363,Marius Măldărășanu,24,2025,Superliga,Romania
 5817,Sönderjyske Fodbold,DK1,Denmark,AL Sydbank Park,10021,Thomas Nørgaard,26,2025,Danish Superliga,Denmark
 5818,Hobro IK,DK1,Denmark,DS Arena,7500,,22,2019,Danish Superliga,Denmark
-583,Paris Saint-Germain,FR1,France,Parc des Princes,48583,Luis Enrique,27,2025,Ligue 1,France
-585,São Paulo Futebol Clube,BRA1,Brazil,MorumBIS,72039,,42,2025,Brasileirão Série A,Brazil
-589,Antalyaspor,TR1,Türkiye,Corendon Airlines Park Antalya Stadı,29307,Emre Belözoğlu,29,2025,Süper Lig,Turkey
-593,Kyoto Purple Sanga,JAP1,Japan,Sanga Stadium by KYOCERA,21600,,36,2025,J1 League,Japan
-59358,FK Zeleznicar Pancevo,SER1,Serbia,SC Mladost Pančevo,4000,Radomir Kokovic,37,2025,Super Liga Srbije,Serbia
-595,SC Bastia,FR1,France,Stade Armand-Cesari,16480,,25,2016,Ligue 1,France
-596,Gamba Osaka,JAP1,Japan,PANASONIC Stadium Suita,39694,,32,2025,J1 League,Japan
-599,NK Varazdin,KR1,Croatia,Gradski stadion Andelko Herjavec,10800,Nikola Safaric,31,2025,Supersport Hnl,Croatia
-6,Adanaspor,TR1,Türkiye,Yeni Adana Stadyumu,33000,,10,2016,Süper Lig,Turkey
-60,SC Freiburg,L1,Germany,Europa-Park Stadion,34700,Julian Schuster,30,2025,Bundesliga,Germany
-601,KV Kortrijk,BE1,Belgium,Guldensporenstadion,8974,Freyr Alexandersson,27,2024,Jupiler Pro League,Belgium
-603,Cardiff City,GB1,England,Cardiff City Stadium,33280,,28,2018,Premier League,England
-605,Aris Thessalonikis,GR1,Greece,"Gipedo ""Kleanthis Vikelidis""",22800,,32,2025,Greek Super League,Greece
-60551,SC Dnipro-1,UKR1,Ukraine,Dnipro-Arena,31003,,0,2023,Ukrainian Premier League,Ukraine
-607,Venezia FC,IT1,Italy,Pier Luigi Penzo,12048,Eusebio Di Francesco,29,2024,Serie A,Italy
 6070,Al-Khaleej Club (Saihat),SA1,Saudi Arabia,Prince Mohamed bin Fahd Stadium,22042,,27,2025,Saudi Pro League,Saudi Arabia
-609,Cruzeiro Esporte Clube,BRA1,Brazil,Estádio Governador Magalhães Pinto,61927,,30,2025,Brasileirão Série A,Brazil
-60949,Volou Neos Podosferikos Syllogos,GR1,Greece,Panthessaliko Stadio,22700,,29,2025,Greek Super League,Greece
-61,Servette FC,C1,Switzerland,Stade de Genève,30084,Thomas Häberli,36,2025,Swiss Super League,Switzerland
-610,Ajax Amsterdam,NL1,Netherlands,Johan Cruijff ArenA,55885,John Heitinga,26,2025,Eredivisie,Netherlands
 6107,Morski Związkowy Klub Sportowy Arka Gdynia Spółka Akcyjna,PL1,Poland,Stadion GOSiR,15139,,28,2025,Pko Bp Ekstraklasa,Poland
 6110,Korona Kielce,PL1,Poland,Exbud Arena,15700,Jacek Zieliński,30,2025,Pko Bp Ekstraklasa,Poland
 6112,Piast Gliwice,PL1,Poland,Stadion Miejski - Gliwice,9736,Max Mölder,28,2025,Pko Bp Ekstraklasa,Poland
-614,Clube de Regatas do Flamengo,BRA1,Brazil,Estádio Jornalista Mário Filho,82238,,28,2025,Brasileirão Série A,Brazil
-618,AS Saint-Étienne,FR1,France,Stade Geoffroy-Guichard,41965,Olivier Dall'Oglio,29,2024,Ligue 1,France
-61825,FC Minaj,UKR1,Ukraine,Minaj-Arena,1312,,25,2023,Ukrainian Premier League,Ukraine
 6195,SSC Napoli,IT1,Italy,Diego Armando Maradona,54726,Antonio Conte,41,2025,Serie A,Italy
-62,SK Slavia Prague,TS1,Czech Republic,Fortuna Arena,19370,Jindrich Trpisovsky,41,2025,Chance Liga,Czech Republic
-621,Athletic Bilbao,ES1,Spain,San Mamés,53289,Ernesto Valverde,32,2025,LaLiga,Spain
-623,Red Bull New York,MLS1,United States,Sports Illustrated Stadium,25000,,30,2025,Major League Soccer,United States
-626,New England Revolution,MLS1,United States,Gillette Stadium,68756,,26,2025,Major League Soccer,United States
-63007,LNZ Cherkasy,UKR1,Ukraine,Cherkasy-Arena,10321,Vitaliy Ponomaryov,29,2025,Ukrainian Premier League,Ukraine
-631,Chelsea FC,GB1,England,Stamford Bridge,41631,Enzo Maresca,38,2025,Premier League,England
 6321,Vancouver Whitecaps FC,MLS1,United States,BC Place,54500,,27,2025,Major League Soccer,United States
-63966,Nashville SC,MLS1,United States,GEODIS Park,30000,,28,2025,Major League Soccer,United States
 6399,Sandefjord Fotball,NO1,Norway,Jotun Arena,8000,,20,2025,Eliteserien,Norway
-641,Middlesbrough FC,GB1,England,Riverside Stadium,33746,,25,2016,Premier League,England
 6414,Metalist Kharkiv (- 2016),UKR1,Ukraine,OSK Metalist,38685,,0,2015,Ukrainian Premier League,Ukraine
 6418,Panetolikos Agrinio,GR1,Greece,Gipedo Panetolikou,7321,,34,2025,Greek Super League,Greece
-642,De Graafschap Doetinchem,NL1,Netherlands,"Stadion ""De Vijverberg""",12600,,30,2018,Eredivisie,Netherlands
 6429,FC Universitatea Cluj,RO1,Romania,Cluj Arena,30246,Ovidiu Sabău,40,2025,Superliga,Romania
 6456,GKS GieKSa Katowice Spółka Akcyjna,PL1,Poland,Arena Katowice,15048,,33,2025,Pko Bp Ekstraklasa,Poland
 6495,Atlético Bucaramanga,COL1,,Estadio Américo Montanini,28000,Rafael Dudamel,23,2025,Nan,
 6499,Foundation Coorperation Hana Financial Group Inc. Football Club,RSK1,"Korea, South",Daejeon World Cup Stadium,42176,,35,2025,K League 1,South Korea
-65,SpVgg Greuther Fürth,L1,Germany,Sportpark Ronhof | Thomas Sommer,16626,,28,2021,Bundesliga,Germany
 6500,Football Club Seoul,RSK1,"Korea, South",Seoul World Cup Stadium,66704,,30,2025,K League 1,South Korea
 6502,Jeonbuk Hyundai Motors,RSK1,"Korea, South",Jeonju World Cup Stadium,50000,,50,2025,K League 1,South Korea
 6504,Daegu FC,RSK1,"Korea, South",Daegu iM Bank Park,12415,Chang-hyeon Park,40,2024,K League 1,South Korea
 6505,Gimcheon Sangmu Football Club,RSK1,"Korea, South",Gimcheon Sports Complex,25000,,36,2025,K League 1,South Korea
-653,Omilos Filathlon Irakliou FC,GR1,Greece,Pankritio Stadio,25780,,31,2025,Greek Super League,Greece
 6574,US Sassuolo,IT1,Italy,Mapei Stadium - Città del Tricolore,21584,Fabio Grosso,40,2025,Serie A,Italy
-660,FC Shakhtar Donetsk,UKR1,Ukraine,Arena Lviv,34725,,34,2025,Ukrainian Premier League,Ukraine
 6600,Sport Club Internacional,BRA1,Brazil,Estádio Beira-Rio,50848,,32,2025,Brasileirão Série A,Brazil
 6621,FK Cukaricki,SER1,Serbia,Stadion Cukaricki,4070,Milan Lesnjak,36,2025,Super Liga Srbije,Serbia
 6622,FK Mladost Lucani,SER1,Serbia,SRC Mr Radoš Milovanović,5944,Mladen Dodic,36,2025,Super Liga Srbije,Serbia
@@ -649,24 +575,12 @@ club_id,name,league_id,country,stadium,stadium_seats,coach,squad_size,last_seaso
 6632,Hitachi Kashiwa Reysol,JAP1,Japan,SANKYO FRONTIER Kashiwa Stadium,15349,,39,2025,J1 League,Japan
 6643,Real Salt Lake,MLS1,United States,America First Field,20213,,35,2025,Major League Soccer,United States
 6646,Fatih Karagümrük,TR1,Türkiye,Atatürk Olimpiyat,77563,Marcel Lička,24,2025,Süper Lig,Turkey
-667,RC Strasbourg Alsace,FR1,France,Stade de la Meinau,32000,Liam Rosenior,34,2025,Ligue 1,France
 6676,A.G.S Asteras Tripolis,GR1,Greece,Gipedo Theodoros Kolokotronis,7423,,29,2025,Greek Super League,Greece
-669,FK Partizan Belgrade,SER1,Serbia,Partizan Stadium,32712,Srdjan Blagojevic,44,2025,Super Liga Srbije,Serbia
 6711,Deportivo Guadalajara,MEX1,Mexico,Estadio Akron,49580,Gabriel Milito,28,2025,Liga MX,Mexico
-672,JEF United,JAP1,Japan,Fukuda Denshi Arena,19781,,34,2025,J1 League,Japan
-677,Ipswich Town,GB1,England,Portman Road,30056,Kieran McKenna,26,2024,Premier League,England
-678,Aarhus GF,DK1,Denmark,Ceres Park Vejlby,12000,Jakob Poulsen,27,2025,Danish Superliga,Denmark
-679,Clube Atlético Paranaense,BRA1,Brazil,Estádio Mário Celso Petraglia,42372,,33,2025,Brasileirão Série A,Brazil
-681,Real Sociedad,ES1,Spain,Anoeta,40000,Sergio Francisco,28,2025,LaLiga,Spain
-683,Olympiakos Syndesmos Filathlon Peiraios,GR1,Greece,Stadio Georgios Karaiskakis,33345,,29,2025,Greek Super League,Greece
-68608,CF Os Belenenses,PO1,Portugal,Estádio do Restelo,19980,,30,2017,Liga Portugal,Portugal
-687,Molde Fotballklubb,NO1,Norway,Aker Stadion,11800,,29,2025,Eliteserien,Norway
 6890,Basaksehir FK,TR1,Türkiye,Başakşehir Fatih Terim,17067,Çağdaş Atan,45,2025,Süper Lig,Turkey
 6894,Kayseri Erciyesspor,TR1,Türkiye,Kayseri Atatürk Spor Kompleksi Yan Açık Saha,2000,,0,2014,Süper Lig,Turkey
 6912,FC Vizela,PO1,Portugal,Estádio do Vizela,6565,,27,2023,Liga Portugal,Portugal
-69261,Club Internacional de Fútbol Miami,MLS1,United States,Nu Stadium,26700,,27,2025,Major League Soccer,United States
 6954,Central Coast Mariners,AUS1,Australia,Polytec Stadium,20059,Mark Jackson,21,2025,A-League Men,Australia
-697,FC Slovan Liberec,TS1,Czech Republic,Stadion U Nisy,9900,Radoslav Kovac,34,2025,Chance Liga,Czech Republic
 6984,Once Caldas,COL1,,Estadio Palogrande,28678,Hernán Herrera,26,2025,Nan,
 6992,Chornomorets Odesa,UKR1,Ukraine,Stadion Chornomorets (2011),34164,Oleksandr Babych,28,2024,Ukrainian Premier League,Ukraine
 6993,FK Mariupol,UKR1,Ukraine,Stadion im. Volodymyra Boyko,12680,,0,2021,Ukrainian Premier League,Ukraine
@@ -674,124 +588,210 @@ club_id,name,league_id,country,stadium,stadium_seats,coach,squad_size,last_seaso
 6996,Goverla Uzhgorod (- 2016),UKR1,Ukraine,Avangard,10640,,0,2015,Ukrainian Premier League,Ukraine
 7006,Melbourne Victory,AUS1,Australia,AAMI Park,30050,Arthur Diles,25,2025,A-League Men,Australia
 7009,Göteborgs Atlet- och Idrottssällskap,SE1,Sweden,Gamla Ullevi,18454,,31,2025,Allsvenskan,Sweden
-703,Nottingham Forest,GB1,England,The City Ground,30404,Nuno Espírito Santo,27,2025,Premier League,England
 7055,Tigres UANL,MEX1,Mexico,Estadio Universitario,41886,Guido Pizarro,24,2025,Liga MX,Mexico
 7097,Club Atlético Unión,ARG1,Argentina,15 de Abril,27358,,22,2025,Argentine Primera División,Argentina
-71084,Western United FC,AUS1,Australia,Ironbark Fields,5000,John Aloisi,0,2024,A-League Men,Australia
-71085,Macarthur FC,AUS1,Australia,Campbelltown Stadium,20000,Mile Sterjovski,21,2025,A-League Men,Australia
 7136,Envigado FC,COL1,,Estadio Polideportivo Sur,14000,Alexis Márquez,27,2025,Nan,
-714,RCD Espanyol Barcelona,ES1,Spain,RCDE Stadium,37776,Manolo González,28,2025,LaLiga,Spain
-715,"Bohemians Praha 1905, a.s.",TS1,Czech Republic,Ďolíček,6300,,27,2025,Chance Liga,Czech Republic
 7154,Radomiak Radom,PL1,Poland,Stadion im. Braci Czachorów,14440,João Henriques,27,2025,Pko Bp Ekstraklasa,Poland
 7160,Eyüpspor,TR1,Türkiye,Recep Tayyip Erdoğan Stadyumu,13797,Selçuk Şahin,22,2025,Süper Lig,Turkey
-71665,Al-Okhdood Club,SA1,Saudi Arabia,Prince Hathloul bin Abdulaziz Sports City Stadium,12000,,27,2025,Saudi Pro League,Saudi Arabia
 7179,CD Tondela,PO1,Portugal,Estádio João Cardoso,5000,Ivo Vieira,24,2025,Liga Portugal,Portugal
 7185,Panthrakikos Komotini,GR1,Greece,Stadio Komotinis OPAP,5601,,29,2015,Greek Super League,Greece
-71985,Akron Togliatti,RU1,Russia,Samara-Arena,44918,,24,2025,Russian Premier League,Russia
-720,FC Porto,PO1,Portugal,Estádio do Dragão,50033,Francesco Farioli,29,2025,Liga Portugal,Portugal
-723,Almere City FC,NL1,Netherlands,Yanmar Stadion,4501,Hedwiges Maduro,27,2024,Eredivisie,Netherlands
-72309,Austin FC,MLS1,United States,Q2 Stadium,20738,,25,2025,Major League Soccer,United States
-724,FC Volendam,NL1,Netherlands,Kras Stadion,6800,Rick Kruys,25,2025,Eredivisie,Netherlands
 7378,Portimonense SC,PO1,Portugal,Estádio Municipal de Portimão,4961,,35,2023,Liga Portugal,Portugal
-738,Le Havre AC,FR1,France,Stade Océane,25178,Didier Digard,20,2025,Ligue 1,France
-749,FC Empoli,IT1,Italy,Carlo Castellani,19847,Roberto D'Aversa,33,2024,Serie A,Italy
-750,FC Sochaux-Montbéliard,FR1,France,Stade Auguste-Bonal,20005,,29,2013,Ligue 1,France
-75231,Dinamo Makhachkala,RU1,Russia,Anzhi-Arena,24173,,26,2025,Russian Premier League,Russia
 7567,FK Radnicki Nis,SER1,Serbia,Stadion Čair,18151,Slavko Matic,34,2025,Super Liga Srbije,Serbia
-759,Slask Wroclaw,PL1,Poland,Tarczyński Arena Wrocław,42771,Jacek Magiera,31,2024,Pko Bp Ekstraklasa,Poland
-76,Vålerengens Idrettsforening,NO1,Norway,Intility Arena,16556,,26,2025,Eliteserien,Norway
-762,Newcastle United,GB1,England,St James' Park,52258,Eddie Howe,25,2025,Premier League,England
 7633,UNAM Pumas,MEX1,Mexico,Estadio Olímpico Universitario,62700,Efraín Juárez,28,2025,Liga MX,Mexico
 7732,Al-Ettifaq Football Club,SA1,Saudi Arabia,EGO Stadium,15000,,27,2025,Saudi Pro League,Saudi Arabia
-776,Coritiba Foot Ball Club,BRA1,Brazil,Estádio Major Antônio Couto Pereira,40502,,32,2025,Brasileirão Série A,Brazil
 7769,CFR Cluj,RO1,Romania,Dr. Constantin Rădulescu,22198,Dan Petrescu,43,2025,Superliga,Romania
 7775,Hatayspor,TR1,Türkiye,Sarıseki Fuat Tosyalı Spor Kompleksi,9800,Özhan Pulat,34,2024,Süper Lig,Turkey
 7831,Brisbane Roar,AUS1,Australia,Suncorp Stadium,52500,Michael Valkanis,19,2025,A-League Men,Australia
-78435,Charlotte Football Club,MLS1,United States,Bank of America Stadium,75412,,29,2025,Major League Soccer,United States
-788,FK Napredak Krusevac,SER1,Serbia,Stadion Mladost,10331,Milan Nikolic,32,2025,Super Liga Srbije,Serbia
-79,VfB Stuttgart,L1,Germany,MHPArena Stuttgart,60449,Sebastian Hoeneß,33,2025,Bundesliga,Germany
 7945,IK Sirius,SE1,Sweden,Studenternas,11167,,25,2025,Allsvenskan,Sweden
-798,Excelsior Rotterdam,NL1,Netherlands,"Stadion ""Woudestein""",4400,Ruben den Uil,21,2025,Eredivisie,Netherlands
-80,VfL Bochum,L1,Germany,Vonovia Ruhrstadion,26000,Peter Zeidler,29,2024,Bundesliga,Germany
-800,Atalanta BC,IT1,Italy,New Balance Arena - Bergamo,24950,Ivan Jurić,31,2025,Serie A,Italy
-801,Idrottsföreningen Kamraterna Göteborg,SE1,Sweden,Gamla Ullevi,18454,,25,2025,Allsvenskan,Sweden
 8023,Al-Ittihad Football Club,SA1,Saudi Arabia,King Abdullah Sports City,62345,,33,2025,Saudi Pro League,Saudi Arabia
 8024,FC Arouca,PO1,Portugal,Estádio Municipal de Arouca,5000,Vasco Seabra,28,2025,Liga Portugal,Portugal
 8054,Sydney FC,AUS1,Australia,Allianz Stadium Sydney,45500,Ufuk Talay,27,2025,A-League Men,Australia
-813,Columbus Crew,MLS1,United States,ScottsMiracle-Gro Field,20011,,29,2025,Major League Soccer,United States
-814,FK Teplice,TS1,Czech Republic,Aréna Na Stínadlech,17078,Zdenko Frtala,32,2025,Chance Liga,Czech Republic
-81401,SC Poltava,UKR1,Ukraine,Vorskla Butovsky Stadion,24600,Volodymyr Sysenko,17,2025,Ukrainian Premier League,Ukraine
 8172,Atlético Nacional,COL1,,Estadio Atanasio Girardot,45943,Pablo Repetto,24,2025,Nan,
-82,VfL Wolfsburg,L1,Germany,Volkswagen Arena,28917,Paul Simonis,39,2025,Bundesliga,Germany
-820,Gençlerbirliği Spor Kulübü,TR1,Türkiye,Eryaman Stadyumu,20000,,33,2025,Süper Lig,Turkey
-825,Eskisehirspor,TR1,Türkiye,Eskişehir Yeni Stadyum,34930,,41,2015,Süper Lig,Turkey
-826,RC Lens,FR1,France,Stade Bollaert-Delelis,38223,Pierre Sage,30,2025,Ligue 1,France
-82686,St. Louis City Soccer Club,MLS1,United States,Energizer Park,22500,,26,2025,Major League Soccer,United States
-82696,Mazatlán FC,MEX1,Mexico,Estadio de Mazatlán,25000,Robert Siboldi,22,2025,Liga MX,Mexico
-828,Urawa Red Diamonds,JAP1,Japan,Saitama Stadium 2002,63700,,29,2025,J1 League,Japan
-830,Club Atlético Banfield,ARG1,Argentina,Florencio Sola,34901,,28,2025,Argentine Primera División,Argentina
-833,Denizlispor,TR1,Türkiye,Denizli Atatürk Stadı,18745,,27,2020,Süper Lig,Turkey
 8344,Albirex Niigata,JAP1,Japan,Denka Big Swan Stadium,42300,Rikizo Matsuhashi,32,2024,J1 League,Japan
-83678,Metalist Kharkiv,UKR1,Ukraine,Avangard,10640,,25,2022,Ukrainian Premier League,Ukraine
-84122,Epicentr Kamyanets-Podilskyi,UKR1,Ukraine,Stadion im. G. Tonkocheyeva,2587,Sergiy Nagornyak,26,2025,Ukrainian Premier League,Ukraine
 8445,Wellington Phoenix,AUS1,Australia,Hnry Stadium,36000,Giancarlo Italiano,18,2025,A-League Men,Australia
 8457,Shonan Bellmare,JAP1,Japan,Lemongas Stadium Hiratsuka,15690,Satoshi Yamaguchi,34,2024,J1 League,Japan
-85465,Karpaty Lviv,UKR1,Ukraine,Ukraina,28051,Fran Fernández,27,2025,Ukrainian Premier League,Ukraine
-855,EA Guingamp,FR1,France,Stade du Roudourou,18120,,27,2018,Ligue 1,France
 8590,Atlas Guadalajara,MEX1,Mexico,Estadio Jalisco,56713,Gonzalo Pineda,26,2025,Liga MX,Mexico
-86,SV Werder Bremen,L1,Germany,Weserstadion,41800,Horst Steffen,31,2025,Bundesliga,Germany
-862,Chievo Verona,IT1,Italy,Marcantonio Bentegodi,31045,,0,2018,Serie A,Italy
-86209,Livyi Bereg Kyiv,UKR1,Ukraine,Arena Livyi Bereg,4700,Vitaliy Pervak,30,2024,Ukrainian Premier League,Ukraine
-865,FC Midtjylland,DK1,Denmark,MCH Arena,12055,Thomas Thomasberg,32,2025,Danish Superliga,Denmark
-868,MKE Ankaragücü,TR1,Türkiye,Eryaman Stadyumu,20672,,34,2023,Süper Lig,Turkey
 8718,Sport Club do Recife,BRA1,Brazil,Estádio Adelmar da Costa Carvalho,35000,Mariano Soso,29,2024,Brasileirão Série A,Brazil
-873,Crystal Palace,GB1,England,Selhurst Park,25486,Oliver Glasner,31,2025,Premier League,England
-875,Adelaide United,AUS1,Australia,Coopers Stadium,16500,Airton Andrioli,29,2025,A-League Men,Australia
-87883,FC Kudrivka,UKR1,Ukraine,Stadion Avangard (2022),7122,Vasyl Baranov,24,2025,Ukrainian Premier League,Ukraine
 8793,Red Bull Bragantino,BRA1,Brazil,Estádio Municipal Cicero De Souza Marques,12000,,39,2025,Brasileirão Série A,Brazil
-88,Widzew Lodz,PL1,Poland,Stadion Widzewa,18018,Zeljko Sopic,30,2025,Pko Bp Ekstraklasa,Poland
 8816,FC Dallas,MLS1,United States,Toyota Stadium,20500,,35,2025,Major League Soccer,United States
 8818,FC Botosani,RO1,Romania,Municipal Botoșani,7782,Leontin Grozavu,30,2025,Superliga,Romania
 8819,FK Javor-Matis Ivanjica,SER1,Serbia,Stadion kraj Moravice,3000,Radovan Curcic,30,2025,Super Liga Srbije,Serbia
 8838,Zirka Kropyvnytskyi,UKR1,Ukraine,Zirka,14628,,7,2017,Ukrainian Premier League,Ukraine
-89,1.FC Union Berlin,L1,Germany,Stadion An der Alten Försterei,22012,Steffen Baumgart,31,2025,Bundesliga,Germany
-897,Deportivo de La Coruña,ES1,Spain,Abanca Riazor,32912,,24,2017,LaLiga,Spain
 8970,Frosinone Calcio,IT1,Italy,Benito Stirpe,16227,,31,2023,Serie A,Italy
 9007,Arsenal Kyiv,UKR1,Ukraine,NSK Olimpisky,70050,,0,2018,Ukrainian Premier League,Ukraine
 9010,FCV Dender EH,BE1,Belgium,Dender Football Complex,8548,Vincent Euvrard,20,2025,Jupiler Pro League,Belgium
-903,Hibernian FC,SC1,Scotland,Easter Road Stadium,20250,David Gray,27,2025,Scottish Premiership,Scotland
 9131,Al-Hazem Sport Club,SA1,Saudi Arabia,Al-Hazem Club Stadium,8000,,28,2025,Saudi Pro League,Saudi Arabia
-91427,Al-Kholood Club,SA1,Saudi Arabia,Al-Hazem Club Stadium,8000,,28,2025,Saudi Pro League,Saudi Arabia
 9168,Houston Dynamo,MLS1,United States,Shell Energy Stadium,22039,,27,2025,Major League Soccer,United States
-924,Istanbulspor,TR1,Türkiye,Esenyurt Necmi Kadıoğlu Stadyumu,4274,,32,2023,Süper Lig,Turkey
-928,Club Atlético Platense,ARG1,Argentina,Ciudad de Vicente López,28530,,32,2025,Argentine Primera División,Argentina
-931,Fulham FC,GB1,England,Craven Cottage,29589,Marco Silva,22,2025,Premier League,England
-932,"Футбольный клуб ""Локомотив"" Москва",RU1,Russia,RZD Arena,27084,,28,2025,Russian Premier League,Russia
-938,FC Thun,C1,Switzerland,Visana Stadion,10014,Mauro Lustrinelli,25,2025,Swiss Super League,Switzerland
-940,Celta de Vigo,ES1,Spain,Abanca Balaídos,22803,Claudio Giráldez,29,2025,LaLiga,Spain
-941,FC Viktoria Plzen,TS1,Czech Republic,Doosan Aréna,11700,Miroslav Koubek,31,2025,Chance Liga,Czech Republic
-943,Yokohama FC,JAP1,Japan,NHK Spring Mitsuzawa Stadium,15454,Shuhei Yomoda,29,2024,J1 League,Japan
 9465,Petrolul Ploiesti,RO1,Romania,Ilie Oană (2011),15073,Liviu Ciobotariu,32,2025,Superliga,Romania
-952,UTA Arad,RO1,Romania,Francisc von Neumann (2020),12584,Dorin Stana,36,2025,Superliga,Romania
 9597,Avispa Fukuoka,JAP1,Japan,Best Denki Stadium,21562,,38,2025,J1 League,Japan
 9598,Kawasaki Frontale,JAP1,Japan,Uvance Todoroki Stadium by Fujitsu,27495,,33,2025,J1 League,Japan
 9636,Seattle Sounders FC,MLS1,United States,Lumen Field,68740,,28,2025,Major League Soccer,United States
-964,AO FK Zenit Sankt-Peterburg,RU1,Russia,Gazprom Arena,63026,,27,2025,Russian Premier League,Russia
 9644,Raków Częstochowa,PL1,Poland,zondacrypto Arena,5500,Marek Papszun,29,2025,Pko Bp Ekstraklasa,Poland
-968,KVC Westerlo,BE1,Belgium,Het Kuipje,9062,Issame Charaï,19,2025,Jupiler Pro League,Belgium
-969,Montpellier HSC,FR1,France,Stade de la Mosson,22000,Michel Der Zakarian,23,2024,Ligue 1,France
-970,Perth Glory,AUS1,Australia,HBF Park,20500,David Zdrilic,27,2025,A-League Men,Australia
-976,CF União Madeira (-2021),PO1,Portugal,Centro Desportivo da Madeira,2500,,0,2015,Liga Portugal,Portugal
-978,Club de Regatas Vasco da Gama,BRA1,Brazil,Estádio São Januário,24584,,32,2025,Brasileirão Série A,Brazil
-979,Moreirense FC,PO1,Portugal,Estádio C. J. de Almeida Freitas,6150,António da Costa,24,2025,Liga Portugal,Portugal
 9811,Deportivo Pereira,COL1,,Santiago de las Atalayas,0,Luis Fernando Suárez,24,2025,Nan,
-982,CD Nacional,PO1,Portugal,Estádio da Madeira,5200,Tiago Margarido,28,2025,Liga Portugal,Portugal
-984,West Bromwich Albion,GB1,England,The Hawthorns,26850,,25,2020,Premier League,England
 9840,Al-Shabab Club,SA1,Saudi Arabia,SHG Arena,15000,,31,2025,Saudi Pro League,Saudi Arabia
-985,Manchester United,GB1,England,Old Trafford,74879,Rúben Amorim,32,2025,Premier League,England
-987,Motherwell FC,SC1,Scotland,Fir Park,13677,Jens Berthel Askou,23,2025,Scottish Premiership,Scotland
-989,AFC Bournemouth,GB1,England,Vitality Stadium,11307,Andoni Iraola,30,2025,Premier League,England
-993,Córdoba CF,ES1,Spain,Nuevo Arcángel,21822,,24,2014,LaLiga,Spain
-995,FC Nantes,FR1,France,Stade de la Beaujoire,35322,Luís Castro,26,2025,Ligue 1,France
 9961,Deportivo Cali,COL1,,Estadio Deportivo Cali,52000,Hernán Torres,28,2025,Nan,
-999,NK Istra 1961,KR1,Croatia,Aldo Drosina,9056,Goran Tomic,32,2025,Supersport Hnl,Croatia
+10004,Paris FC,FR1,France,Stade Jean Bouin,19904,Stéphane Gilli,27,2025,Ligue 1,France
+10010,Esporte Clube Bahia,BRA1,Brazil,Arena Fonte Nova,47364,,32,2025,Brasileirão Série A,Brazil
+10090,Asociación Deportivo Pasto,COL1,,Estadio Departamental Libertad,20000,Gustavo Florentín,26,2025,Nan,
+10093,Independiente Medellín,COL1,,Estadio Atanasio Girardot,45943,Alfredo Arias,26,2025,Nan,
+10217,Sarpsborg 08 Fotballforening,NO1,Norway,Sarpsborg Stadion,8022,,25,2025,Eliteserien,Norway
+10484,Kasimpasa,TR1,Türkiye,Recep Tayyip Erdoğan Stadyumu,13797,Shota Arveladze,37,2025,Süper Lig,Turkey
+10492,Esporte Clube Juventude,BRA1,Brazil,Estádio Alfredo Jaconi,23726,Roger Machado,29,2024,Brasileirão Série A,Brazil
+10503,Deportes Tolima,COL1,,Estadio Manuel Murillo Toro,28100,David González,25,2025,Nan,
+10511,CA San Martín (San Juan),ARG1,Argentina,Ingeniero Hilario Sánchez,26500,Leandro Romagnoli,30,2024,Argentine Primera División,Argentina
+10690,Zorya Lugansk,UKR1,Ukraine,Valeriy Lobanovsky Stadion,16873,Viktor Skrypnyk,23,2025,Ukrainian Premier League,Ukraine
+10870,Fortaleza Esporte Clube,BRA1,Brazil,Estádio Governador Plácido Castelo,63904,Juan Pablo Vojvoda,29,2024,Brasileirão Série A,Brazil
+10997,Clube do Remo,BRA1,Brazil,Estádio Evandro Almeida,13792,,37,2025,Brasileirão Série A,Brazil
+11126,Mordovia Saransk (-2020),RU1,Russia,Mordovia Arena,44442,,0,2015,Russian Premier League,Russia
+11127,Ural Yekaterinburg,RU1,Russia,Yekaterinburg Arena,23000,,30,2023,Russian Premier League,Russia
+11141,Toronto FC,MLS1,United States,BMO Field,30991,,27,2025,Major League Soccer,United States
+11194,NK Lokomotiva Zagreb,KR1,Croatia,Kranjceviceva,8850,Nikica Jelavic,47,2025,Supersport Hnl,Croatia
+11282,Alanyaspor,TR1,Türkiye,Alanya Oba Stadyumu,9727,João Pereira,28,2025,Süper Lig,Turkey
+11380,ASFC Buzau (2016-2025),RO1,Romania,Gloria,12336,Andrei Prepeliță,0,2024,Superliga,Romania
+11648,Independiente Santa Fe,COL1,,Estadio Nemesio Camacho (El Campín),36343,Pablo Peirano,26,2025,Nan,
+11688,Giresunspor,TR1,Türkiye,Çotanak Spor Kompleksi,21500,,17,2022,Süper Lig,Turkey
+11831,Club Atlético Tigre,ARG1,Argentina,José Dellagiovanna,26282,,30,2025,Argentine Primera División,Argentina
+11854,Junior FC,COL1,,Metropolitano Roberto Meléndez,46692,Arturo Reyes,26,2025,Nan,
+12179,Club Sportivo Independiente Rivadavia,ARG1,Argentina,Bautista Gargantini,24000,,28,2025,Argentine Primera División,Argentina
+12301,Club Atlético Aldosivi,ARG1,Argentina,José María Minella,35180,,33,2025,Argentine Primera División,Argentina
+12321,Girona FC,ES1,Spain,Montilivi,14624,Míchel,25,2025,LaLiga,Spain
+12438,Volga Nizhniy Novgorod (- 2016),RU1,Russia,Zentralstadion Lokomotiv,17856,,0,2013,Russian Premier League,Russia
+12454,Club Atlético Sarmiento,ARG1,Argentina,Eva Perón,23156,,30,2025,Argentine Primera División,Argentina
+12574,CD Godoy Cruz Antonio Tomba,ARG1,Argentina,Feliciano Gambarte,23000,Daniel Oldrá,31,2024,Argentine Primera División,Argentina
+13353,Club Tijuana,MEX1,Mexico,Estadio Caliente,29333,Sebastián Abreu,24,2025,Liga MX,Mexico
+13726,MFK Karvina,TS1,Czech Republic,Městský stadion,4833,Marek Jarolim,21,2025,Chance Liga,Czech Republic
+14171,Thonon Évian Grand Genève FC,FR1,France,Stade Camille Fournier,2500,,27,2014,Ligue 1,France
+14554,Club Atlético Tucumán,ARG1,Argentina,Monumental José Fierro,35200,,30,2025,Argentine Primera División,Argentina
+14589,FC Orenburg,RU1,Russia,Gazovik,10046,,31,2025,Russian Premier League,Russia
+14602,Asociación Atlética Estudiantes,ARG1,Argentina,Antonio Candini,12000,,32,2025,Argentine Primera División,Argentina
+14649,Boyacá Chicó FC,COL1,,Estadio de la Independencia,20630,Jhon Jaime Gómez,29,2025,Nan,
+14680,Unión Magdalena,COL1,,Estadio Sierra Nevada (Santa Marta),16126,Álvaro Hernández,26,2025,Nan,
+14687,Club Atlético Gimnasia y Esgrima de Mendoza,ARG1,Argentina,Víctor Antonio Legrotaglie,14000,,30,2025,Argentine Primera División,Argentina
+15276,FK Spartak Subotica,SER1,Serbia,Gradski stadion Subotica,13020,Dusan Djordjevic,31,2025,Super Liga Srbije,Serbia
+15906,Termalica Bruk-Bet Nieciecza Klub Sportowy,PL1,Poland,Stadion Bruk-Bet,4653,,27,2025,Pko Bp Ekstraklasa,Poland
+16239,Desna Chernigiv,UKR1,Ukraine,Stadion im. Yuriya Gagarina,12060,,0,2021,Ukrainian Premier League,Ukraine
+16245,FK Sevastopol (- 2014),UKR1,Ukraine,SK Sevastopol,5826,,0,2013,Ukrainian Premier League,Ukraine
+16247,PFK Stal Kamyanske (-2018),UKR1,Ukraine,Obolon,5100,,0,2017,Ukrainian Premier League,Ukraine
+16704,FK Krasnodar,RU1,Russia,OZON Arena,35179,,29,2025,Russian Premier League,Russia
+16795,Granada CF,ES1,Spain,Nuevo Los Cármenes,19336,,24,2023,LaLiga,Spain
+17209,Al-Wehda FC,SA1,Saudi Arabia,King Abdul Aziz Stadium,38000,Josef Zinnbauer,28,2024,Saudi Pro League,Saudi Arabia
+17425,Internacional de Bogotá,COL1,,Estadio Metropolitano de Techo,8000,Juan Mahecha,24,2025,Nan,
+17776,Associação Chapecoense de Futebol,BRA1,Brazil,Arena Condá,22600,,34,2025,Brasileirão Série A,Brazil
+18105,PFK Lviv,UKR1,Ukraine,Stadion SKIF,3742,,3,2022,Ukrainian Premier League,Ukraine
+18303,FC Oleksandriya,UKR1,Ukraine,KSK Nika,7000,Kyrylo Nesterenko,30,2025,Ukrainian Premier League,Ukraine
+18487,Al-Ahli Saudi Football Club,SA1,Saudi Arabia,King Abdullah Sports City,62345,,26,2025,Saudi Pro League,Saudi Arabia
+18544,Al-Nassr Football Club,SA1,Saudi Arabia,Al-Awwal Park,25000,,27,2025,Saudi Pro League,Saudi Arabia
+19657,Vendsyssel FF,DK1,Denmark,Nord Energi Arena,10000,,24,2018,Danish Superliga,Denmark
+19684,Jeju SK Football Club,RSK1,"Korea, South",Jeju World Cup Stadium,29791,,32,2025,K League 1,South Korea
+19771,Akhisarspor,TR1,Türkiye,Spor Toto Akhisar Stadyumu,12139,,14,2018,Süper Lig,Turkey
+19775,Asociación de Fomento Deportivo Riestra Barrio Colón,ARG1,Argentina,Guillermo Laza,10000,,33,2025,Argentine Primera División,Argentina
+19789,Yeni Malatyaspor,TR1,Türkiye,Yeni Malatya Stadyumu,25745,,10,2021,Süper Lig,Turkey
+20100,FC Vestsjaelland,DK1,Denmark,Harboe Arena,10000,,0,2014,Danish Superliga,Denmark
+20590,Rionegro Águilas,COL1,,Estadio Cincuentenario,4000,José Luis García,25,2025,Nan,
+20698,Balikesirspor,TR1,Türkiye,Balıkesir Atatürk,15800,,22,2014,Süper Lig,Turkey
+20887,FK Jedinstvo Ub,SER1,Serbia,Stadion Dragan Dzajic,4000,Ivan Radovanovic,29,2024,Super Liga Srbije,Serbia
+21101,Kristiansund Ballklubb,NO1,Norway,Nordmøre stadion,4444,,25,2025,Eliteserien,Norway
+21459,Gangwon Football Club,RSK1,"Korea, South",Gangneung High1 Arena,21416,,44,2025,K League 1,South Korea
+21957,AO Platanias,GR1,Greece,Dimotiko Gipedo Perivolia,3700,,0,2017,Greek Super League,Greece
+21975,Football Club Mito HollyHock,JAP1,Japan,K's denki Stadium Mito,12000,,34,2025,J1 League,Japan
+22110,FC Helsingör,DK1,Denmark,Helsingør Ny Stadion,4000,,23,2017,Danish Superliga,Denmark
+22171,Fagiano Okayama Sports Club,JAP1,Japan,JFE Hare no Kuni Stadium,20000,,32,2025,J1 League,Japan
+22381,Al-Raed SFC,SA1,Saudi Arabia,Al-Raed Club Stadium,5000,Odair Hellmann,22,2024,Saudi Pro League,Saudi Arabia
+22431,Stal Mielec,PL1,Poland,Stadion Miejski imienia Grzegorza Lato w Mielcu,6864,Kamil Kieres,26,2024,Pko Bp Ekstraklasa,Poland
+22902,Alianza FC,COL1,,Estadio Armando Maestre Pavajeau,11500,Hubert Bodhert,28,2025,Nan,
+23184,KFUM-Kameratene Oslo,NO1,Norway,KFUM Arena,3300,,27,2025,Eliteserien,Norway
+23568,Zelvia,JAP1,Japan,Machida GION Stadium,15320,,26,2025,J1 League,Japan
+23581,V-Varen Nagasaki,JAP1,Japan,Peace Stadium connected by SoftBank,20027,,34,2025,J1 League,Japan
+23611,Olimpik Donetsk,UKR1,Ukraine,NTK im. B. M. Bannikova,1678,,0,2020,Ukrainian Premier League,Ukraine
+23826,RB Leipzig,L1,Germany,Red Bull Arena,47069,Ole Werner,33,2025,Bundesliga,Germany
+24245,Ümraniyespor,TR1,Türkiye,Ümraniye Belediyesi Şehir Stadı,3513,,12,2022,Süper Lig,Turkey
+24575,HNK Gorica,KR1,Croatia,SRC Velika Gorica,5050,Mario Carevic,35,2025,Supersport Hnl,Croatia
+25184,Club Atlético Barracas Central,ARG1,Argentina,Claudio Chiqui Tapia,18000,,29,2025,Argentine Primera División,Argentina
+25467,Philadelphia Union,MLS1,United States,Subaru Park,18500,,29,2025,Major League Soccer,United States
+25580,Melbourne City FC,AUS1,Australia,AAMI Park,30050,Aurelio Vidmar,26,2025,A-League Men,Australia
+26069,Al-Qadsiah Saudi Football Club,SA1,Saudi Arabia,Prince Mohamed bin Fahd Stadium,26000,,24,2025,Saudi Pro League,Saudi Arabia
+26459,NK Veres Rivne,UKR1,Ukraine,Stadion Avangard (2022),7122,Oleg Shandruk,21,2025,Ukrainian Premier League,Ukraine
+27221,Al-Fateh Club,SA1,Saudi Arabia,Al-Fateh Club Stadium,11000,,32,2025,Saudi Pro League,Saudi Arabia
+28095,FK Ufa,RU1,Russia,Neftyanik,15132,,26,2021,Russian Premier League,Russia
+28643,SK Beveren,BE1,Belgium,Freethielstadion,13290,,27,2020,Jupiler Pro League,Belgium
+28760,SK Austria Klagenfurt,A1,Austria,Wörtherseestadion,32000,Peter Pacult,24,2024,Austrian Bundesliga,Austria
+28844,Al-Taawoun Football Club,SA1,Saudi Arabia,Al-Taawoun Club Stadium,5961,,28,2025,Saudi Pro League,Saudi Arabia
+28893,Puszcza Niepolomice,PL1,Poland,Stadion Miejski w Niepołomicach,2500,Tomasz Tulacz,22,2024,Pko Bp Ekstraklasa,Poland
+28956,AEL Kalloni,GR1,Greece,Stadio Mytilinis,4000,,0,2015,Greek Super League,Greece
+29228,Royal Excel Mouscron (-2022),BE1,Belgium,Le Canonnier,10830,,0,2020,Jupiler Pro League,Belgium
+29700,AFC Unirea 04 Slobozia,RO1,Romania,1 Mai,6000,Andrei Prepeliță,23,2025,Superliga,Romania
+29831,FCV Farul Constanta,RO1,Romania,Central - Complex Gheorghe Hagi,4554,Ianis Zicu,42,2025,Superliga,Romania
+30120,Athlitiki Enosi Kifisias,GR1,Greece,Gipedo Neapolis,4999,,35,2025,Greek Super League,Greece
+30925,Gwangju Football Club,RSK1,"Korea, South",Gwangju World Cup Stadium,39655,,37,2025,K League 1,South Korea
+31008,Al-Riyadh Saudi Club,SA1,Saudi Arabia,Prince Turki bin Abdul Aziz Stadium,15000,,28,2025,Saudi Pro League,Saudi Arabia
+31284,Club Atlético Central Córdoba,ARG1,Argentina,Único Madre de Ciudades,30000,,27,2025,Argentine Primera División,Argentina
+31622,Suwon FC,RSK1,"Korea, South",Suwon Sports Complex,11808,Eun-joong Kim,38,2024,K League 1,South Korea
+32041,Fortaleza CEIF,COL1,,Parque Estadio Olaya Herrera,2500,Sebastián Oliveros,27,2025,Nan,
+32113,FK IMT Belgrad,SER1,Serbia,Stadion Lagator,8500,Zoran Vasiljevic,36,2025,Super Liga Srbije,Serbia
+32328,Al-Najma Sport Club,SA1,Saudi Arabia,Department of Education Stadium,10000,,29,2025,Saudi Pro League,Saudi Arabia
+33328,FK Radnik Surdulica,SER1,Serbia,Gradski stadion Surdulica,3312,Marko Jaksic,29,2025,Super Liga Srbije,Serbia
+33966,ACSM Politehnica Iasi,RO1,Romania,Emil Alexandrescu,11481,Tony,24,2024,Superliga,Romania
+34911,Neom Sports Club,SA1,Saudi Arabia,King Khalid Sport City Stadium,12000,,29,2025,Saudi Pro League,Saudi Arabia
+35759,Bucheon Football Club 1995,RSK1,"Korea, South",Bucheon Sports Complex,35000,,36,2025,K League 1,South Korea
+36100,Western Sydney Wanderers,AUS1,Australia,CommBank Stadium,30000,Alen Stajcic,28,2025,A-League Men,Australia
+36922,FK Tekstilac Odzaci,SER1,Serbia,Gradski stadion Odžaci,1500,Branko Mirjacic,32,2024,Super Liga Srbije,Serbia
+37255,FK Csikszereda Miercurea Ciuc,RO1,Romania,Municipal Miercurea Ciuc,2480,Robert Ilyes,29,2025,Superliga,Romania
+37624,FC Metaloglobus Bucharest,RO1,Romania,Clinceni Arena,4500,Mihai Teja,20,2025,Superliga,Romania
+38628,Llaneros FC,COL1,,Estadio Bello Horizonte,15000,Martín Cardetti,26,2025,Nan,
+38898,Football Club Anyang,RSK1,"Korea, South",Anyang Sports Complex Stadium,25000,,36,2025,K League 1,South Korea
+39097,Obolon Kyiv,UKR1,Ukraine,Obolon-Arena,5103,Oleksandr Antonenko,24,2025,Ukrainian Premier League,Ukraine
+39536,Al-Orobah FC,SA1,Saudi Arabia,Al-Orobah Club Stadium,3000,Álvaro Pacheco,25,2024,Saudi Pro League,Saudi Arabia
+39722,Erzurumspor FK,TR1,Türkiye,Erzurum Kazım Karabekir,23700,,28,2020,Süper Lig,Turkey
+40058,New York City Football Club,MLS1,United States,Yankee Stadium,30321,,33,2025,Major League Soccer,United States
+40188,Atlético de San Luis,MEX1,Mexico,Estadio Alfonso Lastras Ramírez,27029,Guillermo Abascal,29,2025,Liga MX,Mexico
+40426,FC Tosno (-2018),RU1,Russia,Petrovsky,20985,,0,2017,Russian Premier League,Russia
+40812,Universitatea Craiova,RO1,Romania,Ion Oblemenco (2017),30983,Mirel Rădoi,33,2025,Superliga,Romania
+41201,PFK Tambov (-2021),RU1,Russia,Mordovia Arena,44149,,0,2020,Russian Premier League,Russia
+41231,FK Sochi,RU1,Russia,Fisht Olympic Stadium,45994,,28,2025,Russian Premier League,Russia
+41274,Beerschot VA,BE1,Belgium,Olympisch Stadion,12771,Dirk Kuyt,32,2024,Jupiler Pro League,Belgium
+41278,ACSC FC Arges,RO1,Romania,Orășenesc Mioveni,10000,Bogdan Andone,29,2025,Superliga,Romania
+44006,Bodrum FK,TR1,Türkiye,Bodrum İlçe Stadyumu,4243,İsmet Taşdemir,31,2024,Süper Lig,Turkey
+45604,Orlando City Soccer Club,MLS1,United States,Inter&Co Stadium,25500,,26,2025,Major League Soccer,United States
+48332,Kolos Kovalivka,UKR1,Ukraine,Kolos,5050,Ruslan Kostyshyn,29,2025,Ukrainian Premier League,Ukraine
+48726,Rukh Lviv,UKR1,Ukraine,Arena Lviv,34725,Ivan Fedyk,10,2025,Ukrainian Premier League,Ukraine
+49283,FC Juárez,MEX1,Mexico,Estadio Olímpico Benito Juárez,22300,Martín Varini,28,2025,Liga MX,Mexico
+49364,Ingulets Petrove,UKR1,Ukraine,Stadion Ingulets,1869,Vasyl Kobin,30,2024,Ukrainian Premier League,Ukraine
+49702,FK Nizhny Novgorod,RU1,Russia,Nizhny Novgorod Stadium,44242,,29,2025,Russian Premier League,Russia
+50531,Al-Fayha FC,SA1,Saudi Arabia,Al-Majma'ah Sports City,7000,,29,2025,Saudi Pro League,Saudi Arabia
+50532,Damac Football Club,SA1,Saudi Arabia,Damac Club Stadium,5000,,29,2025,Saudi Pro League,Saudi Arabia
+51663,Atlanta United Football Club,MLS1,United States,Mercedes-Benz Stadium,73019,,26,2025,Major League Soccer,United States
+51772,Football Club Cincinnati,MLS1,United States,TQL Stadium,26000,,28,2025,Major League Soccer,United States
+51828,Los Angeles Football Club,MLS1,United States,BMO Stadium,22000,,26,2025,Major League Soccer,United States
+53646,FK Polissya Zhytomyr,UKR1,Ukraine,Tsentralnyi Polissya,5928,,31,2025,Ukrainian Premier League,Ukraine
+54189,RWD Molenbeek,BE1,Belgium,Edmond Machtensstadion,8090,,23,2023,Jupiler Pro League,Belgium
+54585,Sepsi OSK Sf. Gheorghe,RO1,Romania,Sepsi Duna Arena,8400,Bernd Storck,31,2024,Superliga,Romania
+55686,TOV FK Metalist 1925 Kharkiv,UKR1,Ukraine,Tsentralnyi Polissya,5928,,31,2025,Ukrainian Premier League,Ukraine
+56089,Minnesota United FC,MLS1,United States,Allianz Field,19600,,29,2025,Major League Soccer,United States
+58049,FC Hermannstadt,RO1,Romania,Municipal Sibiu (2022),12363,Marius Măldărășanu,24,2025,Superliga,Romania
+59358,FK Zeleznicar Pancevo,SER1,Serbia,SC Mladost Pančevo,4000,Radomir Kokovic,37,2025,Super Liga Srbije,Serbia
+60551,SC Dnipro-1,UKR1,Ukraine,Dnipro-Arena,31003,,0,2023,Ukrainian Premier League,Ukraine
+60949,Volou Neos Podosferikos Syllogos,GR1,Greece,Panthessaliko Stadio,22700,,29,2025,Greek Super League,Greece
+61825,FC Minaj,UKR1,Ukraine,Minaj-Arena,1312,,25,2023,Ukrainian Premier League,Ukraine
+63007,LNZ Cherkasy,UKR1,Ukraine,Cherkasy-Arena,10321,Vitaliy Ponomaryov,29,2025,Ukrainian Premier League,Ukraine
+63966,Nashville SC,MLS1,United States,GEODIS Park,30000,,28,2025,Major League Soccer,United States
+68608,CF Os Belenenses,PO1,Portugal,Estádio do Restelo,19980,,30,2017,Liga Portugal,Portugal
+69261,Club Internacional de Fútbol Miami,MLS1,United States,Nu Stadium,26700,,27,2025,Major League Soccer,United States
+71084,Western United FC,AUS1,Australia,Ironbark Fields,5000,John Aloisi,0,2024,A-League Men,Australia
+71085,Macarthur FC,AUS1,Australia,Campbelltown Stadium,20000,Mile Sterjovski,21,2025,A-League Men,Australia
+71665,Al-Okhdood Club,SA1,Saudi Arabia,Prince Hathloul bin Abdulaziz Sports City Stadium,12000,,27,2025,Saudi Pro League,Saudi Arabia
+71985,Akron Togliatti,RU1,Russia,Samara-Arena,44918,,24,2025,Russian Premier League,Russia
+72309,Austin FC,MLS1,United States,Q2 Stadium,20738,,25,2025,Major League Soccer,United States
+75231,Dinamo Makhachkala,RU1,Russia,Anzhi-Arena,24173,,26,2025,Russian Premier League,Russia
+78435,Charlotte Football Club,MLS1,United States,Bank of America Stadium,75412,,29,2025,Major League Soccer,United States
+81401,SC Poltava,UKR1,Ukraine,Vorskla Butovsky Stadion,24600,Volodymyr Sysenko,17,2025,Ukrainian Premier League,Ukraine
+82686,St. Louis City Soccer Club,MLS1,United States,Energizer Park,22500,,26,2025,Major League Soccer,United States
+82696,Mazatlán FC,MEX1,Mexico,Estadio de Mazatlán,25000,Robert Siboldi,22,2025,Liga MX,Mexico
+83678,Metalist Kharkiv,UKR1,Ukraine,Avangard,10640,,25,2022,Ukrainian Premier League,Ukraine
+84122,Epicentr Kamyanets-Podilskyi,UKR1,Ukraine,Stadion im. G. Tonkocheyeva,2587,Sergiy Nagornyak,26,2025,Ukrainian Premier League,Ukraine
+85465,Karpaty Lviv,UKR1,Ukraine,Ukraina,28051,Fran Fernández,27,2025,Ukrainian Premier League,Ukraine
+86209,Livyi Bereg Kyiv,UKR1,Ukraine,Arena Livyi Bereg,4700,Vitaliy Pervak,30,2024,Ukrainian Premier League,Ukraine
+87883,FC Kudrivka,UKR1,Ukraine,Stadion Avangard (2022),7122,Vasyl Baranov,24,2025,Ukrainian Premier League,Ukraine
+91427,Al-Kholood Club,SA1,Saudi Arabia,Al-Hazem Club Stadium,8000,,28,2025,Saudi Pro League,Saudi Arabia
+110302,Avs Futebol,PO1,Portugal,Estádio do Clube Desportivo das Aves,6230,José Mota,22,2025,Liga Portugal,Portugal
+114977,San Diego Football Club,MLS1,United States,Snapdragon Stadium,35000,,28,2025,Major League Soccer,United States
+118373,Auckland FC,AUS1,Australia,Mount Smart Stadium,25000,Steve Corica,29,2025,A-League Men,Australia

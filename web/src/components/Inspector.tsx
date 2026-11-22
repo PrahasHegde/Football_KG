@@ -12,6 +12,7 @@ interface Props {
   id: string;
   mode: Mode;
   onCompare: (a: string, b: string) => void;
+  onComparePlayers: (a: string, b: string) => void;
   onClose: () => void;
   onOpen: (id: string) => void;
   onExpand: (id: string, type?: string, direction?: string) => void;
@@ -20,7 +21,7 @@ interface Props {
   onFocus: (id: string) => void;
 }
 
-export function Inspector({ id, mode, onCompare, onClose, onOpen, onExpand, onPath, onRemove, onFocus }: Props) {
+export function Inspector({ id, mode, onCompare, onComparePlayers, onClose, onOpen, onExpand, onPath, onRemove, onFocus }: Props) {
   const [entity, setEntity] = useState<Entity | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pathMode, setPathMode] = useState(false);
@@ -71,7 +72,7 @@ export function Inspector({ id, mode, onCompare, onClose, onOpen, onExpand, onPa
               <Route size={14} /> Connect
             </button>
           )}
-          {entity.label === "Team" && (
+          {(entity.label === "Team" || entity.label === "Player") && (
             <button className={`btn btn--sm ${compareMode ? "is-on" : ""}`} onClick={() => { setCompareMode((v) => !v); setPathMode(false); }}>
               <Swords size={14} /> Compare
             </button>
@@ -95,8 +96,12 @@ export function Inspector({ id, mode, onCompare, onClose, onOpen, onExpand, onPa
 
       {entity && compareMode && (
         <div className="inspector__path">
-          <p className="muted small">Head to head: <b>{entity.name}</b> vs</p>
-          <SearchBox compact autoFocus placeholder="Pick another team…" onPick={(h: SearchHit) => h.label === "Team" && onCompare(id, h.id)} />
+          <p className="muted small">{entity.label === "Player" ? "Compare" : "Head to head:"} <b>{entity.name}</b> vs</p>
+          {entity.label === "Player" ? (
+            <SearchBox compact autoFocus label="Player" placeholder="Pick another player…" onPick={(h: SearchHit) => onComparePlayers(id, h.id)} />
+          ) : (
+            <SearchBox compact autoFocus label="Team" placeholder="Pick another team…" onPick={(h: SearchHit) => onCompare(id, h.id)} />
+          )}
         </div>
       )}
 
@@ -298,6 +303,36 @@ function Details({ entity, open }: { entity: Entity; open: (id: string) => void 
                 </tbody>
               </table>
               <p className="footnote">All club competitions (league, cups, Europe) in transfermarkt-datasets, which starts in 2012/13.</p>
+            </Section>
+          )}
+          {d.club_teammates?.length > 0 && (
+            <Section title="Club team-mates · longest together">
+              <Rows
+                rows={d.club_teammates}
+                render={(t) => {
+                  const body = (
+                    <>
+                      {t.name}
+                      <span className="muted small"> {t.club} · {year(t.since)}–{year(t.until)}</span>
+                      <span className="num">{Math.max(1, Math.round(t.days / 365))}y</span>
+                    </>
+                  );
+                  return t.id ? <Link id={t.id} open={open}>{body}</Link> : <span className="row-flex">{body}</span>;
+                }}
+              />
+            </Section>
+          )}
+          {d.scored_with?.length > 0 && (
+            <Section title="Scored in the same match for their country">
+              <Rows
+                rows={d.scored_with}
+                render={(t) => (
+                  <Link id={t.id} open={open}>
+                    {t.name}<span className="muted small"> {year(t.first)}–{year(t.last)}</span>
+                    <span className="num">{t.matches} games</span>
+                  </Link>
+                )}
+              />
             </Section>
           )}
           <Section title="Goals by competition">

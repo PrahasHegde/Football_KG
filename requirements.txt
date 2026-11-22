@@ -5,3 +5,4 @@ fastapi>=0.110
 uvicorn[standard]>=0.29
 groq>=0.30
 python-dotenv>=1.0
+lxml>=5.0          # scripts/fetch_wikipedia_goals.py (pandas.read_html)

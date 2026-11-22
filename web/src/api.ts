@@ -28,6 +28,19 @@ export const api = {
     get<Subgraph>(`/api/overview?top=${era ? 140 : 200}${era ? `&start=${era.start}&end=${era.end}` : ""}`),
   h2h: (a: string, b: string) => get<H2H>(`/api/h2h?a=${enc(a)}&b=${enc(b)}`),
   discover: () => get<Discover>("/api/discover"),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  comparePlayers: (a: string, b: string) => get<any>(`/api/compare/players?a=${enc(a)}&b=${enc(b)}`),
+  quizNew: (level: string) => get<{ token: string; level: string; clues: { icon: string; label: string; text: string }[] }>(
+    `/api/quiz/new?level=${level}`),
+  quizGuess: async (token: string, guess: string | null, reveal = false) => {
+    const r = await fetch("/api/quiz/guess", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token, guess, reveal }),
+    });
+    if (!r.ok) throw new Error((await r.json().catch(() => ({}))).detail ?? r.statusText);
+    return (await r.json()) as { correct: boolean; answer?: { id: string; name: string; team: string } };
+  },
   path: (src: string, dst: string, viaTeams: boolean) =>
     get<PathResult>(`/api/path?src=${enc(src)}&dst=${enc(dst)}&via_teams=${viaTeams}`),
   subgraph: async (ids: string[]) => {

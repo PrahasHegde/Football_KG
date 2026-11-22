@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(ROOT / ".env")
 
 from .agent import MODEL, Agent  # noqa: E402  (reads env vars at import)
-from .media import CONTACT, Media  # noqa: E402
+from .media import CONTACT, OFFLINE, Media  # noqa: E402
 from .store import LABELS, Store  # noqa: E402
 
 store = Store()
@@ -32,11 +32,16 @@ agent = Agent(store)
 media = Media(store.q("SELECT team_id AS id, name, matches FROM teams"))
 # Resolve every team's flag + crest in the background (one-off; cached in app_data/media.sqlite).
 media.clubs = store.q("SELECT club_id AS id, tm_club_id AS tm, name FROM clubs")
-threading.Thread(target=media.warm_all, daemon=True).start()  # teams, then club logos (serial)
-# Pre-fetch top scorers at low priority so famous players already have photos (fewer when we're on
-# Wikimedia's slow anonymous tier, so the warm-up doesn't delay what you actually look at).
-media.enqueue(store.q("SELECT player_id AS id, name, team FROM players ORDER BY goals DESC LIMIT ?",
-                      [300 if CONTACT else 40]), priority=5)
+if OFFLINE:
+    # no network: serve whatever is cached, never wait for a warm-up that can't happen
+    media._teams_ready.set()
+    media._clubs_ready.set()
+else:
+    threading.Thread(target=media.warm_all, daemon=True).start()  # teams, then club logos (serial)
+    # Pre-fetch top scorers at low priority so famous players already have photos (fewer when we're on
+    # Wikimedia's slow anonymous tier, so the warm-up doesn't delay what you actually look at).
+    media.enqueue(store.q("SELECT player_id AS id, name, team FROM players ORDER BY goals DESC LIMIT ?",
+                          [300 if CONTACT else 40]), priority=5)
 
 app = FastAPI(title="Football KG", version="1.0.0")
 
@@ -154,6 +159,33 @@ def h2h(a: str, b: str) -> dict:
     if res is None:
         raise HTTPException(404, "Both ids must be teams")
     return {**res, "graph": store.h2h_graph(a, b)}
+
+
+@app.get("/api/compare/players")
+def compare_players(a: str, b: str) -> dict:
+    res = store.compare_players(a, b)
+    if res is None:
+        raise HTTPException(404, "Both ids must be players")
+    return res
+
+
+@app.get("/api/quiz/new")
+def quiz_new(level: str = Query("easy", pattern="^(easy|medium|hard)$")) -> dict:
+    return store.quiz_new(level)
+
+
+class GuessRequest(BaseModel):
+    token: str = Field(..., max_length=40)
+    guess: str | None = Field(None, max_length=200)
+    reveal: bool = False
+
+
+@app.post("/api/quiz/guess")
+def quiz_guess(req: GuessRequest) -> dict:
+    res = store.quiz_guess(req.token, req.guess, req.reveal)
+    if res is None:
+        raise HTTPException(404, "Unknown or finished quiz")
+    return res
 
 
 @app.get("/api/discover")

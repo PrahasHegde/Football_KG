@@ -34,6 +34,8 @@ IMG_DIR = ROOT / "app_data" / "img"
 # are "unidentified" and limited to 10/min; with contact info the limit is 200/min. The contact is
 # optional and comes from your .env (WIKIMEDIA_CONTACT) - nothing personal is sent unless you set it.
 CONTACT = os.getenv("WIKIMEDIA_CONTACT", "").strip()
+# FKG_OFFLINE=1: never touch the network (tests, CI, working without internet). Cached media still works.
+OFFLINE = os.getenv("FKG_OFFLINE", "").strip() == "1"
 HEADERS = {
     "User-Agent": f"FootballKG/1.0 ({CONTACT}) python-urllib" if CONTACT
     else "FootballKG/1.0 (local football knowledge-graph explorer) python-urllib"
@@ -74,6 +76,8 @@ MIN_INTERVAL = 0.4 if CONTACT else 6.5
 
 def _get_json(url: str, params: dict[str, Any], timeout: float = 20) -> Any:
     """GET JSON from a Wikimedia API: one call at a time, spaced out, backing off on 429."""
+    if OFFLINE:
+        raise RuntimeError("offline mode (FKG_OFFLINE=1)")
     req = urllib.request.Request(f"{url}?{urllib.parse.urlencode(params)}", headers=HEADERS)
     for attempt in range(4):
         with _api_lock:
@@ -522,6 +526,8 @@ class Media:
         existing = next(IMG_DIR.glob(f"{h}.*"), None)
         if existing:
             return existing
+        if OFFLINE:
+            return None
         try:
             req = urllib.request.Request(url, headers=HEADERS)
             with urllib.request.urlopen(req, timeout=20) as r:

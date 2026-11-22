@@ -406,9 +406,10 @@ def add_elo(con: duckdb.DuckDBPyConnection) -> None:
         CREATE TABLE matches2 AS
         SELECT m.*, round(e.home_elo) AS home_elo, round(e.away_elo) AS away_elo,
                round(e.home_win_exp, 3) AS home_win_exp,
-               -- an upset: the winner's pre-match expectancy was below 25%
-               CASE WHEN m.winner = m.home_team THEN e.home_win_exp < 0.25
-                    WHEN m.winner = m.away_team THEN (1 - e.home_win_exp) < 0.25
+               -- an upset: the winner's pre-match expectancy was below 25%. Judged on the same rounded value
+               -- that is stored and shown, so the flag and the number never disagree (0.2496 -> 0.250, no upset)
+               CASE WHEN m.winner = m.home_team THEN round(e.home_win_exp, 3) < 0.25
+                    WHEN m.winner = m.away_team THEN round(1 - e.home_win_exp, 3) < 0.25
                     ELSE false END AS upset,
                CASE WHEN m.winner = m.home_team THEN round(e.home_win_exp, 3)
                     WHEN m.winner = m.away_team THEN round(1 - e.home_win_exp, 3) END AS winner_win_exp

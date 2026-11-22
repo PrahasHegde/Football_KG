@@ -571,3 +571,81 @@ button.legend__item:hover { background: var(--panel-3); }
 .tip--rich img.is-logo { object-fit: contain; background: #fff; border-radius: 6px; padding: 2px; }
 .legend__swatch--club { width: 11px; height: 12px; display: inline-block; border: 2px solid var(--text-2); border-radius: 2px 2px 6px 6px; background: var(--panel); }
 @media (max-width: 760px) { .homeswitch__tabs button small { display: none; } }
+
+/* ============================================================ player compare */
+.compare { width: 440px; }
+.compare__heads { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 10px; }
+.compare__head { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; border: 0;
+  background: none; text-align: center; border-radius: 12px; }
+.compare__head:hover { background: var(--panel-2); }
+.compare__head b { font-size: 15px; line-height: 1.2; }
+.compare__photo { width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; background: var(--panel-3); }
+.compare__photo .avatar { width: 54px; height: 54px; }
+.compare__head--a .compare__photo { box-shadow: 0 0 0 2px var(--panel), 0 0 0 4px var(--series-1); }
+.compare__head--b .compare__photo { box-shadow: 0 0 0 2px var(--panel), 0 0 0 4px var(--series-2); }
+.compare__vs { position: absolute; left: 50%; top: 26px; transform: translateX(-50%); font-weight: 800; font-size: 12px;
+  color: var(--muted); background: var(--panel); padding: 2px 6px; border-radius: 999px; border: 1px solid var(--border); }
+.duel { display: flex; flex-direction: column; gap: 7px; margin-top: 14px; }
+.duel__row { display: grid; grid-template-columns: 44px 1fr 112px 1fr 44px; align-items: center; gap: 6px; font-size: 12.5px; }
+.duel__val { font-variant-numeric: tabular-nums; color: var(--text-2); text-align: right; }
+.duel__val:last-child { text-align: left; }
+.duel__val.is-lead { color: var(--text); font-weight: 700; }
+.duel__label { text-align: center; color: var(--muted); font-size: 11.5px; }
+.duel__bar { height: 8px; background: var(--panel-3); border-radius: 4px; display: flex; overflow: hidden; }
+.duel__bar--a { justify-content: flex-end; }
+.duel__bar i { display: block; height: 100%; border-radius: 4px; transition: width 0.5s ease-out; }
+.duel__bar--a i { background: var(--series-1); }
+.duel__bar--b i { background: var(--series-2); }
+.connect-list { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+.compare__path { margin-top: 10px; }
+.compare__cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.compare__sub { margin-top: 12px !important; }
+
+/* ============================================================ quiz */
+.quiz { padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.quiz__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.quiz__head h3 { display: flex; align-items: center; gap: 7px; font-size: 15px; }
+.quiz__head h3 svg { color: var(--accent); }
+.quiz__levels { display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: var(--panel-2); border: 1px solid var(--border); }
+.quiz__levels button { border: 0; background: none; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600;
+  color: var(--muted); text-transform: capitalize; }
+.quiz__levels button.is-active { background: var(--panel); color: var(--text); box-shadow: var(--shadow-sm); }
+.quiz__stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.quiz__stats span { display: flex; flex-direction: column; align-items: center; padding: 6px 4px; border-radius: 10px;
+  background: var(--panel-2); border: 1px solid var(--border); font-size: 11px; color: var(--muted); }
+.quiz__stats b { font-size: 16px; color: var(--text); font-variant-numeric: tabular-nums; }
+.clues { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.clue { display: flex; gap: 10px; align-items: flex-start; padding: 9px 11px; border-radius: 11px; border: 1px dashed var(--border-strong);
+  background: transparent; color: var(--muted); transition: background 0.25s, border-color 0.25s; }
+.clue.is-open { border-style: solid; border-color: var(--border); background: var(--panel-2); color: var(--text); animation: rise 0.3s ease-out both; }
+.clue__icon { flex: none; width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: var(--panel-3); color: var(--muted); }
+.clue.is-open .clue__icon { background: var(--accent-soft); color: var(--accent); }
+.clue__body { display: flex; flex-direction: column; min-width: 0; }
+.clue__label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+.clue__text { font-size: 13px; }
+.clue:not(.is-open) .clue__text { filter: blur(3px); user-select: none; }
+.quiz__guess { display: flex; flex-direction: column; gap: 8px; }
+.quiz__guess.is-shaking { animation: shake 0.4s; }
+@keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+.quiz__wrong { display: flex; flex-wrap: wrap; gap: 4px; }
+.chip-x { display: inline-flex; align-items: center; gap: 3px; font-size: 11.5px; padding: 2px 8px; border-radius: 999px;
+  color: var(--danger); background: color-mix(in srgb, var(--danger) 9%, transparent); }
+.quiz__actions { display: flex; align-items: center; gap: 6px; }
+.quiz__worth { margin-left: auto; }
+.quiz__result { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 14px; border: 1px solid var(--border);
+  animation: rise 0.35s ease-out; }
+.quiz__result.is-win { background: color-mix(in srgb, var(--accent) 10%, var(--panel)); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.quiz__result.is-loss { background: var(--panel-2); }
+.quiz__avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--panel-3); display: grid; place-items: center; flex: none; }
+.quiz__avatar .avatar { width: 56px; height: 56px; }
+.quiz__verdict { font-weight: 800; font-size: 15px; }
+.quiz__result.is-win .quiz__verdict { color: var(--accent); }
+.quiz__result-actions { display: flex; flex-direction: column; gap: 5px; }
+.tabs button { padding-left: 8px; padding-right: 8px; }
+
+/* ============================================================ error boundary */
+.crash { position: absolute; top: 14px; left: 14px; z-index: 6; width: min(372px, calc(100% - 28px));
+  display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 14px;
+  background: var(--panel); border: 1px solid color-mix(in srgb, var(--danger) 40%, transparent); box-shadow: var(--shadow); }
+.crash > svg { color: var(--danger); flex: none; margin-top: 2px; }
+.side .crash { position: static; width: auto; margin: 14px; }

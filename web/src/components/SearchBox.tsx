@@ -11,9 +11,11 @@ interface Props {
   autoFocus?: boolean;
   compact?: boolean;
   shortcut?: boolean;
+  /** only this entity type (e.g. "Player") */
+  label?: string;
 }
 
-export function SearchBox({ placeholder = "Search teams, players, tournaments…", onPick, autoFocus, compact, shortcut }: Props) {
+export function SearchBox({ placeholder = "Search teams, players, clubs, tournaments…", onPick, autoFocus, compact, shortcut, label }: Props) {
   const [q, setQ] = useState("");
   const [hits, setHits] = useState<SearchHit[]>([]);
   const [open, setOpen] = useState(false);
@@ -27,7 +29,7 @@ export function SearchBox({ placeholder = "Search teams, players, tournaments…
     }
     const ctrl = { cancelled: false };
     const t = setTimeout(() => {
-      api.search(q).then((r) => {
+      api.search(q, label).then((r) => {
         if (!ctrl.cancelled) {
           setHits(r);
           setActive(0);
@@ -38,7 +40,7 @@ export function SearchBox({ placeholder = "Search teams, players, tournaments…
       ctrl.cancelled = true;
       clearTimeout(t);
     };
-  }, [q]);
+  }, [q, label]);
 
   useEffect(() => {
     if (!shortcut) return;

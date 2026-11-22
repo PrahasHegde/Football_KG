@@ -127,8 +127,9 @@ def goal_rows(html: str) -> pd.DataFrame:
     and other tables only count if they are per-team goal lists (goals for a second national team), not
     hat-trick, youth (U15/U17/U23) or summary tables."""
     try:
-        tables = pd.read_html(io.StringIO(html))
-    except ValueError:
+        # lxml only: without it pandas falls back to bs4/html5lib, which may not be installed
+        tables = pd.read_html(io.StringIO(html), flavor="lxml")
+    except (ValueError, ImportError):  # no tables on the page
         return pd.DataFrame()
     keep, cands = [], []
     for t in tables:

@@ -7,3 +7,5 @@ __pycache__/
 app_data/
 web/node_modules/
 web/dist/
+.pytest_cache/
+web/tsconfig.tsbuildinfo
